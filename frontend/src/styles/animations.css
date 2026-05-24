@@ -1,0 +1,27 @@
+@keyframes bluePulse {
+  0% {
+    box-shadow: 0 0 16px rgba(97, 168, 255, 0.12);
+  }
+
+  50% {
+    box-shadow: 0 0 30px rgba(97, 168, 255, 0.28);
+  }
+
+  100% {
+    box-shadow: 0 0 16px rgba(97, 168, 255, 0.12);
+  }
+}
+
+@keyframes slowDrift {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
