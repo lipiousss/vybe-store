@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import { useCollectionStore } from '../../store/collectionStore.js';
 import { useProductStore } from '../../store/productStore.js';
+import { useSiteAssetStore } from '../../store/siteAssetStore.js';
 import { useUiStore } from '../../store/uiStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const timeline = [
   ['01', 'Origin', 'A darker visual code, born from archive sketches and ritual silhouettes.'],
@@ -13,7 +15,7 @@ const timeline = [
   ['04', 'Drop', 'Limited releases, seasonal capsules, and collectible fragments.'],
 ];
 
-function EnterScreen() {
+function EnterScreen({ image }) {
   const { isEnterScreenPassed, setEnterScreenPassed } = useUiStore();
 
   return (
@@ -21,6 +23,7 @@ function EnterScreen() {
       {!isEnterScreenPassed && (
         <motion.div
           className="enter-screen"
+          style={{ '--enter-image': `url("${image}")` }}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.7 }}
@@ -47,15 +50,19 @@ function EnterScreen() {
 export default function HomePage() {
   const { featuredProducts, fetchFeaturedProducts } = useProductStore();
   const { collections, fetchCollections } = useCollectionStore();
+  const { fetchAssets, getAsset } = useSiteAssetStore();
+  const enterImage = mediaUrl(getAsset('enter_screen_image')?.url);
+  const heroImage = mediaUrl(getAsset('home_hero_image')?.url);
 
   React.useEffect(() => {
     fetchFeaturedProducts();
     fetchCollections();
-  }, [fetchFeaturedProducts, fetchCollections]);
+    fetchAssets().catch(() => {});
+  }, [fetchFeaturedProducts, fetchCollections, fetchAssets]);
 
   return (
     <main>
-      <EnterScreen />
+      <EnterScreen image={enterImage} />
 
       <section className="hero-section">
         <motion.div
@@ -82,7 +89,7 @@ export default function HomePage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.1 }}
         >
-          <img src="/images/placeholders/product-placeholder.png" alt="VYBE artifact preview" />
+          <img src={heroImage} alt="VYBE artifact preview" />
         </motion.div>
       </section>
 

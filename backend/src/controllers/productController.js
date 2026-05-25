@@ -93,6 +93,7 @@ function mapImages(images = []) {
 
 function mapVariants(variants = []) {
   return variants.map((variant) => ({
+    id: variant.id || undefined,
     size: variant.size || null,
     color: variant.color || null,
     sku: variant.sku,
@@ -290,6 +291,37 @@ export async function getProductBySlug(req, res, next) {
   }
 }
 
+export async function getProductById(req, res, next) {
+  try {
+    const product = await prisma.product.findUnique({
+      where: { id: req.params.id },
+      include: productInclude,
+    });
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found.' });
+    }
+
+    return res.json({ product });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function uploadProductImage(req, res, next) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Image file is required.' });
+    }
+
+    return res.status(201).json({
+      url: `/uploads/products/${req.file.filename}`,
+    });
+  } catch (error) {
+    return next(error);
+  }
+}
+
 export async function createProduct(req, res, next) {
   try {
     const { name, images, variants } = req.body;
@@ -319,12 +351,28 @@ export async function createProduct(req, res, next) {
       }
 
       if (Array.isArray(variants) && variants.length > 0) {
-        await tx.productVariant.createMany({
-          data: mapVariants(variants).map((variant) => ({
-            ...variant,
-            productId: created.id,
-          })),
+        const variantData = mapVariants(variants).map((variant) => ({
+          ...variant,
+          productId: created.id,
+        }));
+
+        await tx.productVariant.createMany({ data: variantData });
+
+        const createdVariants = await tx.productVariant.findMany({
+          where: { productId: created.id },
         });
+
+        const initialMovements = createdVariants.map((variant) => ({
+            productVariantId: variant.id,
+            type: 'MANUAL',
+            quantity: variant.stock,
+            comment: 'Initial stock',
+            createdById: req.user?.id || null,
+          })).filter((movement) => movement.quantity !== 0);
+
+        if (initialMovements.length > 0) {
+          await tx.stockMovement.createMany({ data: initialMovements });
+        }
       }
 
       return tx.product.findUnique({
@@ -350,6 +398,9 @@ export async function updateProduct(req, res, next) {
     }
 
     const data = buildProductData(req.body, current);
+    const currentVariants = await prisma.productVariant.findMany({
+      where: { productId: current.id },
+    });
 
     if (req.body.name !== undefined) {
       data.name = req.body.name.trim();
@@ -387,6 +438,34 @@ export async function updateProduct(req, res, next) {
 
         if (variantData.length > 0) {
           await tx.productVariant.createMany({ data: variantData });
+
+          const nextVariants = await tx.productVariant.findMany({
+            where: { productId: current.id },
+          });
+
+          const previousById = new Map(currentVariants.map((variant) => [variant.id, variant]));
+          const previousBySku = new Map(currentVariants.map((variant) => [variant.sku, variant]));
+          const stockMovements = [];
+
+          for (const variant of nextVariants) {
+            const previous = previousById.get(variant.id) || previousBySku.get(variant.sku);
+            const previousStock = previous?.stock || 0;
+            const difference = variant.stock - previousStock;
+
+            if (difference !== 0) {
+              stockMovements.push({
+                productVariantId: variant.id,
+                type: 'MANUAL',
+                quantity: difference,
+                comment: 'Product edit stock update',
+                createdById: req.user?.id || null,
+              });
+            }
+          }
+
+          if (stockMovements.length > 0) {
+            await tx.stockMovement.createMany({ data: stockMovements });
+          }
         }
       }
 
@@ -401,6 +480,7 @@ export async function updateProduct(req, res, next) {
     return next(error);
   }
 }
+
 
 export async function deleteProduct(req, res, next) {
   try {

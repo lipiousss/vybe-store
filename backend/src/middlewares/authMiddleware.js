@@ -23,8 +23,12 @@ export async function authMiddleware(req, res, next) {
       where: { id: payload.id },
     });
 
-    if (!user || user.isBlocked) {
+    if (!user) {
       return res.status(401).json({ message: 'User is not authorized.' });
+    }
+
+    if (user.isBlocked) {
+      return res.status(403).json({ message: 'Аккаунт заблокирован' });
     }
 
     req.user = stripPassword(user);

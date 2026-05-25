@@ -1,6 +1,8 @@
 import React from 'react';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import { useProductStore } from '../../store/productStore.js';
+import { useSiteAssetStore } from '../../store/siteAssetStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const filters = [
   ['All', ''],
@@ -15,10 +17,13 @@ const filters = [
 export default function CollectiblesPage() {
   const [activeFilter, setActiveFilter] = React.useState('');
   const { collectibleProducts, isLoading, error, fetchCollectibles } = useProductStore();
+  const { fetchAssets, getAsset } = useSiteAssetStore();
+  const heroImage = mediaUrl(getAsset('collectibles_hero_image')?.url, '/images/placeholders/collectible-placeholder.png');
 
   React.useEffect(() => {
     fetchCollectibles();
-  }, [fetchCollectibles]);
+    fetchAssets().catch(() => {});
+  }, [fetchCollectibles, fetchAssets]);
 
   const visibleProducts = collectibleProducts.filter((product) => {
     if (!activeFilter) {
@@ -34,7 +39,10 @@ export default function CollectiblesPage() {
 
   return (
     <main className="page-shell collectibles-page">
-      <section className="page-hero cinematic">
+      <section
+        className="page-hero cinematic collectibles-hero"
+        style={{ '--collectibles-image': `url("${heroImage}")` }}
+      >
         <p className="eyebrow">Collectibles</p>
         <h1>Хранилище артефактов</h1>
         <p>

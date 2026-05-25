@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useArtworkStore } from '../../store/artworkStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 export default function ArtworkModal() {
   const selectedArtwork = useArtworkStore((state) => state.selectedArtwork);
@@ -58,7 +59,7 @@ export default function ArtworkModal() {
               x
             </button>
             <div className="artwork-modal__image">
-              <img src={selectedArtwork.image} alt={selectedArtwork.title} />
+              <img src={mediaUrl(selectedArtwork.image, '/images/placeholders/artwork-placeholder.png')} alt={selectedArtwork.title} />
             </div>
             <div className="artwork-modal__info">
               <p className="eyebrow">{selectedArtwork.category || 'Archive'}</p>

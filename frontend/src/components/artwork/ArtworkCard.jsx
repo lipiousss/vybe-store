@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useArtworkStore } from '../../store/artworkStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 export default function ArtworkCard({ artwork, index, className = '' }) {
   const openArtworkModal = useArtworkStore((state) => state.openArtworkModal);
@@ -17,7 +18,7 @@ export default function ArtworkCard({ artwork, index, className = '' }) {
       <button type="button" className="artwork-card__button" aria-label={`View ${artwork.title}`}>
         <span className="artwork-card__number">ARTWORK {artworkNumber}</span>
         <span className="artwork-card__image">
-          <img src={artwork.image} alt={artwork.title} />
+          <img src={mediaUrl(artwork.image, '/images/placeholders/artwork-placeholder.png')} alt={artwork.title} />
           <span className="artwork-card__overlay">View Artwork</span>
         </span>
         <span className="artwork-card__body">

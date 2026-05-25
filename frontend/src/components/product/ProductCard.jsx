@@ -1,6 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useAuthStore } from '../../store/authStore.js';
+import { useCartStore } from '../../store/cartStore.js';
+import { useFavoriteStore } from '../../store/favoriteStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 function money(value) {
   if (value === null || value === undefined) {
@@ -11,8 +15,51 @@ function money(value) {
 }
 
 export default function ProductCard({ product }) {
-  const image = product.images?.[0]?.url || '/images/placeholders/product-placeholder.png';
+  const navigate = useNavigate();
+  const isAuth = useAuthStore((state) => state.isAuth);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
+  const isFavorite = useFavoriteStore((state) => state.isFavorite(product.id));
+  const [message, setMessage] = React.useState(null);
+  const image = mediaUrl(product.images?.[0]?.url);
   const hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(product.finalPrice);
+  const hasStock = !product.variants?.length || product.variants.some((variant) => variant.stock > 0);
+
+  function requireAuth() {
+    if (!isAuth) {
+      navigate('/login');
+      return false;
+    }
+
+    return true;
+  }
+
+  async function handleFavorite(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!requireAuth()) {
+      return;
+    }
+
+    await toggleFavorite(product.id);
+  }
+
+  async function handleAddToCart(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!requireAuth()) {
+      return;
+    }
+
+    if (!hasStock) {
+      setMessage('Out of stock');
+      return;
+    }
+
+    await addToCart(product, undefined, 1);
+  }
 
   return (
     <motion.article
@@ -44,6 +91,21 @@ export default function ProductCard({ product }) {
           </div>
         </div>
       </Link>
+
+      <div className="product-card-actions">
+        <button
+          className={`icon-action${isFavorite ? ' is-active' : ''}`}
+          type="button"
+          onClick={handleFavorite}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+        >
+          ♥
+        </button>
+        <button className="icon-action" type="button" onClick={handleAddToCart} disabled={!hasStock}>
+          Cart
+        </button>
+      </div>
+      {message && <p className="product-card-message">{message}</p>}
     </motion.article>
   );
 }

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import ArtworkCard from '../../components/artwork/ArtworkCard.jsx';
 import ArtworkModal from '../../components/artwork/ArtworkModal.jsx';
 import { useArtworkStore } from '../../store/artworkStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const filters = [
   { label: 'All', value: null },
@@ -88,7 +89,7 @@ export default function ArtworksPage() {
         <section className="featured-artwork">
           <button type="button" onClick={() => openArtworkModal(featuredArtwork)}>
             <span className="featured-artwork__image">
-              <img src={featuredArtwork.image} alt={featuredArtwork.title} />
+              <img src={mediaUrl(featuredArtwork.image, '/images/placeholders/artwork-placeholder.png')} alt={featuredArtwork.title} />
             </span>
             <span className="featured-artwork__content">
               <span className="eyebrow">Featured Artwork</span>

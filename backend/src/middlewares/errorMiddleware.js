@@ -27,6 +27,12 @@ export function errorMiddleware(error, req, res, next) {
     });
   }
 
+  if (error.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({
+      message: 'File is too large. Maximum size is 5MB.',
+    });
+  }
+
   return res.status(statusCode).json({
     message: error.message || 'Internal server error.',
   });
