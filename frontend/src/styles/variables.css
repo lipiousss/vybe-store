@@ -1,4 +1,12 @@
 :root {
+  --color-bg: #030407;
+  --color-bg-soft: #070a10;
+  --color-card: #0d1018;
+  --color-card-strong: #141824;
+  --color-ash: #ebe7dc;
+  --color-muted: #9d9689;
+  --color-blue-soft: rgba(97, 168, 255, 0.16);
+  --border-gold: rgba(183, 154, 82, 0.42);
   --color-night-950: #050609;
   --color-night-900: #090b12;
   --color-night-850: #0e111b;
@@ -16,5 +24,6 @@
   --shadow-blue: 0 0 28px rgba(97, 168, 255, 0.18);
   --shadow-gold: 0 0 24px rgba(224, 199, 123, 0.16);
   --container: 1180px;
+  --wide-container: 1440px;
   --radius: 8px;
 }

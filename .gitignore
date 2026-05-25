@@ -9,14 +9,11 @@ frontend/.env
 .DS_Store
 Thumbs.db
 
-backend/uploads/*
-!backend/uploads/.gitkeep
-!backend/uploads/avatars/.gitkeep
-!backend/uploads/products/.gitkeep
-!backend/uploads/artworks/.gitkeep
-!backend/uploads/collectibles/.gitkeep
-!backend/uploads/site/.gitkeep
+# Uploaded project media is intentionally tracked for the diploma demo.
+# Keep product images, avatars, artworks, and site assets in git.
 
-backend/prisma/migrations/dev.db
+# Database dumps can be committed when exported into the project.
+!backend/database-dumps/
+!backend/database-dumps/**
 
 .vscode

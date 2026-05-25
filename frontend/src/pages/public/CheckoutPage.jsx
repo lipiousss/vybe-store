@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
 import { useOrderStore } from '../../store/orderStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
+import { maskRuPhone } from '../../utils/phoneMask.js';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
@@ -96,9 +97,11 @@ export default function CheckoutPage() {
           <label>
             Phone
             <input
+              type="tel"
               placeholder="+7 (999) 999-99-99"
+              maxLength="18"
               value={form.customerPhone}
-              onChange={(event) => setForm({ ...form, customerPhone: event.target.value })}
+              onChange={(event) => setForm({ ...form, customerPhone: maskRuPhone(event.target.value) })}
             />
           </label>
           <label>

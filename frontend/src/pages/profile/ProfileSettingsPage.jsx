@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
 import { useProfileStore } from '../../store/profileStore.js';
+import { maskRuPhone } from '../../utils/phoneMask.js';
 
 const backendUrl = 'http://localhost:4000';
 
@@ -171,9 +172,11 @@ export default function ProfileSettingsPage() {
           <label>
             Phone
             <input
+              type="tel"
               placeholder="+7 (999) 999-99-99"
+              maxLength="18"
               value={phone}
-              onChange={(event) => setPhone(event.target.value)}
+              onChange={(event) => setPhone(maskRuPhone(event.target.value))}
             />
           </label>
           <button className="gold-button" type="submit" disabled={isLoading}>Save phone</button>

@@ -2,8 +2,7 @@ import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
-
-const backendUrl = 'http://localhost:4000';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const navItems = [
   ['Главная', '/'],
@@ -13,20 +12,22 @@ const navItems = [
   ['О нас', '/about'],
 ];
 
-function resolveAvatarUrl(avatar) {
-  if (!avatar) {
-    return null;
-  }
-
-  return avatar.startsWith('/uploads') ? `${backendUrl}${avatar}` : avatar;
-}
-
 export default function Header() {
   const navigate = useNavigate();
   const { user, isAuth, logout } = useAuthStore();
   const { openCart, totalQuantity } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const avatar = resolveAvatarUrl(user?.avatar);
+  const avatar = user?.avatar ? mediaUrl(user.avatar) : null;
+
+  function goTo(path) {
+    setIsMenuOpen(false);
+    navigate(path);
+  }
+
+  function handleMenuLink(event, path) {
+    event.preventDefault();
+    goTo(path);
+  }
 
   function handleLogout() {
     logout();
@@ -80,14 +81,23 @@ export default function Header() {
               </span>
               <span>{user?.username || 'profile'}</span>
             </button>
+
             {isMenuOpen && (
               <div className="user-dropdown">
-                <Link to="/profile" onClick={() => setIsMenuOpen(false)}>Профиль</Link>
-                <Link to="/profile/settings" onClick={() => setIsMenuOpen(false)}>Настройки</Link>
+                <a href="/profile" onMouseDown={(event) => handleMenuLink(event, '/profile')} onClick={(event) => handleMenuLink(event, '/profile')}>
+                  Профиль
+                </a>
+                <a href="/profile/settings" onMouseDown={(event) => handleMenuLink(event, '/profile/settings')} onClick={(event) => handleMenuLink(event, '/profile/settings')}>
+                  Настройки
+                </a>
                 {user?.role === 'ADMIN' && (
-                  <Link to="/admin/orders" onClick={() => setIsMenuOpen(false)}>Admin Orders</Link>
+                  <a href="/admin" onMouseDown={(event) => handleMenuLink(event, '/admin')} onClick={(event) => handleMenuLink(event, '/admin')}>
+                    Admin
+                  </a>
                 )}
-                <button type="button" onClick={handleLogout}>Выйти</button>
+                <button type="button" onMouseDown={handleLogout} onClick={handleLogout}>
+                  Выйти
+                </button>
               </div>
             )}
           </div>

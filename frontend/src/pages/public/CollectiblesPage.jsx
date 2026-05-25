@@ -26,14 +26,8 @@ export default function CollectiblesPage() {
   }, [fetchCollectibles, fetchAssets]);
 
   const visibleProducts = collectibleProducts.filter((product) => {
-    if (!activeFilter) {
-      return true;
-    }
-
-    if (activeFilter === 'limited') {
-      return product.isLimited;
-    }
-
+    if (!activeFilter) return true;
+    if (activeFilter === 'limited') return product.isLimited;
     return product.category?.slug === activeFilter;
   });
 
@@ -43,11 +37,18 @@ export default function CollectiblesPage() {
         className="page-hero cinematic collectibles-hero"
         style={{ '--collectibles-image': `url("${heroImage}")` }}
       >
-        <p className="eyebrow">Collectibles</p>
+        <p className="section-label">Collectibles</p>
         <h1>Хранилище артефактов</h1>
         <p>
           Rare objects from the VYBE archive. Designed as fragments of a darker visual world.
         </p>
+        <button
+          className="relic-button"
+          type="button"
+          onClick={() => document.querySelector('.cinematic-grid')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          Explore Relics
+        </button>
       </section>
 
       <div className="filter-tabs">
@@ -65,9 +66,18 @@ export default function CollectiblesPage() {
 
       {isLoading && <p className="state-text">Opening archive...</p>}
       {error && <p className="state-text danger">{error}</p>}
-      <div className="product-grid cinematic-grid">
-        {visibleProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+      {!isLoading && visibleProducts.length === 0 && (
+        <div className="fantasy-card empty-state">
+          <h3>No relics found.</h3>
+          <p>The archive shelf is empty for this filter.</p>
+        </div>
+      )}
+      <div className="product-grid cinematic-grid collectibles-grid">
+        {visibleProducts.map((product, index) => (
+          <div className="collectible-slot" key={product.id}>
+            <span>ARCHIVE {String(index + 1).padStart(3, '0')}</span>
+            <ProductCard product={product} />
+          </div>
         ))}
       </div>
     </main>

@@ -50,10 +50,11 @@ export default function CatalogPage() {
   }
 
   return (
-    <main className="page-shell">
-      <section className="page-hero compact">
-        <p className="eyebrow">Catalog</p>
-        <h1>Wearable relics and functional artifacts</h1>
+    <main className="page-shell catalog-page">
+      <section className="catalog-hero fantasy-card">
+        <p className="section-label">Catalog</p>
+        <h1>Catalog of Relics</h1>
+        <p>Wearable relics and functional artifacts shaped for the night side of style.</p>
       </section>
 
       <section className="catalog-layout">
@@ -129,7 +130,12 @@ export default function CatalogPage() {
         <div className="catalog-results">
           {isLoading && <p className="state-text">Loading catalog...</p>}
           {error && <p className="state-text danger">{error}</p>}
-          {!isLoading && products.length === 0 && <p className="state-text">No artifacts found.</p>}
+          {!isLoading && products.length === 0 && (
+            <div className="fantasy-card empty-state">
+              <h3>No artifacts found.</h3>
+              <p>Try another name, collection, category, or price range.</p>
+            </div>
+          )}
           <div className="product-grid">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />

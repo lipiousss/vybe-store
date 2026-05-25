@@ -21,6 +21,7 @@ export default function ProductCard({ product }) {
   const toggleFavorite = useFavoriteStore((state) => state.toggleFavorite);
   const isFavorite = useFavoriteStore((state) => state.isFavorite(product.id));
   const [message, setMessage] = React.useState(null);
+  const [lightPosition, setLightPosition] = React.useState({ x: '50%', y: '50%' });
   const image = mediaUrl(product.images?.[0]?.url);
   const hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(product.finalPrice);
   const hasStock = !product.variants?.length || product.variants.some((variant) => variant.stock > 0);
@@ -61,9 +62,19 @@ export default function ProductCard({ product }) {
     await addToCart(product, undefined, 1);
   }
 
+  function handleMouseMove(event) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setLightPosition({
+      x: `${((event.clientX - rect.left) / rect.width) * 100}%`,
+      y: `${((event.clientY - rect.top) / rect.height) * 100}%`,
+    });
+  }
+
   return (
     <motion.article
       className="product-card"
+      style={{ '--light-x': lightPosition.x, '--light-y': lightPosition.y }}
+      onMouseMove={handleMouseMove}
       whileHover={{ y: -6 }}
       transition={{ duration: 0.22 }}
     >
