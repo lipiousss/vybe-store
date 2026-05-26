@@ -6,25 +6,25 @@ const requiredAssets = [
   {
     key: 'enter_screen_image',
     title: 'Enter Screen Image',
-    description: 'Фоновый образ для входного экрана.',
+    description: 'Background image for the ritual enter screen.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'home_hero_image',
     title: 'Home Hero Image',
-    description: 'Главное изображение на главной странице.',
+    description: 'Main image for the storefront hero.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'about_main_image',
     title: 'About Main Image',
-    description: 'Изображение для страницы о проекте.',
+    description: 'Story image for the about page.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'collectibles_hero_image',
     title: 'Collectibles Hero Image',
-    description: 'Hero-изображение для коллекционных предметов.',
+    description: 'Hero image for collectible relics.',
     fallback: '/images/placeholders/collectible-placeholder.png',
   },
 ];
@@ -77,8 +77,8 @@ export default function AdminSiteContentPage() {
       <section className="admin-page-head">
         <div>
           <p className="eyebrow">Site Content</p>
-          <h1>Контент сайта</h1>
-          <p>Управляйте изображениями EnterScreen, hero и ключевых публичных страниц.</p>
+          <h1>SITE CONTENT</h1>
+          <p>Manage EnterScreen, hero and key public-page images through SiteAsset records.</p>
         </div>
       </section>
 

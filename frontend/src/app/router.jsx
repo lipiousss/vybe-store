@@ -12,11 +12,17 @@ import ProtectedRoute from '../components/auth/ProtectedRoute.jsx';
 import AdminLayout from '../components/admin/AdminLayout.jsx';
 import LoginPage from '../pages/auth/LoginPage.jsx';
 import AdminArtworksPage from '../pages/admin/AdminArtworksPage.jsx';
+import AdminAnalyticsPage from '../pages/admin/AdminAnalyticsPage.jsx';
+import AdminBannersPage from '../pages/admin/AdminBannersPage.jsx';
+import AdminCategoriesPage from '../pages/admin/AdminCategoriesPage.jsx';
+import AdminCollectionsPage from '../pages/admin/AdminCollectionsPage.jsx';
 import AdminDashboardPage from '../pages/admin/AdminDashboardPage.jsx';
 import AdminOrdersPage from '../pages/admin/AdminOrdersPage.jsx';
+import AdminPagesPage from '../pages/admin/AdminPagesPage.jsx';
 import AdminProductCreatePage from '../pages/admin/AdminProductCreatePage.jsx';
 import AdminProductEditPage from '../pages/admin/AdminProductEditPage.jsx';
 import AdminProductsPage from '../pages/admin/AdminProductsPage.jsx';
+import AdminSettingsPage from '../pages/admin/AdminSettingsPage.jsx';
 import AdminSiteContentPage from '../pages/admin/AdminSiteContentPage.jsx';
 import AdminStockPage from '../pages/admin/AdminStockPage.jsx';
 import AdminUsersPage from '../pages/admin/AdminUsersPage.jsx';
@@ -62,6 +68,9 @@ export const router = createBrowserRouter([
             element: <AdminLayout />,
             children: [
               { index: true, element: <AdminDashboardPage /> },
+              { path: 'analytics', element: <AdminAnalyticsPage /> },
+              { path: 'collections', element: <AdminCollectionsPage /> },
+              { path: 'categories', element: <AdminCategoriesPage /> },
               { path: 'products', element: <AdminProductsPage /> },
               { path: 'products/create', element: <AdminProductCreatePage /> },
               { path: 'products/:id/edit', element: <AdminProductEditPage /> },
@@ -70,6 +79,9 @@ export const router = createBrowserRouter([
               { path: 'users', element: <AdminUsersPage /> },
               { path: 'artworks', element: <AdminArtworksPage /> },
               { path: 'site-content', element: <AdminSiteContentPage /> },
+              { path: 'pages', element: <AdminPagesPage /> },
+              { path: 'banners', element: <AdminBannersPage /> },
+              { path: 'settings', element: <AdminSettingsPage /> },
             ],
           },
         ],

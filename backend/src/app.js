@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { prisma } from './config/prisma.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 import artworkRoutes from './routes/artworkRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
@@ -58,6 +59,7 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/admin/analytics', analyticsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/artworks', artworkRoutes);
 app.use('/api/cart', cartRoutes);

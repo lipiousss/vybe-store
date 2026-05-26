@@ -23,6 +23,10 @@ function stockTotal(product) {
   return (product.variants || []).reduce((total, variant) => total + Number(variant.stock || 0), 0);
 }
 
+function money(value) {
+  return `$${Number(value || 0).toFixed(2)}`;
+}
+
 export default function AdminProductsPage() {
   const { products, fetchProducts, deleteProduct, isLoading, error, success, clearMessages } = useAdminProductStore();
   const { categories, fetchCategories } = useCategoryStore();
@@ -50,7 +54,7 @@ export default function AdminProductsPage() {
   }, [fetchProducts, filters]);
 
   async function handleDelete(product) {
-    if (!window.confirm(`Удалить товар "${product.name}"?`)) return;
+    if (!window.confirm(`Delete product "${product.name}"?`)) return;
     await deleteProduct(product.id);
   }
 
@@ -63,51 +67,50 @@ export default function AdminProductsPage() {
     <div className="admin-products-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Products</p>
-          <h1>Управление товарами</h1>
-          <p>Создание, редактирование, статусы, бейджи и связь с категориями.</p>
+          <p className="section-label">Products</p>
+          <h1>PRODUCTS</h1>
+          <p>Manage your entire catalogue.</p>
         </div>
-        <Link className="gold-button" to="/admin/products/create">Add product</Link>
+        <Link className="gold-button" to="/admin/products/create">Add Product</Link>
       </section>
 
-      <section className="admin-filters">
-        <input
-          value={filters.search}
-          onChange={(event) => updateFilter('search', event.target.value)}
-          placeholder="Search product"
-        />
+      <section className="admin-filters admin-filters--products">
+        <select value={filters.category} onChange={(event) => updateFilter('category', event.target.value)}>
+          <option value="">All Categories</option>
+          {flatCategories.map((category) => (
+            <option key={category.id} value={category.slug}>{category.name}</option>
+          ))}
+        </select>
         <select value={filters.status} onChange={(event) => updateFilter('status', event.target.value)}>
-          <option value="">All statuses</option>
+          <option value="">All Status</option>
           <option value="ACTIVE">ACTIVE</option>
           <option value="DRAFT">DRAFT</option>
           <option value="ARCHIVED">ARCHIVED</option>
           <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
         </select>
         <select value={filters.isCollectible} onChange={(event) => updateFilter('isCollectible', event.target.value)}>
-          <option value="">All types</option>
+          <option value="">All Stock</option>
           <option value="false">Regular</option>
           <option value="true">Collectible</option>
         </select>
-        <select value={filters.category} onChange={(event) => updateFilter('category', event.target.value)}>
-          <option value="">All categories</option>
-          {flatCategories.map((category) => (
-            <option key={category.id} value={category.slug}>{category.name}</option>
-          ))}
-        </select>
+        <input
+          value={filters.search}
+          onChange={(event) => updateFilter('search', event.target.value)}
+          placeholder="Search products..."
+        />
       </section>
 
       {(error || success) && <p className={`state-text ${error ? 'danger' : 'success'}`}>{error || success}</p>}
 
       <div className="admin-table-wrap">
-        <table className="admin-table">
+        <table className="admin-table admin-table--products">
           <thead>
             <tr>
               <th>Image</th>
-              <th>Name</th>
+              <th>Product</th>
               <th>Category</th>
               <th>Collection</th>
               <th>Price</th>
-              <th>Final</th>
               <th>Stock</th>
               <th>Status</th>
               <th>Badges</th>
@@ -117,17 +120,17 @@ export default function AdminProductsPage() {
           <tbody>
             {products.map((product) => (
               <tr key={product.id}>
-                <td>
-                  <img className="admin-product-thumb" src={imageUrl(product)} alt={product.name} />
-                </td>
+                <td><img className="admin-product-thumb" src={imageUrl(product)} alt={product.name} /></td>
                 <td>
                   <strong>{product.name}</strong>
                   <span>{product.slug}</span>
                 </td>
-                <td>{product.category?.name || '—'}</td>
-                <td>{product.collection?.name || '—'}</td>
-                <td>{Number(product.price).toLocaleString('ru-RU')} ₽</td>
-                <td>{Number(product.finalPrice || product.price).toLocaleString('ru-RU')} ₽</td>
+                <td>{product.category?.name || '-'}</td>
+                <td>{product.collection?.name || '-'}</td>
+                <td>
+                  <strong>{money(product.finalPrice || product.price)}</strong>
+                  {product.oldPrice && <span>{money(product.oldPrice)}</span>}
+                </td>
                 <td>{stockTotal(product)}</td>
                 <td><span className={`admin-status ${product.status.toLowerCase()}`}>{product.status}</span></td>
                 <td>
@@ -140,8 +143,8 @@ export default function AdminProductsPage() {
                 </td>
                 <td>
                   <div className="admin-row-actions">
-                    <Link className="ghost-button small" to={`/admin/products/${product.id}/edit`}>Edit</Link>
-                    <button className="ghost-button small danger" type="button" onClick={() => handleDelete(product)}>
+                    <Link className="admin-icon-action" to={`/admin/products/${product.id}/edit`}>Edit</Link>
+                    <button className="admin-icon-action danger" type="button" onClick={() => handleDelete(product)}>
                       Delete
                     </button>
                   </div>
@@ -149,9 +152,7 @@ export default function AdminProductsPage() {
               </tr>
             ))}
             {!isLoading && products.length === 0 && (
-              <tr>
-                <td colSpan="10">No products found.</td>
-              </tr>
+              <tr><td colSpan="9">No products found.</td></tr>
             )}
           </tbody>
         </table>

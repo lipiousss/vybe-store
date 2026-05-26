@@ -15,9 +15,9 @@ export default function AdminProductCreatePage() {
   return (
     <div className="admin-product-editor">
       <section className="admin-page-head">
-        <p className="eyebrow">Create Product</p>
-        <h1>Новый товар</h1>
-        <p>Добавьте карточку товара, изображения, варианты и стартовые остатки.</p>
+        <p className="section-label">Create Product</p>
+        <h1>NEW ARTIFACT</h1>
+        <p>Add a product card, images, variants and starting stock.</p>
       </section>
       <ProductAdminForm onSubmit={handleSubmit} submitLabel="Create product" />
     </div>

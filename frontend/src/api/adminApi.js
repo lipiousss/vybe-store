@@ -61,6 +61,71 @@ export const adminApi = {
     return response.data;
   },
 
+  async getCollections() {
+    const response = await api.get('/admin/collections');
+    return response.data;
+  },
+
+  async createCollection(data) {
+    const response = await api.post('/admin/collections', data);
+    return response.data;
+  },
+
+  async updateCollection(id, data) {
+    const response = await api.patch(`/admin/collections/${id}`, data);
+    return response.data;
+  },
+
+  async deleteCollection(id) {
+    const response = await api.delete(`/admin/collections/${id}`);
+    return response.data;
+  },
+
+  async getCategories() {
+    const response = await api.get('/admin/categories');
+    return response.data;
+  },
+
+  async createCategory(data) {
+    const response = await api.post('/admin/categories', data);
+    return response.data;
+  },
+
+  async updateCategory(id, data) {
+    const response = await api.patch(`/admin/categories/${id}`, data);
+    return response.data;
+  },
+
+  async deleteCategory(id) {
+    const response = await api.delete(`/admin/categories/${id}`);
+    return response.data;
+  },
+
+  async getAnalyticsOverview() {
+    const response = await api.get('/admin/analytics/overview');
+    return response.data;
+  },
+
+  async getRecentOrders() {
+    const response = await api.get('/admin/analytics/recent-orders');
+    return response.data;
+  },
+
+  async getLowStock() {
+    const response = await api.get('/admin/analytics/low-stock');
+    return response.data;
+  },
+
+  async getTopProducts() {
+    const response = await api.get('/admin/analytics/top-products');
+    return response.data;
+  },
+
+  async getStockMovements() {
+    const response = await api.get('/admin/analytics/stock-movements');
+    return response.data;
+  },
+
   async getUsers(params = {}) {
     const response = await api.get('/admin/users', { params });
     return response.data;

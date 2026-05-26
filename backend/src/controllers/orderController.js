@@ -139,8 +139,8 @@ export async function createOrder(req, res, next) {
             data: {
               productVariantId: item.variantId,
               type: 'SALE',
-              quantity: item.quantity,
-              comment: `Order ${createdOrder.id}`,
+              quantity: -item.quantity,
+              comment: `Order sale: ${createdOrder.id}`,
               createdById: req.user.id,
             },
           });

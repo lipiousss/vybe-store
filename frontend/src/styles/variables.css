@@ -1,4 +1,17 @@
 :root {
+  --vybe-bg: #05070d;
+  --vybe-bg-deep: #02040a;
+  --vybe-panel: #0b1018;
+  --vybe-panel-soft: #101722;
+  --vybe-border: rgba(148, 163, 184, 0.16);
+  --vybe-blue: #38bdf8;
+  --vybe-blue-deep: #1e3a8a;
+  --vybe-blue-soft: rgba(56, 189, 248, 0.16);
+  --vybe-gold: #c8a45d;
+  --vybe-gold-soft: rgba(200, 164, 93, 0.18);
+  --vybe-ash: #cbd5e1;
+  --vybe-muted: #7f8794;
+  --vybe-blood: #991b1b;
   --color-bg: #030407;
   --color-bg-soft: #070a10;
   --color-card: #0d1018;

@@ -72,28 +72,27 @@ export default function ProductCard({ product }) {
 
   return (
     <motion.article
-      className="product-card"
+      className="product-card artifact-card"
       style={{ '--light-x': lightPosition.x, '--light-y': lightPosition.y }}
       onMouseMove={handleMouseMove}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.22 }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.18 }}
     >
       <Link className="product-card-link" to={`/product/${product.slug}`}>
         <div className="product-image-wrap">
           <img src={image} alt={product.images?.[0]?.alt || product.name} />
           <div className="product-card-overlay">
-            <span className="view-item">View Item</span>
+            <span className="view-item">VIEW ITEM</span>
           </div>
         </div>
 
         <div className="product-card-body">
           <div className="badge-row">
-            {product.isNew && <span className="badge">NEW</span>}
-            {product.isLimited && <span className="badge blue">LIMITED</span>}
+            {product.isNew && <span className="badge blue">NEW</span>}
+            {product.isLimited && <span className="badge blood">LIMITED</span>}
             {product.isFeatured && <span className="badge gold">FEATURED</span>}
           </div>
 
-          <p className="product-category">{product.category?.name || 'VYBE'}</p>
           <h3>{product.name}</h3>
 
           <div className="price-row">
@@ -110,10 +109,10 @@ export default function ProductCard({ product }) {
           onClick={handleFavorite}
           aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
         >
-          ♥
+          {'\u2665'}
         </button>
-        <button className="icon-action" type="button" onClick={handleAddToCart} disabled={!hasStock}>
-          Cart
+        <button className="icon-action" type="button" onClick={handleAddToCart} disabled={!hasStock} aria-label="Add to cart">
+          +
         </button>
       </div>
       {message && <p className="product-card-message">{message}</p>}

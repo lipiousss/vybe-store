@@ -23,7 +23,7 @@ export default function AdminUsersPage() {
 
   async function handleRole(user, role) {
     if (user.id === currentUser?.id && user.role === 'ADMIN' && role !== 'ADMIN') {
-      window.alert('Нельзя снимать роль ADMIN с самого себя.');
+      window.alert('You cannot remove the ADMIN role from yourself.');
       return;
     }
 
@@ -32,7 +32,7 @@ export default function AdminUsersPage() {
 
   async function handleBlock(user) {
     if (user.id === currentUser?.id) {
-      window.alert('Нельзя заблокировать самого себя.');
+      window.alert('You cannot block yourself.');
       return;
     }
 
@@ -43,18 +43,14 @@ export default function AdminUsersPage() {
     <div className="admin-users-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Users</p>
-          <h1>Пользователи</h1>
-          <p>Управление ролями, блокировками и базовой активностью аккаунтов.</p>
+          <p className="section-label">Customers</p>
+          <h1>CUSTOMERS</h1>
+          <p>Manage roles, blocked status and basic account activity.</p>
         </div>
       </section>
 
       <section className="admin-filters">
-        <input
-          value={filters.search}
-          onChange={(event) => updateFilter('search', event.target.value)}
-          placeholder="Search email or username"
-        />
+        <input value={filters.search} onChange={(event) => updateFilter('search', event.target.value)} placeholder="Search email or username" />
         <select value={filters.role} onChange={(event) => updateFilter('role', event.target.value)}>
           <option value="">All roles</option>
           <option value="USER">USER</option>
@@ -93,13 +89,10 @@ export default function AdminUsersPage() {
                     {user.avatar ? <img src={mediaUrl(user.avatar)} alt={user.username} /> : user.username[0]?.toUpperCase()}
                   </div>
                 </td>
-                <td>
-                  <strong>{user.username}</strong>
-                  <span>{user.profile?.firstName || 'No profile name'}</span>
-                </td>
+                <td><strong>{user.username}</strong><span>{user.profile?.firstName || 'No profile name'}</span></td>
                 <td>{user.email}</td>
                 <td><span className={`admin-role-badge ${user.role.toLowerCase()}`}>{user.role}</span></td>
-                <td>{user.phone || '—'}</td>
+                <td>{user.phone || '-'}</td>
                 <td>{user.counts?.orders || 0}</td>
                 <td>{user.counts?.favorites || 0}</td>
                 <td>
@@ -110,16 +103,12 @@ export default function AdminUsersPage() {
                 <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                 <td>
                   <div className="admin-row-actions">
-                    <select
-                      value={user.role}
-                      onChange={(event) => handleRole(user, event.target.value)}
-                      disabled={isLoading}
-                    >
+                    <select value={user.role} onChange={(event) => handleRole(user, event.target.value)} disabled={isLoading}>
                       <option value="USER">USER</option>
                       <option value="ADMIN">ADMIN</option>
                     </select>
                     <button
-                      className={`ghost-button small${user.isBlocked ? '' : ' danger'}`}
+                      className={`admin-icon-action${user.isBlocked ? '' : ' danger'}`}
                       type="button"
                       onClick={() => handleBlock(user)}
                       disabled={isLoading || user.id === currentUser?.id}
@@ -130,11 +119,7 @@ export default function AdminUsersPage() {
                 </td>
               </tr>
             ))}
-            {!isLoading && users.length === 0 && (
-              <tr>
-                <td colSpan="10">No users found.</td>
-              </tr>
-            )}
+            {!isLoading && users.length === 0 && <tr><td colSpan="10">No users found.</td></tr>}
           </tbody>
         </table>
       </div>

@@ -28,38 +28,35 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="admin-orders-page">
-      <div className="section-heading">
-        <p className="eyebrow">Admin orders</p>
-        <h1>Orders Control</h1>
-      </div>
+      <section className="admin-page-head">
+        <div>
+          <p className="section-label">Orders</p>
+          <h1>ORDERS</h1>
+          <p>Review demo-mode orders and move them through the fulfilment flow.</p>
+        </div>
+      </section>
 
-      <div className="admin-order-filters">
+      <section className="admin-order-filters">
         <label>
           Status
           <select value={filters.status} onChange={(event) => setFilters({ ...filters, status: event.target.value })}>
-            {statuses.map((status) => (
-              <option value={status} key={status}>{status || 'All'}</option>
-            ))}
+            {statuses.map((status) => <option value={status} key={status}>{status || 'All'}</option>)}
           </select>
         </label>
         <label>
           Search
-          <input
-            value={filters.search}
-            onChange={(event) => setFilters({ ...filters, search: event.target.value })}
-            placeholder="email, name, phone..."
-          />
+          <input value={filters.search} onChange={(event) => setFilters({ ...filters, search: event.target.value })} placeholder="email, name, phone..." />
         </label>
-      </div>
+      </section>
 
       {isLoading && <p className="state-text">Loading admin orders...</p>}
       {error && <p className="state-text danger">{error}</p>}
 
       <div className="admin-table-wrap">
-        <table className="admin-orders-table">
+        <table className="admin-table admin-orders-table">
           <thead>
             <tr>
-              <th>ID</th>
+              <th>Order</th>
               <th>User</th>
               <th>Customer</th>
               <th>Phone</th>
@@ -80,22 +77,13 @@ export default function AdminOrdersPage() {
                 <td>{money(order.totalPrice)}</td>
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td>
-                  <select
-                    value={order.status}
-                    onChange={(event) => handleStatusChange(order.id, event.target.value)}
-                  >
-                    {statuses.filter(Boolean).map((status) => (
-                      <option value={status} key={status}>{status}</option>
-                    ))}
+                  <select value={order.status} onChange={(event) => handleStatusChange(order.id, event.target.value)}>
+                    {statuses.filter(Boolean).map((status) => <option value={status} key={status}>{status}</option>)}
                   </select>
                 </td>
               </tr>
             ))}
-            {orders.length === 0 && (
-              <tr>
-                <td colSpan="8">No orders found.</td>
-              </tr>
-            )}
+            {orders.length === 0 && <tr><td colSpan="8">No orders found.</td></tr>}
           </tbody>
         </table>
       </div>

@@ -13,12 +13,12 @@ export default function MainLayout() {
   return (
     <div className="site-frame">
       {!isAdmin && <Atmosphere />}
-      <Header />
+      {!isAdmin && <Header />}
       <PageTransition key={location.pathname}>
         <Outlet />
       </PageTransition>
-      <Footer />
-      <CartDrawer />
+      {!isAdmin && <Footer />}
+      {!isAdmin && <CartDrawer />}
     </div>
   );
 }

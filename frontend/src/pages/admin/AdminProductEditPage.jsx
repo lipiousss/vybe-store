@@ -26,9 +26,9 @@ export default function AdminProductEditPage() {
   return (
     <div className="admin-product-editor">
       <section className="admin-page-head">
-        <p className="eyebrow">Edit Product</p>
+        <p className="section-label">Edit Product</p>
         <h1>{currentProduct?.name || 'Product editor'}</h1>
-        <p>Измените карточку товара, фотографии, варианты и складские остатки.</p>
+        <p>Edit product data, images, variants and stock.</p>
       </section>
       {currentProduct && (
         <ProductAdminForm initialProduct={currentProduct} onSubmit={handleSubmit} submitLabel="Save changes" />

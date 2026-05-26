@@ -32,6 +32,28 @@ async function createUniqueSlug(name, currentId = null) {
 export async function getCollections(req, res, next) {
   try {
     const collections = await prisma.collection.findMany({
+      include: {
+        _count: {
+          select: { products: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return res.json({ collections });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getAdminCollections(req, res, next) {
+  try {
+    const collections = await prisma.collection.findMany({
+      include: {
+        _count: {
+          select: { products: true },
+        },
+      },
       orderBy: { createdAt: 'desc' },
     });
 
@@ -115,6 +137,25 @@ export async function updateCollection(req, res, next) {
 
 export async function deleteCollection(req, res, next) {
   try {
+    const collection = await prisma.collection.findUnique({
+      where: { id: req.params.id },
+      include: {
+        _count: {
+          select: { products: true },
+        },
+      },
+    });
+
+    if (!collection) {
+      return res.status(404).json({ message: 'Collection not found.' });
+    }
+
+    if (collection._count.products > 0) {
+      return res.status(409).json({
+        message: 'Collection cannot be deleted because products are linked to it.',
+      });
+    }
+
     await prisma.collection.delete({
       where: { id: req.params.id },
     });

@@ -84,14 +84,8 @@ function calculateFinalPrice(form) {
   const price = Number(form.price) || 0;
   const discountValue = Number(form.discountValue) || 0;
 
-  if (form.discountType === 'PERCENT') {
-    return Math.max(price - price * (discountValue / 100), 0);
-  }
-
-  if (form.discountType === 'FIXED') {
-    return Math.max(price - discountValue, 0);
-  }
-
+  if (form.discountType === 'PERCENT') return Math.max(price - price * (discountValue / 100), 0);
+  if (form.discountType === 'FIXED') return Math.max(price - discountValue, 0);
   return price;
 }
 
@@ -146,11 +140,7 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
       ...current,
       images: [
         ...current.images,
-        {
-          url,
-          alt: current.name || 'VYBE product image',
-          order: current.images.length,
-        },
+        { url, alt: current.name || 'VYBE product image', order: current.images.length },
       ],
     }));
     event.target.value = '';
@@ -242,31 +232,49 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
   }
 
   return (
-    <form className="admin-form" onSubmit={handleSubmit}>
+    <form className="admin-form-shell" onSubmit={handleSubmit}>
       <section className="admin-form-main">
-        <div className="admin-form-section">
-          <div>
-            <p className="eyebrow">Product Core</p>
-            <h2>Основная информация</h2>
+        <header className="admin-form-hero">
+          <p className="section-label">FORGE THE CATALOGUE</p>
+          <h1>Create a new artifact for your realm</h1>
+        </header>
+
+        <nav className="admin-form-tabs" aria-label="Product form sections">
+          <a href="#product-details">Product Details</a>
+          <a href="#pricing-inventory">Pricing & Inventory</a>
+          <a href="#media-settings">Media & Settings</a>
+        </nav>
+
+        <section className="admin-form-section" id="product-details">
+          <div className="admin-panel__head">
+            <div>
+              <p className="section-label">Product Details</p>
+              <h2>Core artifact data</h2>
+            </div>
           </div>
 
           <div className="admin-form-grid">
             <label>
-              Name
+              Product Name
               <input value={form.name} onChange={(event) => updateField('name', event.target.value)} />
             </label>
             <label>
-              Status
-              <select value={form.status} onChange={(event) => updateField('status', event.target.value)}>
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="DRAFT">DRAFT</option>
-                <option value="ARCHIVED">ARCHIVED</option>
-                <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+              Category
+              <select value={form.categoryId} onChange={(event) => updateField('categoryId', event.target.value)}>
+                <option value="">Select category</option>
+                {flatCategories.map((category) => (
+                  <option key={category.id} value={category.id}>{category.name}</option>
+                ))}
               </select>
             </label>
-            <label className="admin-wide">
-              Description
-              <textarea value={form.description} onChange={(event) => updateField('description', event.target.value)} />
+            <label>
+              Collection
+              <select value={form.collectionId || ''} onChange={(event) => updateField('collectionId', event.target.value)}>
+                <option value="">No collection</option>
+                {collections.map((collection) => (
+                  <option key={collection.id} value={collection.id}>{collection.name}</option>
+                ))}
+              </select>
             </label>
             <label>
               Brand
@@ -284,35 +292,33 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
               Color
               <input value={form.color} onChange={(event) => updateField('color', event.target.value)} />
             </label>
+            <label className="admin-wide">
+              Description
+              <textarea rows="5" value={form.description} onChange={(event) => updateField('description', event.target.value)} />
+            </label>
           </div>
-        </div>
+        </section>
 
-        <div className="admin-form-section">
-          <div>
-            <p className="eyebrow">Pricing</p>
-            <h2>Цена и скидка</h2>
+        <section className="admin-form-section" id="pricing-inventory">
+          <div className="admin-panel__head">
+            <div>
+              <p className="section-label">Pricing & Inventory</p>
+              <h2>Price, discount and variants</h2>
+            </div>
+            <button className="ghost-button small" type="button" onClick={addVariant}>Add variant</button>
           </div>
+
           <div className="admin-form-grid">
             <label>
               Price
-              <input
-                min="0"
-                type="number"
-                value={form.price}
-                onChange={(event) => updateField('price', event.target.value)}
-              />
+              <input min="0" type="number" value={form.price} onChange={(event) => updateField('price', event.target.value)} />
             </label>
             <label>
-              Old price
-              <input
-                min="0"
-                type="number"
-                value={form.oldPrice}
-                onChange={(event) => updateField('oldPrice', event.target.value)}
-              />
+              Old Price
+              <input min="0" type="number" value={form.oldPrice} onChange={(event) => updateField('oldPrice', event.target.value)} />
             </label>
             <label>
-              Discount type
+              Discount Type
               <select value={form.discountType} onChange={(event) => updateField('discountType', event.target.value)}>
                 <option value="NONE">NONE</option>
                 <option value="PERCENT">PERCENT</option>
@@ -320,131 +326,74 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
               </select>
             </label>
             <label>
-              Discount value
-              <input
-                min="0"
-                type="number"
-                value={form.discountValue}
-                onChange={(event) => updateField('discountValue', event.target.value)}
-              />
+              Discount Value
+              <input min="0" type="number" value={form.discountValue} onChange={(event) => updateField('discountValue', event.target.value)} />
             </label>
           </div>
-        </div>
 
-        <div className="admin-form-section">
-          <div>
-            <p className="eyebrow">Placement</p>
-            <h2>Категории и метки</h2>
-          </div>
-          <div className="admin-form-grid">
-            <label>
-              Category
-              <select value={form.categoryId} onChange={(event) => updateField('categoryId', event.target.value)}>
-                <option value="">Select category</option>
-                {flatCategories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Collection
-              <select value={form.collectionId || ''} onChange={(event) => updateField('collectionId', event.target.value)}>
-                <option value="">No collection</option>
-                {collections.map((collection) => (
-                  <option key={collection.id} value={collection.id}>
-                    {collection.name}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          <div className="admin-checks">
-            {['isNew', 'isLimited', 'isFeatured', 'isCollectible'].map((field) => (
-              <label className="check-row" key={field}>
-                <input
-                  type="checkbox"
-                  checked={form[field]}
-                  onChange={(event) => updateField(field, event.target.checked)}
-                />
-                {field}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div className="admin-form-section">
-          <div>
-            <p className="eyebrow">Images</p>
-            <h2>Фотографии товара</h2>
-          </div>
-          <label className="admin-upload-zone">
-            Upload image
-            <input accept="image/jpeg,image/png,image/webp" type="file" onChange={handleUpload} />
-          </label>
-          <div className="admin-image-list">
-            {form.images.map((image, index) => (
-              <article key={`${image.url}-${index}`}>
-                <img src={normalizeImageUrl(image.url)} alt={image.alt || form.name} />
-                <input value={image.alt} onChange={(event) => updateImage(index, 'alt', event.target.value)} placeholder="Alt" />
-                <input
-                  min="0"
-                  type="number"
-                  value={image.order}
-                  onChange={(event) => updateImage(index, 'order', event.target.value)}
-                  placeholder="Order"
-                />
-                <button className="ghost-button danger" type="button" onClick={() => removeImage(index)}>
-                  Remove
-                </button>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <div className="admin-form-section">
-          <div className="admin-section-head">
-            <div>
-              <p className="eyebrow">Variants</p>
-              <h2>Варианты и остатки</h2>
-            </div>
-            <button className="ghost-button small" type="button" onClick={addVariant}>
-              Add variant
-            </button>
-          </div>
           <div className="admin-variant-list">
             {form.variants.map((variant, index) => (
               <article key={variant.id || index}>
                 <input value={variant.size} onChange={(event) => updateVariant(index, 'size', event.target.value)} placeholder="Size" />
                 <input value={variant.color} onChange={(event) => updateVariant(index, 'color', event.target.value)} placeholder="Color" />
                 <input value={variant.sku} onChange={(event) => updateVariant(index, 'sku', event.target.value)} placeholder="SKU" />
-                <input
-                  min="0"
-                  type="number"
-                  value={variant.stock}
-                  onChange={(event) => updateVariant(index, 'stock', event.target.value)}
-                  placeholder="Stock"
-                />
-                <button className="ghost-button danger" type="button" onClick={() => removeVariant(index)}>
-                  Remove
-                </button>
+                <input min="0" type="number" value={variant.stock} onChange={(event) => updateVariant(index, 'stock', event.target.value)} placeholder="Stock" />
+                <button className="admin-icon-action danger" type="button" onClick={() => removeVariant(index)}>Remove</button>
               </article>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="admin-form-section">
-          <div>
-            <p className="eyebrow">JSON</p>
-            <h2>Characteristics</h2>
+        <section className="admin-form-section" id="media-settings">
+          <div className="admin-panel__head">
+            <div>
+              <p className="section-label">Media & Settings</p>
+              <h2>Images, flags and status</h2>
+            </div>
           </div>
-          <textarea
-            className="admin-json"
-            value={form.characteristics}
-            onChange={(event) => updateField('characteristics', event.target.value)}
-          />
-        </div>
+
+          <label className="admin-upload-zone">
+            <span>Drag & drop images here</span>
+            <strong>Choose Files</strong>
+            <input accept="image/jpeg,image/png,image/webp" type="file" onChange={handleUpload} />
+          </label>
+
+          <div className="admin-image-list">
+            {form.images.map((image, index) => (
+              <article key={`${image.url}-${index}`}>
+                <img src={normalizeImageUrl(image.url)} alt={image.alt || form.name} />
+                <input value={image.alt} onChange={(event) => updateImage(index, 'alt', event.target.value)} placeholder="Alt" />
+                <input min="0" type="number" value={image.order} onChange={(event) => updateImage(index, 'order', event.target.value)} placeholder="Order" />
+                <button className="admin-icon-action danger" type="button" onClick={() => removeImage(index)}>Remove</button>
+              </article>
+            ))}
+          </div>
+
+          <div className="admin-form-grid">
+            <label>
+              Status
+              <select value={form.status} onChange={(event) => updateField('status', event.target.value)}>
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="DRAFT">DRAFT</option>
+                <option value="ARCHIVED">ARCHIVED</option>
+                <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+              </select>
+            </label>
+            <label className="admin-wide">
+              Characteristics JSON
+              <textarea className="admin-json" value={form.characteristics} onChange={(event) => updateField('characteristics', event.target.value)} />
+            </label>
+          </div>
+
+          <div className="admin-checks">
+            {['isNew', 'isLimited', 'isFeatured', 'isCollectible'].map((field) => (
+              <label className="check-row" key={field}>
+                <input type="checkbox" checked={form[field]} onChange={(event) => updateField(field, event.target.checked)} />
+                {field}
+              </label>
+            ))}
+          </div>
+        </section>
 
         {(validationError || error || success) && (
           <p className={`state-text ${validationError || error ? 'danger' : 'success'}`}>
@@ -459,8 +408,9 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
         </div>
       </section>
 
-      <aside className="admin-product-preview">
-        <p className="eyebrow">Live Preview</p>
+      <aside className="admin-live-preview admin-product-preview">
+        <p className="section-label">LIVE PREVIEW</p>
+        <span>This is how your product will appear on the store.</span>
         <div className="admin-preview-card">
           <div className="admin-preview-image">
             <img src={normalizeImageUrl(previewImage)} alt={form.name || 'Product preview'} />

@@ -6,6 +6,12 @@ const categoryInclude = {
   children: {
     orderBy: { name: 'asc' },
   },
+  _count: {
+    select: {
+      products: true,
+      children: true,
+    },
+  },
 };
 
 async function createUniqueSlug(name, currentId = null) {
@@ -63,6 +69,22 @@ export async function getCategoryBySlug(req, res, next) {
     }
 
     return res.json({ category });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export async function getAdminCategories(req, res, next) {
+  try {
+    const categories = await prisma.category.findMany({
+      include: categoryInclude,
+      orderBy: [
+        { parentId: 'asc' },
+        { name: 'asc' },
+      ],
+    });
+
+    return res.json({ categories });
   } catch (error) {
     return next(error);
   }
@@ -127,6 +149,28 @@ export async function updateCategory(req, res, next) {
 
 export async function deleteCategory(req, res, next) {
   try {
+    const category = await prisma.category.findUnique({
+      where: { id: req.params.id },
+      include: {
+        _count: {
+          select: {
+            products: true,
+            children: true,
+          },
+        },
+      },
+    });
+
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found.' });
+    }
+
+    if (category._count.products > 0 || category._count.children > 0) {
+      return res.status(409).json({
+        message: 'Category cannot be deleted because products or child categories are linked to it.',
+      });
+    }
+
     await prisma.category.delete({
       where: { id: req.params.id },
     });
