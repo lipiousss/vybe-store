@@ -15,12 +15,13 @@ const navItems = [
 export default function Header() {
   const navigate = useNavigate();
   const { user, isAuth, logout } = useAuthStore();
-  const { openCart, totalQuantity } = useCartStore();
+  const { closeCart, totalQuantity } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const avatar = user?.avatar ? mediaUrl(user.avatar) : null;
 
   function goTo(path) {
     setIsMenuOpen(false);
+    closeCart();
     navigate(path);
   }
 
@@ -32,16 +33,12 @@ export default function Header() {
   function handleLogout() {
     logout();
     setIsMenuOpen(false);
+    closeCart();
     navigate('/');
   }
 
   function handleCartClick() {
-    if (!isAuth) {
-      navigate('/login');
-      return;
-    }
-
-    openCart();
+    goTo(isAuth ? '/cart' : '/login');
   }
 
   return (

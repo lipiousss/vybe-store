@@ -1,5 +1,8 @@
 import React from 'react';
 import ProductCard from '../../components/product/ProductCard.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useCategoryStore } from '../../store/categoryStore.js';
 import { useCollectionStore } from '../../store/collectionStore.js';
 import { useProductStore } from '../../store/productStore.js';
@@ -128,19 +131,22 @@ export default function CatalogPage() {
         </aside>
 
         <div className="catalog-results">
-          {isLoading && <p className="state-text">Loading catalog...</p>}
-          {error && <p className="state-text danger">{error}</p>}
+          {isLoading && <Loader text="Loading catalog..." />}
+          {error && <ErrorState title="Catalog is unavailable" message={error} />}
           {!isLoading && products.length === 0 && (
-            <div className="fantasy-card empty-state">
-              <h3>No artifacts found.</h3>
-              <p>Try another name, collection, category, or price range.</p>
+            <EmptyState
+              label="Catalog"
+              title="No artifacts found."
+              message="Try another name, collection, category, or price range."
+            />
+          )}
+          {!isLoading && !error && products.length > 0 && (
+            <div className="product-grid">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
           )}
-          <div className="product-grid">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
         </div>
       </section>
     </main>

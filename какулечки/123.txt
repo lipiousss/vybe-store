@@ -1,0 +1,21 @@
+git add .
+git commit -m ""
+git push
+
+
+docker compose exec backend npx prisma migrate dev --name init
+docker compose exec backend npm run prisma:seed
+
+
+
+
+
+git clone ссылка_на_репозиторий
+cd vybe-store
+docker compose up --build
+
+
+
+docker compose exec backend npx prisma migrate dev
+docker compose run --rm backend npx prisma migrate dev
+docker compose exec backend npx prisma db seed

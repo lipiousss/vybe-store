@@ -1,5 +1,8 @@
 import React from 'react';
 import ProductCard from '../../components/product/ProductCard.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useProductStore } from '../../store/productStore.js';
 import { useSiteAssetStore } from '../../store/siteAssetStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
@@ -64,22 +67,26 @@ export default function CollectiblesPage() {
         ))}
       </div>
 
-      {isLoading && <p className="state-text">Opening archive...</p>}
-      {error && <p className="state-text danger">{error}</p>}
-      {!isLoading && visibleProducts.length === 0 && (
-        <div className="fantasy-card empty-state">
-          <h3>No relics found.</h3>
-          <p>The archive shelf is empty for this filter.</p>
+      {isLoading && <Loader text="Opening archive..." />}
+      {error && <ErrorState title="Collectibles archive is unavailable" message={error} />}
+      {!isLoading && !error && visibleProducts.length === 0 && (
+        <EmptyState
+          label="Collectibles"
+          title="No relics found."
+          message="The archive shelf is empty for this filter."
+        />
+      )}
+
+      {!isLoading && !error && visibleProducts.length > 0 && (
+        <div className="product-grid cinematic-grid collectibles-grid">
+          {visibleProducts.map((product, index) => (
+            <div className="collectible-slot" key={product.id}>
+              <span>ARCHIVE {String(index + 1).padStart(3, '0')}</span>
+              <ProductCard product={product} />
+            </div>
+          ))}
         </div>
       )}
-      <div className="product-grid cinematic-grid collectibles-grid">
-        {visibleProducts.map((product, index) => (
-          <div className="collectible-slot" key={product.id}>
-            <span>ARCHIVE {String(index + 1).padStart(3, '0')}</span>
-            <ProductCard product={product} />
-          </div>
-        ))}
-      </div>
     </main>
   );
 }

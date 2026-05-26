@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import Loader from '../ui/Loader.jsx';
 import { useAuthStore } from '../../store/authStore.js';
 
 export default function ProtectedRoute({ allowedRoles = [] }) {
@@ -9,7 +10,7 @@ export default function ProtectedRoute({ allowedRoles = [] }) {
   if ((isLoading || (token && !user)) && token) {
     return (
       <main className="page-shell">
-        <p className="state-text">Checking access...</p>
+        <Loader text="Checking access..." />
       </main>
     );
   }

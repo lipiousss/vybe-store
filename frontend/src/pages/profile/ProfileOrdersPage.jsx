@@ -1,6 +1,9 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useOrderStore } from '../../store/orderStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
@@ -36,15 +39,18 @@ export default function ProfileOrdersPage() {
         </div>
 
         {location.state?.success && <p className="state-text success">{location.state.success}</p>}
-        {isLoading && <p className="state-text">Loading orders...</p>}
-        {error && <p className="state-text danger">{error}</p>}
+        {isLoading && <Loader text="Loading orders..." />}
+        {error && <ErrorState title="Orders are unavailable" message={error} />}
 
-        {!isLoading && orders.length === 0 ? (
-          <div className="profile-placeholder">
-            <h2>Заказов пока нет</h2>
-            <p>После оформления корзины заказ появится здесь.</p>
-          </div>
-        ) : (
+        {!isLoading && !error && orders.length === 0 ? (
+          <EmptyState
+            label="Orders"
+            title="Заказов пока нет"
+            message="После оформления корзины заказ появится здесь."
+          />
+        ) : null}
+
+        {!isLoading && !error && orders.length > 0 && (
           <div className="orders-list">
             {orders.map((order) => (
               <article className="order-card" key={order.id}>

@@ -21,6 +21,8 @@ import AdminSiteContentPage from '../pages/admin/AdminSiteContentPage.jsx';
 import AdminStockPage from '../pages/admin/AdminStockPage.jsx';
 import AdminUsersPage from '../pages/admin/AdminUsersPage.jsx';
 import CheckoutPage from '../pages/public/CheckoutPage.jsx';
+import CartPage from '../pages/public/CartPage.jsx';
+import NotFoundPage from '../pages/public/NotFoundPage.jsx';
 import RegisterPage from '../pages/auth/RegisterPage.jsx';
 import ProfileFavoritesPage from '../pages/profile/ProfileFavoritesPage.jsx';
 import ProfileOrdersPage from '../pages/profile/ProfileOrdersPage.jsx';
@@ -44,6 +46,7 @@ export const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: [
+          { path: 'cart', element: <CartPage /> },
           { path: 'checkout', element: <CheckoutPage /> },
           { path: 'profile', element: <ProfilePage /> },
           { path: 'profile/settings', element: <ProfileSettingsPage /> },
@@ -71,6 +74,7 @@ export const router = createBrowserRouter([
           },
         ],
       },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);

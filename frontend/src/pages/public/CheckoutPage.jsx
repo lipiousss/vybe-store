@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import EmptyState from '../../components/ui/EmptyState.jsx';
 import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
 import { useOrderStore } from '../../store/orderStore.js';
@@ -66,13 +67,13 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <main className="checkout-page">
-        <section className="checkout-empty">
-          <p className="eyebrow">Checkout</p>
-          <h1>Корзина пуста</h1>
-          <p>Добавь товары из каталога, чтобы создать demo-order.</p>
-          <Link className="gold-button" to="/catalog">В каталог</Link>
-        </section>
+      <main className="checkout-page checkout-page--empty">
+        <EmptyState
+          label="Checkout"
+          title="Корзина пуста"
+          message="Добавь товары из каталога, чтобы создать demo-order."
+          action={<Link className="gold-button" to="/catalog">В каталог</Link>}
+        />
       </main>
     );
   }

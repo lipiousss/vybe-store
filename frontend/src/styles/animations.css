@@ -92,6 +92,12 @@
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @keyframes cursorTrail {
   0% {
     transform: scale(0.6);

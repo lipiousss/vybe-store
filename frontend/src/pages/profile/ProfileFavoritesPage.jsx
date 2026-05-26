@@ -1,6 +1,9 @@
 import React from 'react';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useFavoriteStore } from '../../store/favoriteStore.js';
 
 export default function ProfileFavoritesPage() {
@@ -21,15 +24,18 @@ export default function ProfileFavoritesPage() {
           <p>Сохранённые товары из архива VYBE.</p>
         </div>
 
-        {isLoading && <p className="state-text">Loading favorites...</p>}
-        {error && <p className="state-text danger">{error}</p>}
+        {isLoading && <Loader text="Loading favorites..." />}
+        {error && <ErrorState title="Favorites are unavailable" message={error} />}
 
-        {!isLoading && products.length === 0 ? (
-          <div className="profile-placeholder empty-favorites">
-            <h2>В избранном пока пусто</h2>
-            <p>Добавь товар через кнопку сердца в каталоге или на странице товара.</p>
-          </div>
-        ) : (
+        {!isLoading && !error && products.length === 0 ? (
+          <EmptyState
+            label="Favorites"
+            title="В избранном пока пусто"
+            message="Добавь товар через кнопку сердца в каталоге или на странице товара."
+          />
+        ) : null}
+
+        {!isLoading && !error && products.length > 0 && (
           <div className="product-grid favorites-grid">
             {products.map((product) => (
               <ProductCard product={product} key={product.id} />

@@ -1,5 +1,8 @@
 import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
 import { useFavoriteStore } from '../../store/favoriteStore.js';
@@ -30,15 +33,24 @@ export default function ProductPage() {
   }, [slug, fetchProductBySlug]);
 
   if (isLoading) {
-    return <main className="page-shell"><p className="state-text">Loading item...</p></main>;
+    return <main className="page-shell"><Loader text="Loading item..." /></main>;
   }
 
   if (error) {
-    return <main className="page-shell"><p className="state-text danger">{error}</p></main>;
+    return <main className="page-shell"><ErrorState title="Product is unavailable" message={error} /></main>;
   }
 
   if (!currentProduct) {
-    return <main className="page-shell"><p className="state-text">Item not found.</p></main>;
+    return (
+      <main className="page-shell">
+        <EmptyState
+          label="Product"
+          title="Item not found."
+          message="This artifact is absent from the visible catalog."
+          action={<Link className="ghost-button" to="/catalog">Back to catalog</Link>}
+        />
+      </main>
+    );
   }
 
   const image = mediaUrl(currentProduct.images?.[0]?.url);

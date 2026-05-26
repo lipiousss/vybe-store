@@ -1,6 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 import ArtworkCard from '../../components/artwork/ArtworkCard.jsx';
 import ArtworkModal from '../../components/artwork/ArtworkModal.jsx';
+import EmptyState from '../../components/ui/EmptyState.jsx';
+import ErrorState from '../../components/ui/ErrorState.jsx';
+import Loader from '../../components/ui/Loader.jsx';
 import { useArtworkStore } from '../../store/artworkStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
@@ -119,11 +122,15 @@ export default function ArtworksPage() {
           <h2>ARTWORKS</h2>
         </header>
 
-        {isLoading && <p className="state-text artwork-state">Loading visual archive...</p>}
-        {error && <p className="state-text danger artwork-state">{error}</p>}
+        {isLoading && <Loader text="Loading visual archive..." />}
+        {error && <ErrorState title="Visual archive is unavailable" message={error} />}
 
         {!isLoading && !error && artworks.length === 0 && (
-          <p className="artwork-empty-state">No artworks found in the archive.</p>
+          <EmptyState
+            label="Visual archive"
+            title="No artworks found in the archive."
+            message="Try another archive filter or add artworks from the admin panel."
+          />
         )}
 
         {!isLoading && !error && artworks.length > 0 && (
