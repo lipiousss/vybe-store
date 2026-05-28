@@ -29,6 +29,7 @@ const uploadsPath = path.resolve(__dirname, '../uploads');
 const defaultClientUrls = [
   'http://localhost:5173',
   'https://lipioussss.netlify.app',
+  'https://vybe-store-frontend.onrender.com',
 ];
 
 function normalizeOrigin(origin) {
@@ -48,16 +49,38 @@ const allowedOrigins = configuredClientUrls
   .map(normalizeOrigin)
   .filter(Boolean);
 
+function isAllowedOrigin(origin) {
+  const normalizedOrigin = normalizeOrigin(origin);
+
+  return (
+    !normalizedOrigin
+    || allowedOrigins.includes(normalizedOrigin)
+    || normalizedOrigin.endsWith('.netlify.app')
+    || normalizedOrigin.endsWith('.onrender.com')
+  );
+}
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (isAllowedOrigin(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin || '*');
+    res.setHeader('Vary', 'Origin');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,PUT,DELETE,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  return next();
+});
+
 app.use(cors({
   origin(origin, callback) {
-    const normalizedOrigin = normalizeOrigin(origin);
-
-    if (
-      !normalizedOrigin
-      || allowedOrigins.includes(normalizedOrigin)
-      || normalizedOrigin.endsWith('.netlify.app')
-      || normalizedOrigin.endsWith('.onrender.com')
-    ) {
+    if (isAllowedOrigin(origin)) {
       return callback(null, true);
     }
 
