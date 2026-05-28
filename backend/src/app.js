@@ -26,15 +26,33 @@ const port = process.env.PORT || 4000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsPath = path.resolve(__dirname, '../uploads');
-const defaultClientUrl = 'http://localhost:5173';
-const allowedOrigins = (process.env.CLIENT_URL || process.env.FRONTEND_URL || defaultClientUrl)
+const defaultClientUrls = [
+  'http://localhost:5173',
+  'https://lipioussss.netlify.app',
+];
+
+function normalizeOrigin(origin) {
+  return origin?.trim().replace(/\/$/, '');
+}
+
+const configuredClientUrls = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  ...defaultClientUrls,
+]
+  .filter(Boolean)
+  .join(',');
+
+const allowedOrigins = configuredClientUrls
   .split(',')
-  .map((origin) => origin.trim())
+  .map(normalizeOrigin)
   .filter(Boolean);
 
 app.use(cors({
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    const normalizedOrigin = normalizeOrigin(origin);
+
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
 
