@@ -556,11 +556,27 @@ async function clearProductData() {
 }
 
 async function seedProducts() {
-  await clearProductData();
+  const shouldResetProducts = process.env.SEED_FORCE === 'true';
+
+  if (shouldResetProducts) {
+    await clearProductData();
+    console.log('Product seed reset enabled: existing product data was cleared.');
+  } else {
+    console.log('Product seed reset disabled: existing admin-created products will be preserved.');
+  }
 
   const products = buildProducts();
 
   for (const productData of products) {
+    const existingProduct = await prisma.product.findUnique({
+      where: { slug: productData.slug },
+      select: { id: true },
+    });
+
+    if (existingProduct) {
+      continue;
+    }
+
     const category = await prisma.category.findUniqueOrThrow({
       where: { slug: productData.categorySlug },
     });
