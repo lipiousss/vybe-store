@@ -6,15 +6,14 @@ import Loader from '../../components/ui/Loader.jsx';
 import { useFavoriteStore } from '../../store/favoriteStore.js';
 import { useOrderStore } from '../../store/orderStore.js';
 import { useProfileStore } from '../../store/profileStore.js';
-
-const backendUrl = 'http://localhost:4000';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 function avatarUrl(avatar) {
   if (!avatar) {
     return null;
   }
 
-  return avatar.startsWith('/uploads') ? `${backendUrl}${avatar}` : avatar;
+  return mediaUrl(avatar);
 }
 
 export default function ProfilePage() {

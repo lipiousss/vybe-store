@@ -26,7 +26,7 @@ services:
       NODE_ENV: development
       PORT: 4000
       DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:-vybe_password}@postgres:5432/${POSTGRES_DB:-vybe_store}
-      FRONTEND_URL: http://localhost:${FRONTEND_PORT:-5173}
+      CLIENT_URL: http://localhost:${FRONTEND_PORT:-5173}
     ports:
       - "${BACKEND_PORT:-4000}:4000"
     volumes:
@@ -43,7 +43,7 @@ services:
     container_name: vybe-frontend
     restart: unless-stopped
     environment:
-      VITE_API_URL: http://localhost:${BACKEND_PORT:-4000}
+      VITE_API_URL: http://localhost:${BACKEND_PORT:-4000}/api
     ports:
       - "${FRONTEND_PORT:-5173}:5173"
     volumes:

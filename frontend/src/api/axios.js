@@ -1,7 +1,11 @@
 import axios from 'axios';
 
+const LOCAL_API_URL = 'http://localhost:4000/api';
+const PRODUCTION_API_URL = 'https://vybe-store-backend.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? PRODUCTION_API_URL : LOCAL_API_URL);
+
 const api = axios.create({
-  baseURL: 'http://localhost:4000/api',
+  baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },

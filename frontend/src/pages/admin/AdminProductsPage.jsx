@@ -2,12 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminProductStore } from '../../store/adminProductStore.js';
 import { useCategoryStore } from '../../store/categoryStore.js';
-
-const API_URL = 'http://localhost:4000';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 function imageUrl(product) {
   const url = product.images?.[0]?.url || '/images/placeholders/product-placeholder.png';
-  return url.startsWith('/uploads') ? `${API_URL}${url}` : url;
+  return mediaUrl(url);
 }
 
 function flattenCategories(categories = []) {

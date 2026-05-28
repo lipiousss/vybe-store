@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
 import { useProfileStore } from '../../store/profileStore.js';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 import { maskRuPhone } from '../../utils/phoneMask.js';
-
-const backendUrl = 'http://localhost:4000';
 
 function avatarUrl(avatar) {
   if (!avatar) {
     return null;
   }
 
-  return avatar.startsWith('/uploads') ? `${backendUrl}${avatar}` : avatar;
+  return mediaUrl(avatar);
 }
 
 export default function ProfileSettingsPage() {

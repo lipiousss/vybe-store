@@ -1,8 +1,8 @@
 # VYBE Store
 
-VYBE Store — дипломный проект интернет-магазина дизайнерской продукции в стилистике dark fantasy. Проект демонстрирует публичный каталог, коллекционные товары, визуальный архив Artworks, пользовательский профиль, корзину, demo-заказы и административную панель.
+VYBE Store is a diploma project: a dark fantasy online store for designer products. The project includes a public storefront, catalogue, collectibles, artworks archive, user profile, cart, demo checkout, orders, uploads and an admin command dashboard.
 
-## Стек
+## Stack
 
 - Frontend: React, Vite, JavaScript, React Router
 - State: Zustand
@@ -15,55 +15,126 @@ VYBE Store — дипломный проект интернет-магазина
 - Docker: Docker Compose
 - DB GUI: pgAdmin
 
-## Запуск через Docker
+## Local Run With Docker
 
 ```bash
 docker compose up --build
 ```
 
-После запуска:
+Local URLs:
 
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:4000
 - Health check: http://localhost:4000/health
 - pgAdmin: http://localhost:5050
 
-## Тестовые пользователи
+Test users:
 
 - Admin: `admin@vybe.com` / `Admin1234`
 - User: `user@vybe.com` / `User1234`
 
-Если база пустая, примените миграции и seed внутри backend-контейнера:
+If the database is empty, run migrations and seed inside the backend container:
 
 ```bash
 docker compose exec backend npm run prisma:migrate
 docker compose exec backend npm run prisma:seed
 ```
 
-## Основные возможности
+## Useful Commands
 
-- Главная страница в dark fantasy стиле с EnterScreen и cinematic hero
-- Каталог обычных товаров с поиском и фильтрами
-- Отдельная страница коллекционных товаров
-- Страница товара с вариантами, остатками, избранным и добавлением в корзину
-- Visual Archive / Artworks с фильтрами и полноэкранным modal-preview
-- Регистрация, вход, JWT-auth, профиль и настройки пользователя
-- Загрузка avatar пользователя
-- Избранное и корзина с сохранением на backend
-- Demo-checkout без платёжной системы
-- История заказов пользователя
-- Админ-панель:
-  - dashboard
-  - управление товарами
-  - загрузка изображений товаров
-  - складской учёт
-  - экспорт остатков в Excel
-  - управление заказами
-  - управление пользователями
-  - управление Artworks
-  - управление контентными изображениями сайта
+Frontend:
 
-## Структура проекта
+```bash
+cd frontend
+npm run dev
+npm run build
+npm run preview
+```
+
+Backend:
+
+```bash
+cd backend
+npm run dev
+npm start
+npm run prisma:generate
+npm run prisma:migrate
+npm run prisma:seed
+npm run prisma:studio
+```
+
+Docker:
+
+```bash
+docker compose ps
+docker compose logs backend
+docker compose logs frontend
+```
+
+## Deployment
+
+### Frontend On Netlify
+
+Use these Netlify settings:
+
+- Base directory: `frontend`
+- Build command: `npm run build`
+- Publish directory: `dist`
+
+Frontend environment variables:
+
+```env
+VITE_API_URL=https://YOUR_BACKEND_DOMAIN/api
+```
+
+The file `frontend/public/_redirects` is included so direct React Router URLs such as `/catalog`, `/profile` and `/admin` work on Netlify.
+
+### Backend On Render Or Railway
+
+Use these hosting settings:
+
+- Root directory: `backend`
+- Build command: `npm install && npx prisma generate`
+- Start command: `npm start`
+
+Backend environment variables:
+
+```env
+DATABASE_URL=production PostgreSQL URL
+JWT_SECRET=strong secret
+CLIENT_URL=https://YOUR_NETLIFY_DOMAIN
+PORT=4000
+```
+
+`CLIENT_URL` can contain one or more origins separated by commas:
+
+```env
+CLIENT_URL=http://localhost:5173,https://your-site.netlify.app
+```
+
+Some platforms provide `PORT` automatically. In that case, use the platform value.
+
+### Database
+
+Use PostgreSQL on Render, Railway or Supabase.
+
+Run migrations:
+
+```bash
+npx prisma migrate deploy
+```
+
+Run seed:
+
+```bash
+npm run prisma:seed
+```
+
+### Uploads Warning
+
+Local uploaded files are stored in `backend/uploads`. On many free hosting plans, this folder may be reset after redeploy or restart. For a production version, use Cloudinary, S3, Netlify Blob or a persistent disk. For diploma preview, placeholder images and demo uploads are acceptable.
+
+## Project Structure
 
 ```text
 vybe-store/
@@ -99,36 +170,9 @@ vybe-store/
   docker-compose.yml
 ```
 
-## Полезные команды
+## Database Dump
 
-Frontend:
-
-```bash
-cd frontend
-npm run build
-```
-
-Backend:
-
-```bash
-cd backend
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
-npm run prisma:studio
-```
-
-Docker:
-
-```bash
-docker compose ps
-docker compose logs backend
-docker compose logs frontend
-```
-
-## Данные и uploads
-
-Загруженные файлы сохраняются в `backend/uploads`. Для сохранения текущей базы в репозитории можно сделать SQL dump:
+To save a local SQL dump:
 
 ```bash
 docker compose exec -T postgres pg_dump -U vybe -d vybe_store > backend/database-dumps/vybe_store.sql

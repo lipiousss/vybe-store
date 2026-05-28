@@ -2,8 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useCategoryStore } from '../../store/categoryStore.js';
 import { useCollectionStore } from '../../store/collectionStore.js';
 import { useAdminProductStore } from '../../store/adminProductStore.js';
-
-const API_URL = 'http://localhost:4000';
+import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const defaultForm = {
   name: '',
@@ -30,8 +29,7 @@ const defaultForm = {
 
 function normalizeImageUrl(url) {
   if (!url) return '/images/placeholders/product-placeholder.png';
-  if (url.startsWith('/uploads')) return `${API_URL}${url}`;
-  return url;
+  return mediaUrl(url);
 }
 
 function flattenCategories(categories = []) {
