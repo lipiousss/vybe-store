@@ -6,7 +6,7 @@ import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const navItems = [
   ['SHOP', '/catalog'],
-  ['COLLECTIONS', '/catalog'],
+  ['COLLECTIONS', '/collections'],
   ['COLLECTIBLES', '/collectibles'],
   ['ARTWORKS', '/artworks'],
   ['ABOUT', '/about'],
@@ -74,7 +74,7 @@ export default function Header() {
       </nav>
 
       <div className="header-actions">
-        <button className="header-icon-button" type="button" aria-label="Search placeholder">
+        <button className="header-icon-button" type="button" aria-label="Open catalog search" onClick={() => goTo('/catalog')}>
           Search
         </button>
 

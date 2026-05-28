@@ -36,6 +36,17 @@ export async function getCollections(req, res, next) {
         _count: {
           select: { products: true },
         },
+        products: {
+          where: { status: 'ACTIVE', isCollectible: false },
+          include: {
+            category: true,
+            collection: true,
+            images: { orderBy: { order: 'asc' } },
+            variants: true,
+          },
+          orderBy: { createdAt: 'desc' },
+          take: 4,
+        },
       },
       orderBy: { createdAt: 'desc' },
     });

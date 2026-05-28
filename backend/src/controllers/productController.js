@@ -158,6 +158,10 @@ function buildProductWhere(query) {
       { description: { contains: search, mode: 'insensitive' } },
       { brand: { contains: search, mode: 'insensitive' } },
       { designer: { contains: search, mode: 'insensitive' } },
+      { category: { name: { contains: search, mode: 'insensitive' } } },
+      { category: { slug: { contains: search, mode: 'insensitive' } } },
+      { collection: { name: { contains: search, mode: 'insensitive' } } },
+      { collection: { slug: { contains: search, mode: 'insensitive' } } },
     ];
   }
 
@@ -166,6 +170,10 @@ function buildProductWhere(query) {
       OR: [
         { id: category },
         { slug: category },
+        { name: { equals: category, mode: 'insensitive' } },
+        { parent: { is: { id: category } } },
+        { parent: { is: { slug: category } } },
+        { parent: { is: { name: { equals: category, mode: 'insensitive' } } } },
       ],
     };
   }

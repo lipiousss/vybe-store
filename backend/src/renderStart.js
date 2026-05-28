@@ -15,7 +15,21 @@ run('npx', ['prisma', 'generate']);
 run('npx', ['prisma', 'migrate', 'deploy']);
 
 if (process.env.RUN_SEED === 'true') {
-  run('node', ['prisma/seed.js']);
+  const { PrismaClient } = await import('@prisma/client');
+  const prisma = new PrismaClient();
+
+  try {
+    const productCount = await prisma.product.count();
+    const shouldForceSeed = process.env.RUN_SEED_FORCE === 'true';
+
+    if (productCount === 0 || shouldForceSeed) {
+      run('node', ['prisma/seed.js']);
+    } else {
+      console.log(`Seed skipped: database already has ${productCount} products.`);
+    }
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 await import('./app.js');

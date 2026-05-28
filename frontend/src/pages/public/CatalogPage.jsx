@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import ErrorState from '../../components/ui/ErrorState.jsx';
@@ -19,7 +20,18 @@ const initialFilters = {
 };
 
 export default function CatalogPage() {
-  const [filters, setFilters] = React.useState(initialFilters);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filters, setFilters] = React.useState(() => ({
+    ...initialFilters,
+    search: searchParams.get('search') || '',
+    category: searchParams.get('category') || '',
+    collection: searchParams.get('collection') || '',
+    minPrice: searchParams.get('minPrice') || '',
+    maxPrice: searchParams.get('maxPrice') || '',
+    isNew: searchParams.get('isNew') === 'true',
+    isLimited: searchParams.get('isLimited') === 'true',
+    isFeatured: searchParams.get('isFeatured') === 'true',
+  }));
   const { products, isLoading, error, fetchProducts } = useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
   const { collections, fetchCollections } = useCollectionStore();
@@ -45,8 +57,16 @@ export default function CatalogPage() {
       }
     }
 
+    const urlParams = {};
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== '' && value !== false) {
+        urlParams[key] = String(value);
+      }
+    }
+    setSearchParams(urlParams, { replace: true });
+
     fetchProducts(params);
-  }, [filters, fetchProducts]);
+  }, [filters, fetchProducts, setSearchParams]);
 
   function updateFilter(name, value) {
     setFilters((current) => ({ ...current, [name]: value }));

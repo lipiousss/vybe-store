@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const columns = [
   ['Shop', [['Catalog', '/catalog'], ['Collectibles', '/collectibles'], ['Cart', '/cart']]],
-  ['Collections', [['Artworks', '/artworks'], ['Project', '/project'], ['About', '/about']]],
+  ['Collections', [['Collections', '/collections'], ['Artworks', '/artworks'], ['Project', '/project']]],
   ['Company', [['About VYBE', '/about'], ['Visual Archive', '/artworks'], ['Project Notes', '/project']]],
   ['Support', [['Profile', '/profile'], ['Orders', '/profile/orders'], ['Settings', '/profile/settings']]],
 ];

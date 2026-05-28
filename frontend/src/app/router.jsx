@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout.jsx';
 import HomePage from '../pages/public/HomePage.jsx';
 import CatalogPage from '../pages/public/CatalogPage.jsx';
+import CollectionsPage from '../pages/public/CollectionsPage.jsx';
 import ProductPage from '../pages/public/ProductPage.jsx';
 import CollectiblesPage from '../pages/public/CollectiblesPage.jsx';
 import ArtworksPage from '../pages/public/ArtworksPage.jsx';
@@ -42,6 +43,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: 'catalog', element: <CatalogPage /> },
+      { path: 'collections', element: <CollectionsPage /> },
       { path: 'product/:slug', element: <ProductPage /> },
       { path: 'collectibles', element: <CollectiblesPage /> },
       { path: 'artworks', element: <ArtworksPage /> },
