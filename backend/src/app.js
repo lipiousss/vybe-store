@@ -56,6 +56,7 @@ app.use(cors({
       !normalizedOrigin
       || allowedOrigins.includes(normalizedOrigin)
       || normalizedOrigin.endsWith('.netlify.app')
+      || normalizedOrigin.endsWith('.onrender.com')
     ) {
       return callback(null, true);
     }
