@@ -52,7 +52,11 @@ app.use(cors({
   origin(origin, callback) {
     const normalizedOrigin = normalizeOrigin(origin);
 
-    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
+    if (
+      !normalizedOrigin
+      || allowedOrigins.includes(normalizedOrigin)
+      || normalizedOrigin.endsWith('.netlify.app')
+    ) {
       return callback(null, true);
     }
 
