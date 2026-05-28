@@ -104,6 +104,7 @@ DATABASE_URL=production PostgreSQL URL
 JWT_SECRET=strong secret
 CLIENT_URL=https://YOUR_NETLIFY_DOMAIN
 PORT=4000
+RUN_SEED=false
 ```
 
 `CLIENT_URL` can contain one or more origins separated by commas:
@@ -129,6 +130,8 @@ Run seed:
 ```bash
 npm run prisma:seed
 ```
+
+If the hosting plan does not provide a shell, set `RUN_SEED=true` on the first backend deploy. The Docker start command will run Prisma migrations and seed automatically. After the first successful deploy, change `RUN_SEED` back to `false` or remove it so demo data is not recreated on every restart.
 
 ### Uploads Warning
 
