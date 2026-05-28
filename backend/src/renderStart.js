@@ -14,7 +14,7 @@ function run(command, args) {
 run('npx', ['prisma', 'generate']);
 run('npx', ['prisma', 'migrate', 'deploy']);
 
-if (process.env.RUN_SEED === 'true') {
+if (process.env.RUN_SEED_ON_START === 'true') {
   const { PrismaClient } = await import('@prisma/client');
   const prisma = new PrismaClient();
 
@@ -30,6 +30,8 @@ if (process.env.RUN_SEED === 'true') {
   } finally {
     await prisma.$disconnect();
   }
+} else if (process.env.RUN_SEED === 'true') {
+  console.log('RUN_SEED is ignored on Render start. Use RUN_SEED_ON_START=true only for a deliberate one-time seed.');
 }
 
 await import('./app.js');
