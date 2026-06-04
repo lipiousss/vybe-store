@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
@@ -21,7 +22,7 @@ export default function ProfileFavoritesPage() {
         <div className="section-heading">
           <p className="eyebrow">Favorites</p>
           <h1>Избранное</h1>
-          <p>Сохранённые товары из архива VYBE.</p>
+          <p>Сохраненные товары из архива VYBE.</p>
         </div>
 
         {isLoading && <Loader text="Loading favorites..." />}
@@ -32,6 +33,7 @@ export default function ProfileFavoritesPage() {
             label="Favorites"
             title="В избранном пока пусто"
             message="Добавь товар через кнопку сердца в каталоге или на странице товара."
+            action={<Link className="relic-button" to="/catalog">Explore Catalog</Link>}
           />
         ) : null}
 

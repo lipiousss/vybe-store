@@ -106,7 +106,7 @@ export default function ProfileSettingsPage() {
         {success && <p className="state-text success">{success}</p>}
 
         <section className="settings-panel">
-          <h2>Avatar</h2>
+          <h2>Avatar Upload</h2>
           <div className="avatar-upload">
             <div className="profile-avatar large">
               {avatarUrl(profile?.user?.avatar) ? (
@@ -123,7 +123,7 @@ export default function ProfileSettingsPage() {
         </section>
 
         <form className="settings-panel" onSubmit={handleProfileSubmit}>
-          <h2>Main profile</h2>
+          <h2>Personal Data</h2>
           <div className="settings-grid">
             <label>
               Username
@@ -182,7 +182,7 @@ export default function ProfileSettingsPage() {
         </form>
 
         <form className="settings-panel" onSubmit={handleEmailSubmit}>
-          <h2>Email</h2>
+          <h2>Change Email</h2>
           <div className="settings-grid">
             <label>
               New email

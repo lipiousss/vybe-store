@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminAnalyticsStore } from '../../store/adminAnalyticsStore.js';
+import { useAdminProductStore } from '../../store/adminProductStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 function money(value) {
@@ -29,18 +30,24 @@ export default function AdminDashboardPage() {
     fetchDashboardData,
     error,
   } = useAdminAnalyticsStore();
+  const { products, fetchProducts } = useAdminProductStore();
 
   useEffect(() => {
     fetchDashboardData().catch(() => {});
   }, [fetchDashboardData]);
 
+  useEffect(() => {
+    fetchProducts({ status: 'ACTIVE' }).catch(() => {});
+  }, [fetchProducts]);
+
   const stats = [
     ['Total Revenue', money(overview?.totalRevenue), 'Real paid demo orders'],
-    ['Orders', overview?.totalOrders || 0, `${overview?.deliveredOrdersCount || 0} delivered`],
-    ['Customers', overview?.totalUsers || 0, 'Registered accounts'],
-    ['Products', overview?.totalProducts || 0, `${overview?.activeProductsCount || 0} active`],
-    ['Average Order Value', money(overview?.averageOrderValue), `${overview?.cancelledOrdersCount || 0} cancelled`],
+    ['Total Orders', overview?.totalOrders || 0, `${overview?.deliveredOrdersCount || 0} delivered`],
+    ['Total Customers', overview?.totalUsers || 0, 'Registered accounts'],
+    ['Total Products', overview?.totalProducts || 0, `${overview?.activeProductsCount || 0} active`],
+    ['Low Stock Items', overview?.lowStockCount || 0, `${overview?.outOfStockCount || 0} out of stock`],
   ];
+  const previewProduct = products[0] || null;
 
   return (
     <div className="admin-dashboard">
@@ -144,26 +151,27 @@ export default function AdminDashboardPage() {
         <article className="admin-panel admin-products-mini">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Stock Movements</p>
-              <h2>Last warehouse events</h2>
+              <p className="section-label">Product Management</p>
+              <h2>Catalogue control</h2>
             </div>
-            <Link to="/admin/analytics">Open Analytics</Link>
+            <Link to="/admin/products/create">Add Product</Link>
           </header>
           <div className="admin-table-wrap compact">
             <table className="admin-table admin-table--compact">
               <thead>
-                <tr><th>Product</th><th>Type</th><th>Qty</th><th>Comment</th></tr>
+                <tr><th>Product</th><th>SKU</th><th>Price</th><th>Stock</th><th>Status</th></tr>
               </thead>
               <tbody>
-                {stockMovements.slice(0, 8).map((movement) => (
-                  <tr key={movement.id}>
-                    <td>{movement.product?.name}</td>
-                    <td><span className={`stock-movement ${movement.type.toLowerCase()}`}>{movement.type}</span></td>
-                    <td>{movementSign(movement.quantity)}</td>
-                    <td>{movement.comment || '-'}</td>
+                {products.slice(0, 5).map((product) => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.variants?.[0]?.sku || '-'}</td>
+                    <td>{money(product.finalPrice || product.price)}</td>
+                    <td>{(product.variants || []).reduce((sum, variant) => sum + Number(variant.stock || 0), 0)}</td>
+                    <td><span className={`admin-status ${product.status.toLowerCase()}`}>{product.status}</span></td>
                   </tr>
                 ))}
-                {stockMovements.length === 0 && <tr><td colSpan="4">No stock movements yet.</td></tr>}
+                {products.length === 0 && <tr><td colSpan="5">No products yet.</td></tr>}
               </tbody>
             </table>
           </div>
@@ -172,29 +180,37 @@ export default function AdminDashboardPage() {
         <article className="admin-panel admin-forge-mini">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Forge the Catalogue</p>
-              <h2>Quick actions</h2>
+              <p className="section-label">Stock Movements</p>
+              <h2>Last warehouse events</h2>
             </div>
+            <Link to="/admin/analytics">Open Analytics</Link>
           </header>
-          <Link className="ghost-button" to="/admin/products/create">Add Product</Link>
-          <Link className="ghost-button" to="/admin/collections">Collections</Link>
-          <Link className="ghost-button" to="/admin/categories">Categories</Link>
-          <Link className="ghost-button" to="/admin/stock">Manage Stock</Link>
+          <div className="admin-mini-list">
+            {stockMovements.slice(0, 5).map((movement) => (
+              <article className="admin-mini-card" key={movement.id}>
+                <strong>{movement.product?.name}</strong>
+                <span className={`stock-movement ${movement.type.toLowerCase()}`}>{movement.type}</span>
+                <span>{movementSign(movement.quantity)}</span>
+              </article>
+            ))}
+            {stockMovements.length === 0 && <p>No stock movements yet.</p>}
+          </div>
         </article>
 
         <article className="admin-live-preview">
-          <p className="section-label">Best Seller Preview</p>
+          <p className="section-label">Live Product Preview</p>
           <div className="admin-preview-card">
             <div className="admin-preview-image">
               <img
-                src={mediaUrl(topProducts[0]?.image, '/images/placeholders/product-placeholder.png')}
-                alt={topProducts[0]?.name || 'Preview'}
+                src={mediaUrl(previewProduct?.images?.[0]?.url, '/images/placeholders/product-placeholder.png')}
+                alt={previewProduct?.name || 'Preview'}
               />
             </div>
             <div className="admin-preview-body">
-              <h3>{topProducts[0]?.name || 'No sales yet'}</h3>
-              <span>{topProducts[0]?.category || 'Awaiting order data'}</span>
-              <strong>{topProducts[0] ? money(topProducts[0].revenue) : money(0)}</strong>
+              <h3>{previewProduct?.name || 'No products yet'}</h3>
+              <span>{previewProduct?.category?.name || 'Awaiting catalogue data'}</span>
+              <strong>{previewProduct ? money(previewProduct.finalPrice || previewProduct.price) : money(0)}</strong>
+              {previewProduct && <Link className="ghost-button" to={`/product/${previewProduct.slug}`}>View Product Page</Link>}
             </div>
           </div>
         </article>

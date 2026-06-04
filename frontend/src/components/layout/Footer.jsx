@@ -37,12 +37,12 @@ export default function Footer() {
         <p>Enter your email to receive drops, tales, and archive offers.</p>
         <div>
           <input placeholder="Enter your email" type="email" />
-          <button type="button">→</button>
+          <button type="button" aria-label="Join newsletter">-&gt;</button>
         </div>
       </form>
 
       <div className="footer-bottom">
-        <span>© 2026 VYBE</span>
+        <span>(c) 2026 VYBE</span>
         <Link to="/project">Terms</Link>
         <Link to="/project">Privacy</Link>
         <Link to="/project">Cookie Policy</Link>

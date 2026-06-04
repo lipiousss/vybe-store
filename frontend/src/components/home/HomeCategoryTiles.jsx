@@ -5,32 +5,37 @@ const tileConfig = [
   {
     title: 'APPAREL',
     text: 'Layered shadows tailored for the realm.',
-    match: ['одежда', 'apparel', 'clothing'],
+    match: ['apparel', 'clothing', 'одежда'],
     to: '/catalog',
+    image: '/images/placeholders/product-placeholder.png',
   },
   {
     title: 'ACCESSORIES',
     text: 'Details that speak in steel and signal.',
-    match: ['аксессуары', 'accessories'],
+    match: ['accessories', 'аксессуары'],
     to: '/catalog',
+    image: '/images/placeholders/product-placeholder.png',
   },
   {
     title: 'DECOR',
     text: 'Objects for a mythic dark sanctuary.',
-    match: ['декор', 'decor'],
+    match: ['decor', 'декор'],
     to: '/catalog',
+    image: '/images/placeholders/product-placeholder.png',
   },
   {
     title: 'PERIPHERALS',
     text: 'Build your dark command desk.',
-    match: ['периферия', 'peripherals'],
+    match: ['peripherals', 'периферия'],
     to: '/catalog',
+    image: '/images/placeholders/product-placeholder.png',
   },
   {
     title: 'COLLECTIBLES',
     text: 'Rare fragments from the archive.',
-    match: ['коллекционные', 'collectibles'],
+    match: ['collectibles', 'коллекционные'],
     to: '/collectibles',
+    image: '/images/placeholders/collectible-placeholder.png',
   },
 ];
 
@@ -52,7 +57,10 @@ export default function HomeCategoryTiles({ categories = [] }) {
 
         return (
           <article className="home-category-tile" key={tile.title}>
-            <div>
+            <div className="home-category-tile__image">
+              <img src={category?.image || tile.image} alt="" />
+            </div>
+            <div className="home-category-tile__content">
               <span>{String(index + 1).padStart(2, '0')}</span>
               <h3>{tile.title}</h3>
               <p>{category?.description || tile.text}</p>

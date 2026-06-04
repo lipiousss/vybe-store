@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import ProfileMenu from '../../components/profile/ProfileMenu.jsx';
 import Loader from '../../components/ui/Loader.jsx';
+import { useCartStore } from '../../store/cartStore.js';
 import { useFavoriteStore } from '../../store/favoriteStore.js';
 import { useOrderStore } from '../../store/orderStore.js';
 import { useProfileStore } from '../../store/profileStore.js';
@@ -20,6 +21,7 @@ export default function ProfilePage() {
   const { profile, fetchProfile, isLoading, error } = useProfileStore();
   const { favorites, fetchFavorites } = useFavoriteStore();
   const { orders, fetchMyOrders } = useOrderStore();
+  const { totalQuantity, fetchCart } = useCartStore();
   const user = profile?.user;
   const userProfile = profile?.profile;
   const stats = profile?.stats || { favorites: 0, orders: 0 };
@@ -30,7 +32,8 @@ export default function ProfilePage() {
     fetchProfile().catch(() => {});
     fetchFavorites().catch(() => {});
     fetchMyOrders().catch(() => {});
-  }, [fetchProfile, fetchFavorites, fetchMyOrders]);
+    fetchCart().catch(() => {});
+  }, [fetchProfile, fetchFavorites, fetchMyOrders, fetchCart]);
 
   return (
     <main className="profile-page profile-archive-page">
@@ -61,12 +64,12 @@ export default function ProfilePage() {
           <p>Saved Relics</p>
         </article>
         <article>
-          <span>{user?.role || 'USER'}</span>
-          <p>Member Tier</p>
+          <span>{totalQuantity}</span>
+          <p>Cart Items</p>
         </article>
         <article>
-          <span>2450</span>
-          <p>Loyalty Points</p>
+          <span>{user?.role || 'USER'}</span>
+          <p>Member Tier</p>
         </article>
       </section>
 
@@ -103,7 +106,7 @@ export default function ProfilePage() {
                 <article className="archive-card" key={order.id}>
                   <strong>#{order.id.slice(0, 8)}</strong>
                   <span>{order.status}</span>
-                  <span>{Number(order.totalPrice).toLocaleString('ru-RU')} ₽</span>
+                  <span>{Number(order.totalPrice).toLocaleString('ru-RU')} RUB</span>
                 </article>
               ))
             ) : (
@@ -114,10 +117,10 @@ export default function ProfilePage() {
 
         <aside className="profile-actions archive-card">
           <p className="section-label">Account Actions</p>
-          <Link to="/profile/settings">Edit personal data →</Link>
-          <Link to="/profile/settings">Change email →</Link>
-          <Link to="/profile/settings">Change password →</Link>
-          <Link to="/profile/settings">Upload new avatar →</Link>
+          <Link to="/profile/settings">Edit personal data -&gt;</Link>
+          <Link to="/profile/settings">Change email -&gt;</Link>
+          <Link to="/profile/settings">Change password -&gt;</Link>
+          <Link to="/profile/settings">Upload new avatar -&gt;</Link>
         </aside>
       </div>
     </main>

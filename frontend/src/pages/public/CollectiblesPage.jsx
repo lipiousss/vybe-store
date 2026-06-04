@@ -17,8 +17,16 @@ const filters = [
   ['Limited', 'limited'],
 ];
 
+const archiveFacts = [
+  ['Curated Archive', 'Every object is selected from the VYBE archive.'],
+  ['Limited Releases', 'Rare drops in small quantities.'],
+  ['Authentic Relics', 'Demo provenance for collectible items.'],
+  ['Secure Archive', 'Protected cart and checkout flow.'],
+];
+
 export default function CollectiblesPage() {
   const [activeFilter, setActiveFilter] = React.useState('');
+  const [sort, setSort] = React.useState('newest');
   const { collectibleProducts, isLoading, error, fetchCollectibles } = useProductStore();
   const { fetchAssets, getAsset } = useSiteAssetStore();
   const heroImage = mediaUrl(getAsset('collectibles_hero_image')?.url, '/images/placeholders/collectible-placeholder.png');
@@ -28,44 +36,52 @@ export default function CollectiblesPage() {
     fetchAssets().catch(() => {});
   }, [fetchCollectibles, fetchAssets]);
 
-  const visibleProducts = collectibleProducts.filter((product) => {
-    if (!activeFilter) return true;
-    if (activeFilter === 'limited') return product.isLimited;
-    return product.category?.slug === activeFilter;
-  });
+  const visibleProducts = collectibleProducts
+    .filter((product) => {
+      if (!activeFilter) return true;
+      if (activeFilter === 'limited') return product.isLimited;
+      return product.category?.slug === activeFilter;
+    })
+    .sort((first, second) => {
+      if (sort === 'price-asc') return Number(first.finalPrice || first.price) - Number(second.finalPrice || second.price);
+      if (sort === 'price-desc') return Number(second.finalPrice || second.price) - Number(first.finalPrice || first.price);
+      return new Date(second.createdAt || 0) - new Date(first.createdAt || 0);
+    });
 
   return (
-    <main className="page-shell collectibles-page">
+    <main className="page-shell collectibles-page collectibles-reference-page">
       <section
         className="page-hero cinematic collectibles-hero"
         style={{ '--collectibles-image': `url("${heroImage}")` }}
       >
-        <p className="section-label">Collectibles</p>
-        <h1>Хранилище артефактов</h1>
-        <p>
-          Rare objects from the VYBE archive. Designed as fragments of a darker visual world.
-        </p>
-        <button
-          className="relic-button"
-          type="button"
-          onClick={() => document.querySelector('.cinematic-grid')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          Explore Relics
-        </button>
+        <p className="section-label">VYBE Archive</p>
+        <h1>Collectibles</h1>
+        <p>Rare objects from the VYBE archive.</p>
       </section>
 
-      <div className="filter-tabs">
-        {filters.map(([label, value]) => (
-          <button
-            key={label}
-            className={activeFilter === value ? 'is-active' : ''}
-            type="button"
-            onClick={() => setActiveFilter(value)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
+      <section className="collectibles-toolbar" aria-label="Collectibles filters">
+        <div className="filter-tabs">
+          {filters.map(([label, value]) => (
+            <button
+              key={label}
+              className={activeFilter === value ? 'is-active' : ''}
+              type="button"
+              onClick={() => setActiveFilter(value)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+        <label className="collectibles-sort">
+          <span>Sort:</span>
+          <select value={sort} onChange={(event) => setSort(event.target.value)}>
+            <option value="newest">Newest</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+          </select>
+        </label>
+      </section>
 
       {isLoading && <Loader text="Opening archive..." />}
       {error && <ErrorState title="Collectibles archive is unavailable" message={error} />}
@@ -87,6 +103,15 @@ export default function CollectiblesPage() {
           ))}
         </div>
       )}
+
+      <section className="collectibles-info-strip">
+        {archiveFacts.map(([title, text]) => (
+          <article key={title}>
+            <strong>{title}</strong>
+            <p>{text}</p>
+          </article>
+        ))}
+      </section>
     </main>
   );
 }

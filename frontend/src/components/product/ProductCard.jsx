@@ -23,8 +23,18 @@ export default function ProductCard({ product }) {
   const [message, setMessage] = React.useState(null);
   const [lightPosition, setLightPosition] = React.useState({ x: '50%', y: '50%' });
   const image = mediaUrl(product.images?.[0]?.url);
+  const categoryName = product.category?.name || product.categoryName || 'VYBE artifact';
   const hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(product.finalPrice);
   const hasStock = !product.variants?.length || product.variants.some((variant) => variant.stock > 0);
+
+  React.useEffect(() => {
+    if (!message) {
+      return undefined;
+    }
+
+    const timer = window.setTimeout(() => setMessage(null), 2200);
+    return () => window.clearTimeout(timer);
+  }, [message]);
 
   function requireAuth() {
     if (!isAuth) {
@@ -94,6 +104,7 @@ export default function ProductCard({ product }) {
           </div>
 
           <h3>{product.name}</h3>
+          <p className="product-category">{categoryName}</p>
 
           <div className="price-row">
             {hasDiscount && <span className="old-price">{money(product.oldPrice)}</span>}
