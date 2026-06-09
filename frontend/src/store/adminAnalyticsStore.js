@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Analytics request failed';
+  return error.response?.data?.message || error.message || 'Не удалось загрузить аналитику';
 }
 
 export const useAdminAnalyticsStore = create((set) => ({

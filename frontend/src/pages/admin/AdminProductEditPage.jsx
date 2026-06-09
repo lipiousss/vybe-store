@@ -16,7 +16,7 @@ export default function AdminProductEditPage() {
   }
 
   if (isLoading && !currentProduct) {
-    return <p className="state-text">Loading product...</p>;
+    return <p className="state-text">Загружаем товар...</p>;
   }
 
   if (error && !currentProduct) {
@@ -26,12 +26,12 @@ export default function AdminProductEditPage() {
   return (
     <div className="admin-product-editor">
       <section className="admin-page-head">
-        <p className="section-label">Edit Product</p>
-        <h1>{currentProduct?.name || 'Product editor'}</h1>
-        <p>Edit product data, images, variants and stock.</p>
+        <p className="section-label">Редактирование товара</p>
+        <h1>{currentProduct?.name || 'Редактор товара'}</h1>
+        <p>Изменяйте данные товара, изображения, варианты и остатки.</p>
       </section>
       {currentProduct && (
-        <ProductAdminForm initialProduct={currentProduct} onSubmit={handleSubmit} submitLabel="Save changes" />
+        <ProductAdminForm initialProduct={currentProduct} onSubmit={handleSubmit} submitLabel="Сохранить изменения" />
       )}
     </div>
   );

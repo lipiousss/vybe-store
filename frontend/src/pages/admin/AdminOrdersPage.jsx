@@ -1,11 +1,8 @@
 import React from 'react';
 import { useAdminOrderStore } from '../../store/adminOrderStore.js';
+import { formatOrderStatus, money } from '../../utils/formatters.js';
 
 const statuses = ['', 'NEW', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'];
-
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
 
 export default function AdminOrdersPage() {
   const { orders, fetchAdminOrders, updateOrderStatus, isLoading, error } = useAdminOrderStore();
@@ -30,40 +27,40 @@ export default function AdminOrdersPage() {
     <div className="admin-orders-page">
       <section className="admin-page-head">
         <div>
-          <p className="section-label">Orders</p>
-          <h1>ORDERS</h1>
-          <p>Review demo-mode orders and move them through the fulfilment flow.</p>
+          <p className="section-label">Заказы</p>
+          <h1>ЗАКАЗЫ</h1>
+          <p>Проверяйте demo-заказы и переводите их по этапам обработки.</p>
         </div>
       </section>
 
       <section className="admin-order-filters">
         <label>
-          Status
+          Статус
           <select value={filters.status} onChange={(event) => setFilters({ ...filters, status: event.target.value })}>
-            {statuses.map((status) => <option value={status} key={status}>{status || 'All'}</option>)}
+            {statuses.map((status) => <option value={status} key={status}>{status ? formatOrderStatus(status) : 'Все'}</option>)}
           </select>
         </label>
         <label>
-          Search
-          <input value={filters.search} onChange={(event) => setFilters({ ...filters, search: event.target.value })} placeholder="email, name, phone..." />
+          Поиск
+          <input value={filters.search} onChange={(event) => setFilters({ ...filters, search: event.target.value })} placeholder="email, имя, телефон..." />
         </label>
       </section>
 
-      {isLoading && <p className="state-text">Loading admin orders...</p>}
+      {isLoading && <p className="state-text">Загружаем заказы...</p>}
       {error && <p className="state-text danger">{error}</p>}
 
       <div className="admin-table-wrap">
         <table className="admin-table admin-orders-table">
           <thead>
             <tr>
-              <th>Order</th>
-              <th>User</th>
-              <th>Customer</th>
-              <th>Phone</th>
-              <th>Status</th>
-              <th>Total</th>
-              <th>Created</th>
-              <th>Actions</th>
+              <th>Заказ</th>
+              <th>Пользователь</th>
+              <th>Клиент</th>
+              <th>Телефон</th>
+              <th>Статус</th>
+              <th>Сумма</th>
+              <th>Создан</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody>
@@ -73,17 +70,17 @@ export default function AdminOrdersPage() {
                 <td>{order.user?.email || order.customerEmail}</td>
                 <td>{order.customerName}</td>
                 <td>{order.customerPhone}</td>
-                <td><span className={`order-status ${order.status.toLowerCase()}`}>{order.status}</span></td>
+                <td><span className={`order-status ${order.status.toLowerCase()}`}>{formatOrderStatus(order.status)}</span></td>
                 <td>{money(order.totalPrice)}</td>
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                 <td>
                   <select value={order.status} onChange={(event) => handleStatusChange(order.id, event.target.value)}>
-                    {statuses.filter(Boolean).map((status) => <option value={status} key={status}>{status}</option>)}
+                    {statuses.filter(Boolean).map((status) => <option value={status} key={status}>{formatOrderStatus(status)}</option>)}
                   </select>
                 </td>
               </tr>
             ))}
-            {orders.length === 0 && <tr><td colSpan="8">No orders found.</td></tr>}
+            {orders.length === 0 && <tr><td colSpan="8">Заказы не найдены.</td></tr>}
           </tbody>
         </table>
       </div>

@@ -20,20 +20,20 @@ export default function ProfileFavoritesPage() {
       <ProfileMenu />
       <section className="profile-content">
         <div className="section-heading">
-          <p className="eyebrow">Favorites</p>
+          <p className="eyebrow">Избранное</p>
           <h1>Избранное</h1>
-          <p>Сохраненные товары из архива VYBE.</p>
+          <p>Сохранённые товары из архива VYBE.</p>
         </div>
 
-        {isLoading && <Loader text="Loading favorites..." />}
-        {error && <ErrorState title="Favorites are unavailable" message={error} />}
+        {isLoading && <Loader text="Загружаем избранное..." />}
+        {error && <ErrorState title="Избранное недоступно" message={error} />}
 
         {!isLoading && !error && products.length === 0 ? (
           <EmptyState
-            label="Favorites"
-            title="В избранном пока пусто"
-            message="Добавь товар через кнопку сердца в каталоге или на странице товара."
-            action={<Link className="relic-button" to="/catalog">Explore Catalog</Link>}
+            label="Избранное"
+            title="Пока нет избранных товаров"
+            message="Добавьте товар через кнопку сердца в каталоге или на странице товара."
+            action={<Link className="relic-button" to="/catalog">Перейти в каталог</Link>}
           />
         ) : null}
 

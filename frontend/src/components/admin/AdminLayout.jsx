@@ -4,31 +4,31 @@ import { useAuthStore } from '../../store/authStore.js';
 
 const menuGroups = [
   {
-    title: 'MAIN',
+    title: 'ОСНОВНОЕ',
     links: [
-      { label: 'Dashboard', to: '/admin', end: true },
-      { label: 'Orders', to: '/admin/orders' },
-      { label: 'Products', to: '/admin/products' },
-      { label: 'Collections', to: '/admin/collections' },
-      { label: 'Customers', to: '/admin/users' },
-      { label: 'Analytics', to: '/admin/analytics' },
+      { label: 'Панель', to: '/admin', end: true },
+      { label: 'Заказы', to: '/admin/orders' },
+      { label: 'Товары', to: '/admin/products' },
+      { label: 'Коллекции', to: '/admin/collections' },
+      { label: 'Пользователи', to: '/admin/users' },
+      { label: 'Аналитика', to: '/admin/analytics' },
     ],
   },
   {
-    title: 'CATALOGUE',
+    title: 'КАТАЛОГ',
     links: [
-      { label: 'Categories', to: '/admin/categories' },
-      { label: 'Inventory', to: '/admin/stock' },
-      { label: 'Artworks', to: '/admin/artworks' },
-      { label: 'Site Content', to: '/admin/site-content' },
+      { label: 'Категории', to: '/admin/categories' },
+      { label: 'Склад', to: '/admin/stock' },
+      { label: 'Артворки', to: '/admin/artworks' },
+      { label: 'Контент сайта', to: '/admin/site-content' },
     ],
   },
   {
-    title: 'STORE MANAGEMENT',
+    title: 'УПРАВЛЕНИЕ',
     links: [
-      { label: 'Pages', to: '/admin/pages' },
-      { label: 'Banners', to: '/admin/banners' },
-      { label: 'Settings', to: '/admin/settings' },
+      { label: 'Страницы', to: '/admin/pages' },
+      { label: 'Баннеры', to: '/admin/banners' },
+      { label: 'Настройки', to: '/admin/settings' },
     ],
   },
 ];
@@ -70,29 +70,29 @@ export default function AdminLayout() {
         </nav>
 
         <div className="admin-promo-card">
-          <p>WEAR THE SHADOW.</p>
-          <strong>COMMAND THE SILENCE.</strong>
-          <button type="button" onClick={() => navigate('/')}>View Store</button>
-          <button type="button" onClick={handleLogout}>Logout</button>
+          <p>НОСИ ЛЕГЕНДУ.</p>
+          <strong>УПРАВЛЯЙ ТИШИНОЙ.</strong>
+          <button type="button" onClick={() => navigate('/')}>На сайт</button>
+          <button type="button" onClick={handleLogout}>Выйти</button>
         </div>
       </aside>
 
       <section className="admin-content">
         <header className="admin-topbar">
           <label className="admin-command-input">
-            <span>Search</span>
-            <input placeholder="Search orders, products, customers..." />
+            <span>Поиск</span>
+            <input placeholder="Искать заказы, товары, пользователей..." />
           </label>
 
           <div className="admin-topbar__actions">
-            <button type="button">Bell</button>
-            <button type="button">Inbox</button>
+            <button type="button">Уведомления</button>
+            <button type="button">Входящие</button>
             <select defaultValue="30">
-              <option value="30">Last 30 Days</option>
-              <option value="7">Last 7 Days</option>
-              <option value="all">All Time</option>
+              <option value="30">Последние 30 дней</option>
+              <option value="7">Последние 7 дней</option>
+              <option value="all">Всё время</option>
             </select>
-            <button type="button">Export Report</button>
+            <button type="button">Экспорт отчёта</button>
             <div className="admin-topbar__user">
               <span className="avatar-orb">{user?.username?.[0]?.toUpperCase() || 'A'}</span>
               <div>

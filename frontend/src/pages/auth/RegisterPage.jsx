@@ -7,11 +7,11 @@ const usernamePattern = /^[a-zA-Z0-9_]{3,20}$/;
 
 function validateForm(form) {
   if (!emailPattern.test(form.email.trim())) {
-    return 'Email is invalid.';
+    return 'Некорректный email.';
   }
 
   if (!usernamePattern.test(form.username.trim())) {
-    return 'Username must be 3-20 characters: latin letters, numbers, underscore.';
+    return 'Имя пользователя: 3-20 символов, латиница, цифры или underscore.';
   }
 
   if (
@@ -20,11 +20,11 @@ function validateForm(form) {
     || !/[a-z]/.test(form.password)
     || !/\d/.test(form.password)
   ) {
-    return 'Password must include uppercase, lowercase, number, and 8+ characters.';
+    return 'Пароль должен содержать большую букву, маленькую букву, цифру и минимум 8 символов.';
   }
 
   if (form.password !== form.repeatPassword) {
-    return 'Passwords do not match.';
+    return 'Пароли не совпадают.';
   }
 
   return null;
@@ -62,11 +62,11 @@ export default function RegisterPage() {
   return (
     <main className="auth-page">
       <form className="auth-panel" onSubmit={handleSubmit}>
-        <p className="eyebrow">New signal</p>
-        <h1>Create account</h1>
-        <p>Register a VYBE profile for future favorites, orders, and archive access.</p>
+        <p className="eyebrow">Новый сигнал</p>
+        <h1>Создание аккаунта</h1>
+        <p>Зарегистрируйте профиль VYBE для избранного, заказов и доступа к архиву.</p>
         <label>
-          Email
+          Электронная почта
           <input
             type="email"
             value={form.email}
@@ -75,7 +75,7 @@ export default function RegisterPage() {
           />
         </label>
         <label>
-          Username
+          Имя пользователя
           <input
             value={form.username}
             onChange={(event) => setForm({ ...form, username: event.target.value })}
@@ -83,7 +83,7 @@ export default function RegisterPage() {
           />
         </label>
         <label>
-          Password
+          Пароль
           <input
             type="password"
             value={form.password}
@@ -92,7 +92,7 @@ export default function RegisterPage() {
           />
         </label>
         <label>
-          Repeat password
+          Повторите пароль
           <input
             type="password"
             value={form.repeatPassword}
@@ -102,9 +102,9 @@ export default function RegisterPage() {
         </label>
         {(localError || error) && <p className="state-text danger">{localError || error}</p>}
         <button className="gold-button" type="submit" disabled={isLoading}>
-          {isLoading ? 'Creating...' : 'Register'}
+          {isLoading ? 'Создаём...' : 'Зарегистрироваться'}
         </button>
-        <Link className="auth-link" to="/login">Already have access?</Link>
+        <Link className="auth-link" to="/login">Уже есть аккаунт?</Link>
       </form>
     </main>
   );

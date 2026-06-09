@@ -1,11 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCartStore } from '../../store/cartStore.js';
+import { money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
-
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
 
 export default function CartItem({ item }) {
   const updateQuantity = useCartStore((state) => state.updateQuantity);
@@ -43,7 +40,7 @@ export default function CartItem({ item }) {
             +
           </button>
           <button className="cart-item__remove" type="button" onClick={() => removeFromCart(item.id)}>
-            Remove
+            Удалить
           </button>
         </div>
       </div>

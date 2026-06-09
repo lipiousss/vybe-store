@@ -4,7 +4,7 @@ import { authApi } from '../api/authApi.js';
 const tokenKey = 'vybe_token';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Authentication failed';
+  return error.response?.data?.message || error.message || 'Ошибка авторизации';
 }
 
 export const useAuthStore = create((set, get) => ({

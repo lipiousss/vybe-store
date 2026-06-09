@@ -5,14 +5,11 @@ import EmptyState from '../../components/ui/EmptyState.jsx';
 import ErrorState from '../../components/ui/ErrorState.jsx';
 import Loader from '../../components/ui/Loader.jsx';
 import { useOrderStore } from '../../store/orderStore.js';
+import { formatOrderStatus, money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
-
 function formatDate(value) {
-  return new Date(value).toLocaleDateString();
+  return new Date(value).toLocaleDateString('ru-RU');
 }
 
 function getItemsCount(order) {
@@ -33,19 +30,19 @@ export default function ProfileOrdersPage() {
       <ProfileMenu />
       <section className="profile-content">
         <div className="section-heading">
-          <p className="eyebrow">Orders</p>
-          <h1>История заказов</h1>
+          <p className="eyebrow">Заказы</p>
+          <h1>Архив заказов</h1>
           <p>Demo-mode заказы, созданные из корзины.</p>
         </div>
 
         {location.state?.success && <p className="state-text success">{location.state.success}</p>}
-        {isLoading && <Loader text="Loading orders..." />}
-        {error && <ErrorState title="Orders are unavailable" message={error} />}
+        {isLoading && <Loader text="Загружаем заказы..." />}
+        {error && <ErrorState title="Заказы недоступны" message={error} />}
 
         {!isLoading && !error && orders.length === 0 ? (
           <EmptyState
-            label="Orders"
-            title="Заказов пока нет"
+            label="Заказы"
+            title="У вас пока нет заказов"
             message="После оформления корзины заказ появится здесь."
           />
         ) : null}
@@ -61,9 +58,9 @@ export default function ProfileOrdersPage() {
                 >
                   <span>#{order.id.slice(0, 8)}</span>
                   <span>{formatDate(order.createdAt)}</span>
-                  <span className={`order-status ${order.status.toLowerCase()}`}>{order.status}</span>
+                  <span className={`order-status ${order.status.toLowerCase()}`}>{formatOrderStatus(order.status)}</span>
                   <strong>{money(order.totalPrice)}</strong>
-                  <span>{getItemsCount(order)} items</span>
+                  <span>{getItemsCount(order)} шт.</span>
                 </button>
 
                 {openOrderId === order.id && (

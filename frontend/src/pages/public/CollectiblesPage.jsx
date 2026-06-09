@@ -8,20 +8,20 @@ import { useSiteAssetStore } from '../../store/siteAssetStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const filters = [
-  ['All', ''],
-  ['Figures', 'figures'],
-  ['Prints', 'art-books'],
-  ['Cards', 'cards'],
-  ['Patches', 'patches'],
-  ['Objects', 'limited-boxes'],
-  ['Limited', 'limited'],
+  ['Все', ''],
+  ['Фигурки', 'figures'],
+  ['Постеры', 'art-books'],
+  ['Карты', 'cards'],
+  ['Патчи', 'patches'],
+  ['Объекты', 'limited-boxes'],
+  ['Лимитированные', 'limited'],
 ];
 
 const archiveFacts = [
-  ['Curated Archive', 'Every object is selected from the VYBE archive.'],
-  ['Limited Releases', 'Rare drops in small quantities.'],
-  ['Authentic Relics', 'Demo provenance for collectible items.'],
-  ['Secure Archive', 'Protected cart and checkout flow.'],
+  ['Кураторский архив', 'Каждый объект отобран из архива VYBE.'],
+  ['Лимитированные релизы', 'Редкие дропы в малых тиражах.'],
+  ['Подлинные реликвии', 'Demo-происхождение для коллекционных предметов.'],
+  ['Безопасная доставка', 'Защищённый сценарий корзины и оформления.'],
 ];
 
 export default function CollectiblesPage() {
@@ -54,12 +54,12 @@ export default function CollectiblesPage() {
         className="page-hero cinematic collectibles-hero"
         style={{ '--collectibles-image': `url("${heroImage}")` }}
       >
-        <p className="section-label">VYBE Archive</p>
-        <h1>Collectibles</h1>
-        <p>Rare objects from the VYBE archive.</p>
+        <p className="section-label">Архив VYBE</p>
+        <h1>Коллекционные предметы</h1>
+        <p>Редкие объекты из архива VYBE.</p>
       </section>
 
-      <section className="collectibles-toolbar" aria-label="Collectibles filters">
+      <section className="collectibles-toolbar" aria-label="Фильтры коллекционных предметов">
         <div className="filter-tabs">
           {filters.map(([label, value]) => (
             <button
@@ -74,22 +74,22 @@ export default function CollectiblesPage() {
         </div>
 
         <label className="collectibles-sort">
-          <span>Sort:</span>
+          <span>Сортировка:</span>
           <select value={sort} onChange={(event) => setSort(event.target.value)}>
-            <option value="newest">Newest</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
+            <option value="newest">Сначала новые</option>
+            <option value="price-asc">Цена: по возрастанию</option>
+            <option value="price-desc">Цена: по убыванию</option>
           </select>
         </label>
       </section>
 
-      {isLoading && <Loader text="Opening archive..." />}
-      {error && <ErrorState title="Collectibles archive is unavailable" message={error} />}
+      {isLoading && <Loader text="Открываем архив..." />}
+      {error && <ErrorState title="Архив коллекционных предметов недоступен" message={error} />}
       {!isLoading && !error && visibleProducts.length === 0 && (
         <EmptyState
-          label="Collectibles"
-          title="No relics found."
-          message="The archive shelf is empty for this filter."
+          label="Коллекционные предметы"
+          title="Реликвии не найдены"
+          message="На этой полке архива пока пусто для выбранного фильтра."
         />
       )}
 
@@ -97,8 +97,8 @@ export default function CollectiblesPage() {
         <div className="product-grid cinematic-grid collectibles-grid">
           {visibleProducts.map((product, index) => (
             <div className="collectible-slot" key={product.id}>
-              <span>ARCHIVE {String(index + 1).padStart(3, '0')}</span>
-              <ProductCard product={product} />
+              <span>АРХИВ {String(index + 1).padStart(3, '0')}</span>
+              <ProductCard product={product} variant="collectible" />
             </div>
           ))}
         </div>

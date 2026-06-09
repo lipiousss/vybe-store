@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Admin request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос админки';
 }
 
 export const useAdminOrderStore = create((set, get) => ({

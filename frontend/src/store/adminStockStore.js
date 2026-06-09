@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Admin stock request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос склада';
 }
 
 export const useAdminStockStore = create((set) => ({
@@ -27,7 +27,7 @@ export const useAdminStockStore = create((set) => ({
     set({ isLoading: true, error: null, success: null });
     try {
       await adminApi.updateVariantStock(variantId, { stock, comment });
-      set({ isLoading: false, success: 'Stock updated.' });
+      set({ isLoading: false, success: 'Остаток обновлён.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;
@@ -46,7 +46,7 @@ export const useAdminStockStore = create((set) => ({
       link.click();
       link.remove();
       URL.revokeObjectURL(url);
-      set({ isLoading: false, success: 'Stock export downloaded.' });
+      set({ isLoading: false, success: 'Экспорт остатков скачан.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;

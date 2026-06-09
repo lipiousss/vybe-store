@@ -4,22 +4,19 @@ import EmptyState from '../../components/ui/EmptyState.jsx';
 import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
 import { useOrderStore } from '../../store/orderStore.js';
+import { money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 import { maskRuPhone } from '../../utils/phoneMask.js';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
-
 function validateForm(form) {
-  if (!form.customerName.trim()) return 'Name is required.';
-  if (!phonePattern.test(form.customerPhone.trim())) return 'Phone format must be +7 (999) 999-99-99.';
-  if (!emailPattern.test(form.customerEmail.trim())) return 'Email is invalid.';
-  if (!form.deliveryCity.trim()) return 'City is required.';
-  if (!form.deliveryAddress.trim()) return 'Delivery address is required.';
+  if (!form.customerName.trim()) return 'Укажите имя получателя.';
+  if (!phonePattern.test(form.customerPhone.trim())) return 'Телефон должен быть в формате +7 (999) 999-99-99.';
+  if (!emailPattern.test(form.customerEmail.trim())) return 'Некорректный email.';
+  if (!form.deliveryCity.trim()) return 'Укажите город.';
+  if (!form.deliveryAddress.trim()) return 'Укажите адрес доставки.';
   return null;
 }
 
@@ -62,16 +59,16 @@ export default function CheckoutPage() {
 
     setLocalError(null);
     await createOrder(form);
-    navigate('/profile/orders', { replace: true, state: { success: 'Order created.' } });
+    navigate('/profile/orders', { replace: true, state: { success: 'Заказ создан.' } });
   }
 
   if (items.length === 0) {
     return (
       <main className="checkout-page checkout-page--empty">
         <EmptyState
-          label="Checkout"
+          label="Оформление заказа"
           title="Корзина пуста"
-          message="Добавь товары из каталога, чтобы создать demo-order."
+          message="Добавьте товары из каталога, чтобы создать demo-заказ."
           action={<Link className="gold-button" to="/catalog">В каталог</Link>}
         />
       </main>
@@ -82,21 +79,21 @@ export default function CheckoutPage() {
     <main className="checkout-page">
       <section className="checkout-form-wrap">
         <div className="section-heading">
-          <p className="eyebrow">Demo checkout</p>
-          <h1>Create Order</h1>
-          <p>Payment is disabled in demo mode. The order will be created without a payment gateway.</p>
+          <p className="eyebrow">Demo-mode</p>
+          <h1>Оформление заказа</h1>
+          <p>Оплата отключена в demo-mode. Заказ будет создан без платёжной системы.</p>
         </div>
 
         <form className="checkout-form" onSubmit={handleSubmit}>
           <label>
-            Customer name
+            Имя получателя
             <input
               value={form.customerName}
               onChange={(event) => setForm({ ...form, customerName: event.target.value })}
             />
           </label>
           <label>
-            Phone
+            Телефон
             <input
               type="tel"
               placeholder="+7 (999) 999-99-99"
@@ -106,7 +103,7 @@ export default function CheckoutPage() {
             />
           </label>
           <label>
-            Email
+            Электронная почта
             <input
               type="email"
               value={form.customerEmail}
@@ -114,21 +111,21 @@ export default function CheckoutPage() {
             />
           </label>
           <label>
-            City
+            Город
             <input
               value={form.deliveryCity}
               onChange={(event) => setForm({ ...form, deliveryCity: event.target.value })}
             />
           </label>
           <label className="checkout-wide">
-            Delivery address
+            Адрес доставки
             <input
               value={form.deliveryAddress}
               onChange={(event) => setForm({ ...form, deliveryAddress: event.target.value })}
             />
           </label>
           <label className="checkout-wide">
-            Comment
+            Комментарий
             <textarea
               value={form.comment}
               onChange={(event) => setForm({ ...form, comment: event.target.value })}
@@ -138,13 +135,13 @@ export default function CheckoutPage() {
 
           {(localError || error) && <p className="state-text danger checkout-wide">{localError || error}</p>}
           <button className="gold-button checkout-wide" type="submit" disabled={isLoading}>
-            {isLoading ? 'Creating...' : 'Create Order'}
+            {isLoading ? 'Создаём...' : 'Создать заказ'}
           </button>
         </form>
       </section>
 
       <aside className="checkout-summary">
-        <h2>Summary</h2>
+        <h2>Состав заказа</h2>
         <div className="checkout-summary-items">
           {items.map((item) => {
             const image = mediaUrl(item.product?.images?.[0]?.url);
@@ -164,7 +161,7 @@ export default function CheckoutPage() {
           })}
         </div>
         <div className="checkout-total">
-          <span>Total</span>
+          <span>Итого</span>
           <strong>{money(totalPrice)}</strong>
         </div>
       </aside>

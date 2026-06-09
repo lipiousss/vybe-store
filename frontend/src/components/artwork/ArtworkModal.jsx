@@ -54,15 +54,15 @@ export default function ArtworkModal() {
               type="button"
               className="artwork-modal__close"
               onClick={closeArtworkModal}
-              aria-label="Close artwork modal"
+              aria-label="Закрыть окно артворка"
             >
-              x
+              Закрыть
             </button>
             <div className="artwork-modal__image">
               <img src={mediaUrl(selectedArtwork.image, '/images/placeholders/artwork-placeholder.png')} alt={selectedArtwork.title} />
             </div>
             <div className="artwork-modal__info">
-              <p className="eyebrow">{selectedArtwork.category || 'Archive'}</p>
+              <p className="eyebrow">{selectedArtwork.category || 'Архив'}</p>
               <h2>{selectedArtwork.title}</h2>
               {selectedArtwork.description && <p>{selectedArtwork.description}</p>}
               {tags.length > 0 && (

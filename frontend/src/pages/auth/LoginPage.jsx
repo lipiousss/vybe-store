@@ -17,11 +17,11 @@ export default function LoginPage() {
   return (
     <main className="auth-page">
       <form className="auth-panel" onSubmit={handleSubmit}>
-        <p className="eyebrow">Access ritual</p>
-        <h1>Login to VYBE</h1>
-        <p>Enter the archive with your email and password.</p>
+        <p className="eyebrow">Доступ к архиву</p>
+        <h1>Вход в VYBE</h1>
+        <p>Введите email и пароль, чтобы открыть профиль, корзину и заказы.</p>
         <label>
-          Email
+          Электронная почта
           <input
             type="email"
             value={form.email}
@@ -30,7 +30,7 @@ export default function LoginPage() {
           />
         </label>
         <label>
-          Password
+          Пароль
           <input
             type="password"
             value={form.password}
@@ -40,9 +40,9 @@ export default function LoginPage() {
         </label>
         {error && <p className="state-text danger">{error}</p>}
         <button className="gold-button" type="submit" disabled={isLoading}>
-          {isLoading ? 'Entering...' : 'Enter'}
+          {isLoading ? 'Входим...' : 'Войти'}
         </button>
-        <Link className="auth-link" to="/register">Create account</Link>
+        <Link className="auth-link" to="/register">Создать аккаунт</Link>
       </form>
     </main>
   );

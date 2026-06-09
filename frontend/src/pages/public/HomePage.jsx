@@ -4,29 +4,27 @@ import EnterScreen from '../../components/home/EnterScreen.jsx';
 import HeroSection from '../../components/home/HeroSection.jsx';
 import HomeCategoryTiles from '../../components/home/HomeCategoryTiles.jsx';
 import HomeEditorialBanners from '../../components/home/HomeEditorialBanners.jsx';
+import HomeSetupShowcase from '../../components/home/HomeSetupShowcase.jsx';
 import TrustStrip from '../../components/home/TrustStrip.jsx';
 import ProductCard from '../../components/product/ProductCard.jsx';
 import EmptyState from '../../components/ui/EmptyState.jsx';
 import { useCategoryStore } from '../../store/categoryStore.js';
 import { useCollectionStore } from '../../store/collectionStore.js';
 import { useProductStore } from '../../store/productStore.js';
-import { useSiteAssetStore } from '../../store/siteAssetStore.js';
-import { mediaUrl } from '../../utils/mediaUrl.js';
+
+const enterImage = '/images/site/enter/enter-screen-bg.png';
+const heroImage = '/images/site/home/home-hero-bg.png';
 
 export default function HomePage() {
   const { featuredProducts, fetchFeaturedProducts } = useProductStore();
   const { categories, fetchCategories } = useCategoryStore();
-  const { collections, fetchCollections } = useCollectionStore();
-  const { fetchAssets, getAsset } = useSiteAssetStore();
-  const enterImage = mediaUrl(getAsset('enter_screen_image')?.url);
-  const heroImage = mediaUrl(getAsset('home_hero_image')?.url, '/images/placeholders/product-placeholder.png');
+  const { fetchCollections } = useCollectionStore();
 
   React.useEffect(() => {
     fetchFeaturedProducts();
     fetchCategories();
     fetchCollections();
-    fetchAssets().catch(() => {});
-  }, [fetchFeaturedProducts, fetchCategories, fetchCollections, fetchAssets]);
+  }, [fetchFeaturedProducts, fetchCategories, fetchCollections]);
 
   const featured = featuredProducts.slice(0, 6);
 
@@ -38,26 +36,31 @@ export default function HomePage() {
 
       <section className="home-featured">
         <div className="home-section-head">
-          <h2>FEATURED PIECES</h2>
-          <Link to="/catalog">VIEW ALL PRODUCTS {'\u2192'}</Link>
+          <div>
+            <p className="section-label">Витрина</p>
+            <h2>Избранные товары</h2>
+            <p>Подборка вещей, которые лучше всего раскрывают эстетику магазина.</p>
+          </div>
+          <Link to="/catalog">Смотреть все товары →</Link>
         </div>
 
         {featured.length === 0 ? (
           <EmptyState
-            label="Featured"
-            title="No featured relics yet."
-            message="Mark products as FEATURED in admin to fill this shelf."
+            label="Рекомендации"
+            title="Пока нет избранных товаров"
+            message="Отметьте товары как рекомендуемые в админ-панели, чтобы заполнить эту секцию."
           />
         ) : (
           <div className="product-grid home-featured__grid">
             {featured.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} variant="compact" />
             ))}
           </div>
         )}
       </section>
 
-      <HomeEditorialBanners collections={collections} />
+      <HomeEditorialBanners />
+      <HomeSetupShowcase />
       <TrustStrip />
     </main>
   );

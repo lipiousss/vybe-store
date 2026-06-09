@@ -3,7 +3,7 @@ import { orderApi } from '../api/orderApi.js';
 import { useCartStore } from './cartStore.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Order request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос заказа';
 }
 
 export const useOrderStore = create((set) => ({
@@ -19,7 +19,7 @@ export const useOrderStore = create((set) => ({
     try {
       const response = await orderApi.create(data);
       await useCartStore.getState().fetchCart();
-      set({ currentOrder: response.order, isLoading: false, success: 'Order created.' });
+      set({ currentOrder: response.order, isLoading: false, success: 'Заказ создан.' });
       return response.order;
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });

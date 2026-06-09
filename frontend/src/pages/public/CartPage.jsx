@@ -5,10 +5,7 @@ import EmptyState from '../../components/ui/EmptyState.jsx';
 import ErrorState from '../../components/ui/ErrorState.jsx';
 import Loader from '../../components/ui/Loader.jsx';
 import { useCartStore } from '../../store/cartStore.js';
-
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
+import { money } from '../../utils/formatters.js';
 
 export default function CartPage() {
   const {
@@ -28,19 +25,19 @@ export default function CartPage() {
   return (
     <main className="cart-page">
       <section className="cart-page__head fantasy-card">
-        <p className="section-label">Cart</p>
+        <p className="section-label">Корзина</p>
         <h1>Корзина</h1>
-        <p>Проверь выбранные артефакты перед оформлением demo-заказа.</p>
+        <p>Проверьте выбранные артефакты перед оформлением demo-заказа.</p>
       </section>
 
-      {isLoading && items.length === 0 && <Loader text="Loading cart..." />}
-      {error && <ErrorState title="Cart is unavailable" message={error} />}
+      {isLoading && items.length === 0 && <Loader text="Загружаем корзину..." />}
+      {error && <ErrorState title="Корзина недоступна" message={error} />}
 
       {!isLoading && !error && items.length === 0 ? (
         <EmptyState
-          label="Cart"
+          label="Корзина"
           title="Корзина пуста"
-          message="Добавь товар из каталога, чтобы перейти к оформлению заказа."
+          message="Добавьте товар из каталога, чтобы перейти к оформлению заказа."
           action={<Link className="gold-button" to="/catalog">В каталог</Link>}
         />
       ) : null}
@@ -54,18 +51,18 @@ export default function CartPage() {
           </div>
 
           <aside className="cart-page__summary fantasy-card">
-            <h2>Summary</h2>
+            <h2>Итог</h2>
             <div>
-              <span>Total items</span>
+              <span>Товаров</span>
               <strong>{totalQuantity}</strong>
             </div>
             <div>
-              <span>Total</span>
+              <span>Сумма</span>
               <strong>{money(totalPrice)}</strong>
             </div>
-            <Link className="gold-button" to="/checkout">Checkout</Link>
+            <Link className="gold-button" to="/checkout">Оформить заказ</Link>
             <button className="ghost-button danger" type="button" onClick={clearCart} disabled={isLoading}>
-              Clear cart
+              Очистить корзину
             </button>
           </aside>
         </section>

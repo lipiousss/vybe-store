@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Collection request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос коллекции';
 }
 
 export const useAdminCollectionStore = create((set, get) => ({
@@ -32,7 +32,7 @@ export const useAdminCollectionStore = create((set, get) => ({
         await adminApi.createCollection(payload);
       }
       await get().fetchCollections();
-      set({ success: id ? 'Collection updated.' : 'Collection created.' });
+      set({ success: id ? 'Коллекция обновлена.' : 'Коллекция создана.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;
@@ -44,7 +44,7 @@ export const useAdminCollectionStore = create((set, get) => ({
     try {
       await adminApi.deleteCollection(id);
       await get().fetchCollections();
-      set({ success: 'Collection deleted.' });
+      set({ success: 'Коллекция удалена.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;

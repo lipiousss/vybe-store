@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Category request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос категории';
 }
 
 export const useAdminCategoryStore = create((set, get) => ({
@@ -32,7 +32,7 @@ export const useAdminCategoryStore = create((set, get) => ({
         await adminApi.createCategory(payload);
       }
       await get().fetchCategories();
-      set({ success: id ? 'Category updated.' : 'Category created.' });
+      set({ success: id ? 'Категория обновлена.' : 'Категория создана.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;
@@ -44,7 +44,7 @@ export const useAdminCategoryStore = create((set, get) => ({
     try {
       await adminApi.deleteCategory(id);
       await get().fetchCategories();
-      set({ success: 'Category deleted.' });
+      set({ success: 'Категория удалена.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;

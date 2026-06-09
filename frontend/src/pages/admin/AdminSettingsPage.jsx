@@ -28,42 +28,42 @@ export default function AdminSettingsPage() {
     <div className="admin-settings-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Settings</p>
-          <h1>STORE SETTINGS</h1>
-          <p>Demo configuration panel for diploma presentation. Values are stored locally until a settings model is added.</p>
+          <p className="eyebrow">Настройки</p>
+          <h1>НАСТРОЙКИ МАГАЗИНА</h1>
+          <p>Demo-панель конфигурации для презентации диплома. Значения хранятся локально до появления модели настроек.</p>
         </div>
       </section>
 
-      {saved && <p className="state-text success">Settings saved locally.</p>}
+      {saved && <p className="state-text success">Настройки сохранены локально.</p>}
 
       <form className="admin-panel admin-settings-form" onSubmit={handleSave}>
-        <label>Store name<input value={settings.storeName} onChange={(event) => update('storeName', event.target.value)} /></label>
-        <label>Theme<input value={settings.theme} onChange={(event) => update('theme', event.target.value)} /></label>
-        <label>Currency
+        <label>Название магазина<input value={settings.storeName} onChange={(event) => update('storeName', event.target.value)} /></label>
+        <label>Тема<input value={settings.theme} onChange={(event) => update('theme', event.target.value)} /></label>
+        <label>Валюта
           <select value={settings.currency} onChange={(event) => update('currency', event.target.value)}>
             <option value="RUB">RUB</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
           </select>
         </label>
-        <label>Email verification mode
+        <label>Режим подтверждения email
           <select value={settings.emailVerification} onChange={(event) => update('emailVerification', event.target.value)}>
-            <option value="demo">demo</option>
-            <option value="disabled">disabled</option>
-            <option value="planned">planned</option>
+            <option value="demo">Демо</option>
+            <option value="disabled">Отключено</option>
+            <option value="planned">Запланировано</option>
           </select>
         </label>
-        <label>1C integration
+        <label>Интеграция 1C
           <select value={settings.oneCIntegration} onChange={(event) => update('oneCIntegration', event.target.value)}>
-            <option value="disabled">disabled</option>
-            <option value="planned">planned</option>
+            <option value="disabled">Отключена</option>
+            <option value="planned">Запланирована</option>
           </select>
         </label>
         <label className="check-row">
           <input checked={settings.demoPayment} type="checkbox" onChange={(event) => update('demoPayment', event.target.checked)} />
-          Demo payment mode enabled
+          Demo-оплата включена
         </label>
-        <button className="gold-button" type="submit">Save Settings</button>
+        <button className="gold-button" type="submit">Сохранить настройки</button>
       </form>
     </div>
   );

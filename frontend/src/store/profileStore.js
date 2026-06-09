@@ -3,7 +3,7 @@ import { userApi } from '../api/userApi.js';
 import { useAuthStore } from './authStore.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Profile request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос профиля';
 }
 
 function syncAuthUser(user) {
@@ -45,7 +45,7 @@ export const useProfileStore = create((set) => ({
     try {
       const data = await userApi.updateProfile(payload);
       syncAuthUser(data.user);
-      set({ profile: data, isLoading: false, success: 'Profile updated.' });
+      set({ profile: data, isLoading: false, success: 'Профиль обновлён.' });
       return data;
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
@@ -58,7 +58,7 @@ export const useProfileStore = create((set) => ({
 
     try {
       const data = await userApi.changePassword(payload);
-      set({ isLoading: false, success: data.message || 'Password changed.' });
+      set({ isLoading: false, success: data.message || 'Пароль изменён.' });
       return data;
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
@@ -75,7 +75,7 @@ export const useProfileStore = create((set) => ({
       set((state) => ({
         profile: state.profile ? { ...state.profile, user: data.user } : state.profile,
         isLoading: false,
-        success: 'Email changed.',
+        success: 'Почта изменена.',
       }));
       return data;
     } catch (error) {
@@ -93,7 +93,7 @@ export const useProfileStore = create((set) => ({
       set((state) => ({
         profile: state.profile ? { ...state.profile, user: data.user } : state.profile,
         isLoading: false,
-        success: 'Phone updated.',
+        success: 'Телефон обновлён.',
       }));
       return data;
     } catch (error) {
@@ -111,7 +111,7 @@ export const useProfileStore = create((set) => ({
       set((state) => ({
         profile: state.profile ? { ...state.profile, user: data.user } : state.profile,
         isLoading: false,
-        success: 'Avatar uploaded.',
+        success: 'Аватар загружен.',
       }));
       return data;
     } catch (error) {

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { productApi } from '../api/productApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос товаров';
 }
 
 export const useProductStore = create((set) => ({

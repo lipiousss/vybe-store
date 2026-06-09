@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const pages = [
-  ['Home Page', '/', 'Storefront hero, featured pieces and editorial banners.'],
-  ['About Page', '/about', 'Brand story, materials and project mission.'],
-  ['Artworks Page', '/artworks', 'Visual archive and fullscreen artwork modal.'],
-  ['Collectibles Page', '/collectibles', 'Rare objects and archive relics.'],
-  ['Catalog Page', '/catalog', 'Main product catalogue with filters.'],
+  ['Главная', '/', 'Витрина, избранные товары и редакционные баннеры.'],
+  ['О бренде', '/about', 'История бренда, материалы и идея проекта.'],
+  ['Артворки', '/artworks', 'Визуальный архив и полноэкранный просмотр работ.'],
+  ['Коллекционные', '/collectibles', 'Редкие объекты и архивные реликвии.'],
+  ['Каталог', '/catalog', 'Основной каталог товаров с фильтрами.'],
 ];
 
 export default function AdminPagesPage() {
@@ -14,9 +14,9 @@ export default function AdminPagesPage() {
     <div className="admin-pages-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Pages</p>
-          <h1>STATIC PAGES MANAGER</h1>
-          <p>Demo control room for public routes. CRUD content editing can be added later through SiteAsset and page content models.</p>
+          <p className="eyebrow">Страницы</p>
+          <h1>МЕНЕДЖЕР СТАТИЧЕСКИХ СТРАНИЦ</h1>
+          <p>Demo-панель публичных маршрутов. Полное редактирование контента можно добавить позже через SiteAsset и модели страниц.</p>
         </div>
       </section>
 
@@ -26,8 +26,8 @@ export default function AdminPagesPage() {
             <p className="section-label">{route}</p>
             <h2>{title}</h2>
             <p>{description}</p>
-            <span className="admin-status active">ACTIVE</span>
-            <Link className="ghost-button" to={route}>Open Page</Link>
+            <span className="admin-status active">Активна</span>
+            <Link className="ghost-button" to={route}>Открыть страницу</Link>
           </article>
         ))}
       </section>

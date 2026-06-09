@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const columns = [
-  ['Shop', [['Catalog', '/catalog'], ['Collectibles', '/collectibles'], ['Cart', '/cart']]],
-  ['Collections', [['Collections', '/collections'], ['Artworks', '/artworks'], ['Project', '/project']]],
-  ['Company', [['About VYBE', '/about'], ['Visual Archive', '/artworks'], ['Project Notes', '/project']]],
-  ['Support', [['Profile', '/profile'], ['Orders', '/profile/orders'], ['Settings', '/profile/settings']]],
+  ['Магазин', [['Каталог', '/catalog'], ['Коллекционные предметы', '/collectibles'], ['Корзина', '/cart']]],
+  ['Коллекции', [['Коллекции', '/collections'], ['Артворки', '/artworks'], ['Проект', '/project']]],
+  ['Компания', [['О VYBE', '/about'], ['Визуальный архив', '/artworks'], ['Описание проекта', '/project']]],
+  ['Поддержка', [['Профиль', '/profile'], ['Заказы', '/profile/orders'], ['Настройки', '/profile/settings']]],
 ];
 
 export default function Footer() {
@@ -17,7 +17,7 @@ export default function Footer() {
           <span>VYBE</span>
         </Link>
         <p className="footer-copy">
-          Designer objects, apparel, and archive fragments shaped in a dark fantasy language.
+          Дизайнерские вещи, предметы и визуальные фрагменты в эстетике dark fantasy.
         </p>
       </div>
 
@@ -33,19 +33,19 @@ export default function Footer() {
       </div>
 
       <form className="footer-newsletter">
-        <h3>Join the Realm</h3>
-        <p>Enter your email to receive drops, tales, and archive offers.</p>
+        <h3>Присоединиться к VYBE</h3>
+        <p>Получайте новости о дропах, коллекциях и визуальном архиве.</p>
         <div>
-          <input placeholder="Enter your email" type="email" />
-          <button type="button" aria-label="Join newsletter">-&gt;</button>
+          <input placeholder="Ваш email" type="email" />
+          <button type="button">Подписаться</button>
         </div>
       </form>
 
       <div className="footer-bottom">
-        <span>(c) 2026 VYBE</span>
-        <Link to="/project">Terms</Link>
-        <Link to="/project">Privacy</Link>
-        <Link to="/project">Cookie Policy</Link>
+        <span>© 2026 VYBE</span>
+        <Link to="/project">Условия</Link>
+        <Link to="/project">Приватность</Link>
+        <Link to="/project">Cookies</Link>
       </div>
     </footer>
   );

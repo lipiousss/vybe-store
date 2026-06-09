@@ -2,37 +2,46 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-export default function HeroSection({ image }) {
-  const heroImage = image || '/images/placeholders/product-placeholder.png';
-
+export default function HeroSection({ image = '/images/site/home/home-hero-bg.png' }) {
   return (
-    <section className="home-hero home-storefront" style={{ '--home-hero-image': `url("${heroImage}")` }}>
+    <section className="home-hero home-storefront" style={{ '--home-hero-image': `url("${image}")` }}>
       <div className="home-hero__backdrop" />
+      <span className="home-hero__gold-line" />
+      <span className="home-hero__blue-glow" />
 
       <motion.div
         className="home-hero__content"
-        initial={{ opacity: 0, y: 22, filter: 'blur(8px)' }}
+        initial={{ opacity: 0, y: 24, filter: 'blur(10px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-        transition={{ duration: 0.72, ease: 'easeOut' }}
+        transition={{ duration: 0.75, ease: 'easeOut' }}
       >
-        <p className="section-label">WEAR THE SHADOW. COMMAND THE SILENCE.</p>
-        <h1>ENTER THE REALM OF VYBE</h1>
+        <p className="section-label">ДИЗАЙНЕРСКИЙ МАГАЗИН</p>
+        <h1>НОСИ ЛЕГЕНДУ</h1>
+        <strong>Дизайн. Культура. Тьма.</strong>
         <span className="home-hero__rule" />
         <p>
-          Dark-fantasy fashion and designer pieces for those who walk beyond the light.
+          Дизайнерская продукция, собранная в единой визуальной системе:
+          одежда, аксессуары, декор, периферия и коллекционные предметы.
         </p>
-        <Link className="home-hero__button" to="/catalog">
-          EXPLORE THE COLLECTION {'\u2192'}
-        </Link>
+        <div className="home-hero__actions">
+          <Link className="home-hero__button" to="/catalog">
+            Смотреть каталог
+          </Link>
+          <Link className="home-hero__button ghost" to="/artworks">
+            Открыть артворки
+          </Link>
+        </div>
       </motion.div>
 
       <motion.div
         className="home-hero__visual"
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.82, delay: 0.08, ease: 'easeOut' }}
+        initial={{ opacity: 0, scale: 0.96, x: 20 }}
+        animate={{ opacity: 1, scale: 1, x: 0 }}
+        transition={{ duration: 0.9, delay: 0.1, ease: 'easeOut' }}
       >
-        <img src={heroImage} alt="VYBE dark fantasy storefront" />
+        <div className="home-hero__visual-frame">
+          <img src={image} alt="Главный визуал VYBE" />
+        </div>
       </motion.div>
     </section>
   );

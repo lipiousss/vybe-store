@@ -8,13 +8,13 @@ import { useArtworkStore } from '../../store/artworkStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const filters = [
-  { label: 'All', value: null },
-  { label: 'Night Collection', value: 'Night Collection' },
-  { label: 'Armor Concepts', value: 'Armor' },
-  { label: 'Product Visuals', value: 'Product' },
-  { label: 'Posters', value: 'Poster' },
-  { label: 'Characters', value: 'Character' },
-  { label: 'Environment', value: 'Environment' },
+  { label: 'Все', value: null },
+  { label: 'Ночная коллекция', value: 'Night Collection' },
+  { label: 'Концепты брони', value: 'Armor' },
+  { label: 'Визуалы товаров', value: 'Product' },
+  { label: 'Постеры', value: 'Poster' },
+  { label: 'Персонажи', value: 'Character' },
+  { label: 'Окружение', value: 'Environment' },
 ];
 
 const layoutClasses = [
@@ -66,16 +66,16 @@ export default function ArtworksPage() {
     <main className="artworks-page">
       <section className="artworks-hero">
         <div>
-          <p className="eyebrow">VYBE Visual Archive</p>
-          <h1>Visual Archive</h1>
+          <p className="eyebrow">Визуальный архив VYBE</p>
+          <h1>Визуальный архив</h1>
           <p>
-            A collection of visual fragments, concept pieces and dark fantasy references from
-            the VYBE universe.
+            Коллекция визуальных фрагментов, концептов и dark fantasy-референсов
+            из вселенной VYBE.
           </p>
         </div>
       </section>
 
-      <section className="artwork-filters" aria-label="Artwork filters">
+      <section className="artwork-filters" aria-label="Фильтры артворков">
         {filters.map((filter) => (
           <button
             type="button"
@@ -95,7 +95,7 @@ export default function ArtworksPage() {
               <img src={mediaUrl(featuredArtwork.image, '/images/placeholders/artwork-placeholder.png')} alt={featuredArtwork.title} />
             </span>
             <span className="featured-artwork__content">
-              <span className="eyebrow">Featured Artwork</span>
+              <span className="eyebrow">Главный артворк</span>
               <strong>{featuredArtwork.title}</strong>
               {featuredArtwork.description && <span>{featuredArtwork.description}</span>}
               {Array.isArray(featuredArtwork.tags) && featuredArtwork.tags.length > 0 && (
@@ -111,30 +111,30 @@ export default function ArtworksPage() {
       )}
 
       <section className="artwork-page-shell">
-        <div className="artwork-side-mark">VYBE ARCHIVE</div>
+        <div className="artwork-side-mark">АРХИВ VYBE</div>
 
-        <header className="artwork-banner" aria-label="Artworks banner">
+        <header className="artwork-banner" aria-label="Баннер артворков">
           <div className="artwork-banner-log">
-            <span>archive.boot 24:05:26 - loading visual fragments | status: active</span>
-            <span>vybe.index 24:05:26 - golden frame verified | cold glow stable</span>
-            <span>visual.node 24:05:26 - concepts, posters, characters, environments</span>
+            <span>archive.boot 24:05:26 - загрузка визуальных фрагментов | статус: активен</span>
+            <span>vybe.index 24:05:26 - золотая рамка проверена | холодное свечение стабильно</span>
+            <span>visual.node 24:05:26 - концепты, постеры, персонажи, окружение</span>
           </div>
-          <h2>ARTWORKS</h2>
+          <h2>АРТВОРКИ</h2>
         </header>
 
-        {isLoading && <Loader text="Loading visual archive..." />}
-        {error && <ErrorState title="Visual archive is unavailable" message={error} />}
+        {isLoading && <Loader text="Загружаем визуальный архив..." />}
+        {error && <ErrorState title="Визуальный архив недоступен" message={error} />}
 
         {!isLoading && !error && artworks.length === 0 && (
           <EmptyState
-            label="Visual archive"
-            title="No artworks found in the archive."
-            message="Try another archive filter or add artworks from the admin panel."
+            label="Визуальный архив"
+            title="Артворки не найдены"
+            message="Попробуйте другой фильтр или добавьте артворки в админ-панели."
           />
         )}
 
         {!isLoading && !error && artworks.length > 0 && (
-          <section className="artwork-grid artwork-layout" aria-label="Artwork gallery">
+          <section className="artwork-grid artwork-layout" aria-label="Галерея артворков">
             <div className="artwork-column artwork-column-left">
               {columns.left.map((item) => (
                 <ArtworkCard

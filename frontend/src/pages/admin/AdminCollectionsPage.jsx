@@ -45,7 +45,7 @@ export default function AdminCollectionsPage() {
   }
 
   async function handleDelete(collection) {
-    if (!window.confirm(`Delete collection "${collection.name}"?`)) return;
+    if (!window.confirm(`Удалить коллекцию "${collection.name}"?`)) return;
     await deleteCollection(collection.id);
   }
 
@@ -53,9 +53,9 @@ export default function AdminCollectionsPage() {
     <div className="admin-collections-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Collections</p>
-          <h1>COLLECTIONS</h1>
-          <p>Manage catalogue drops and archive groups used by product cards and public pages.</p>
+          <p className="eyebrow">Коллекции</p>
+          <h1>КОЛЛЕКЦИИ</h1>
+          <p>Управление дропами каталога и архивными группами для витрины.</p>
         </div>
       </section>
 
@@ -63,10 +63,10 @@ export default function AdminCollectionsPage() {
 
       <section className="admin-crud-layout">
         <article className="admin-panel">
-          <header className="admin-panel__head"><div><p className="section-label">Collection List</p><h2>Existing drops</h2></div></header>
+          <header className="admin-panel__head"><div><p className="section-label">Список коллекций</p><h2>Активные дропы</h2></div></header>
           <div className="admin-table-wrap">
             <table className="admin-table">
-              <thead><tr><th>Image</th><th>Name</th><th>Slug</th><th>Products</th><th>Status</th><th>Actions</th></tr></thead>
+              <thead><tr><th>Фото</th><th>Название</th><th>Slug</th><th>Товаров</th><th>Статус</th><th>Действия</th></tr></thead>
               <tbody>
                 {collections.map((collection) => (
                   <tr key={collection.id}>
@@ -74,31 +74,31 @@ export default function AdminCollectionsPage() {
                     <td>{collection.name}</td>
                     <td>{collection.slug}</td>
                     <td>{collection._count?.products || 0}</td>
-                    <td><span className={`admin-status ${collection.isActive ? 'active' : 'draft'}`}>{collection.isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
+                    <td><span className={`admin-status ${collection.isActive ? 'active' : 'draft'}`}>{collection.isActive ? 'Активна' : 'Скрыта'}</span></td>
                     <td className="admin-row-actions">
-                      <button className="admin-icon-action" type="button" onClick={() => editCollection(collection)}>Edit</button>
-                      <button className="admin-icon-action danger" type="button" onClick={() => handleDelete(collection)}>Delete</button>
+                      <button className="admin-icon-action" type="button" onClick={() => editCollection(collection)}>Изменить</button>
+                      <button className="admin-icon-action danger" type="button" onClick={() => handleDelete(collection)}>Удалить</button>
                     </td>
                   </tr>
                 ))}
-                {collections.length === 0 && <tr><td colSpan="6">No collections yet.</td></tr>}
+                {collections.length === 0 && <tr><td colSpan="6">Коллекций пока нет.</td></tr>}
               </tbody>
             </table>
           </div>
         </article>
 
         <form className="admin-panel admin-entity-form" onSubmit={handleSubmit}>
-          <header className="admin-panel__head"><div><p className="section-label">{form.id ? 'Edit Collection' : 'New Collection'}</p><h2>Drop profile</h2></div></header>
-          <label>Name<input value={form.name} onChange={(event) => updateField('name', event.target.value)} required /></label>
-          <label>Description<textarea value={form.description} onChange={(event) => updateField('description', event.target.value)} /></label>
-          <label>Image URL<input value={form.image} onChange={(event) => updateField('image', event.target.value)} /></label>
-          <label className="check-row"><input type="checkbox" checked={form.isActive} onChange={(event) => updateField('isActive', event.target.checked)} /> Active</label>
+          <header className="admin-panel__head"><div><p className="section-label">{form.id ? 'Редактирование' : 'Новая коллекция'}</p><h2>Профиль дропа</h2></div></header>
+          <label>Название<input value={form.name} onChange={(event) => updateField('name', event.target.value)} required /></label>
+          <label>Описание<textarea value={form.description} onChange={(event) => updateField('description', event.target.value)} /></label>
+          <label>URL изображения<input value={form.image} onChange={(event) => updateField('image', event.target.value)} /></label>
+          <label className="check-row"><input type="checkbox" checked={form.isActive} onChange={(event) => updateField('isActive', event.target.checked)} /> Активна</label>
           <div className="admin-upload-preview">
-            <img src={mediaUrl(form.image, '/images/placeholders/product-placeholder.png')} alt={form.name || 'Collection preview'} />
+            <img src={mediaUrl(form.image, '/images/placeholders/product-placeholder.png')} alt={form.name || 'Предпросмотр коллекции'} />
           </div>
           <div className="admin-form-actions">
-            <button className="gold-button" type="submit" disabled={isLoading}>{form.id ? 'Save Collection' : 'Create Collection'}</button>
-            {form.id && <button className="ghost-button" type="button" onClick={() => setForm(emptyForm)}>Cancel</button>}
+            <button className="gold-button" type="submit" disabled={isLoading}>{form.id ? 'Сохранить коллекцию' : 'Создать коллекцию'}</button>
+            {form.id && <button className="ghost-button" type="button" onClick={() => setForm(emptyForm)}>Отмена</button>}
           </div>
         </form>
       </section>

@@ -2,11 +2,8 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminAnalyticsStore } from '../../store/adminAnalyticsStore.js';
 import { useAdminProductStore } from '../../store/adminProductStore.js';
+import { formatOrderStatus, formatProductStatus, formatStockMovement, money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
-
-function money(value) {
-  return `${Number(value || 0).toLocaleString('ru-RU')} ₽`;
-}
 
 function shortId(id) {
   return `#${String(id || '').slice(0, 8)}`;
@@ -41,19 +38,19 @@ export default function AdminDashboardPage() {
   }, [fetchProducts]);
 
   const stats = [
-    ['Total Revenue', money(overview?.totalRevenue), 'Real paid demo orders'],
-    ['Total Orders', overview?.totalOrders || 0, `${overview?.deliveredOrdersCount || 0} delivered`],
-    ['Total Customers', overview?.totalUsers || 0, 'Registered accounts'],
-    ['Total Products', overview?.totalProducts || 0, `${overview?.activeProductsCount || 0} active`],
-    ['Low Stock Items', overview?.lowStockCount || 0, `${overview?.outOfStockCount || 0} out of stock`],
+    ['Выручка', money(overview?.totalRevenue), 'Реальные demo-заказы'],
+    ['Всего заказов', overview?.totalOrders || 0, `Доставлено: ${overview?.deliveredOrdersCount || 0}`],
+    ['Пользователи', overview?.totalUsers || 0, 'Зарегистрированные аккаунты'],
+    ['Товары', overview?.totalProducts || 0, `Активных: ${overview?.activeProductsCount || 0}`],
+    ['Мало на складе', overview?.lowStockCount || 0, `Нет в наличии: ${overview?.outOfStockCount || 0}`],
   ];
   const previewProduct = products[0] || null;
 
   return (
     <div className="admin-dashboard">
       <section className="admin-dashboard__head">
-        <p className="section-label">OVERVIEW OF YOUR EMPIRE</p>
-        <h1>COMMAND THE REALM</h1>
+        <p className="section-label">Обзор системы</p>
+        <h1>Управление магазином</h1>
         {error && <p className="state-text danger">{error}</p>}
       </section>
 
@@ -72,20 +69,20 @@ export default function AdminDashboardPage() {
         <article className="admin-panel">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Recent Orders</p>
-              <h2>Latest movement</h2>
+              <p className="section-label">Последние заказы</p>
+              <h2>Последнее движение</h2>
             </div>
-            <Link to="/admin/orders">View All Orders</Link>
+            <Link to="/admin/orders">Все заказы</Link>
           </header>
           <div className="admin-table-wrap compact">
             <table className="admin-table admin-table--compact">
               <thead>
                 <tr>
-                  <th>Order</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Total</th>
-                  <th>Status</th>
+                  <th>Заказ</th>
+                  <th>Покупатель</th>
+                  <th>Дата</th>
+                  <th>Сумма</th>
+                  <th>Статус</th>
                 </tr>
               </thead>
               <tbody>
@@ -95,10 +92,10 @@ export default function AdminDashboardPage() {
                     <td>{order.customerName}</td>
                     <td>{formatDate(order.createdAt)}</td>
                     <td>{money(order.totalPrice)}</td>
-                    <td><span className={`order-status ${order.status.toLowerCase()}`}>{order.status}</span></td>
+                    <td><span className={`order-status ${order.status.toLowerCase()}`}>{formatOrderStatus(order.status)}</span></td>
                   </tr>
                 ))}
-                {recentOrders.length === 0 && <tr><td colSpan="5">No orders yet.</td></tr>}
+                {recentOrders.length === 0 && <tr><td colSpan="5">Заказов пока нет.</td></tr>}
               </tbody>
             </table>
           </div>
@@ -107,10 +104,10 @@ export default function AdminDashboardPage() {
         <article className="admin-panel">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Low Stock Alerts</p>
-              <h2>Inventory warnings</h2>
+              <p className="section-label">Остатки</p>
+              <h2>Предупреждения склада</h2>
             </div>
-            <Link to="/admin/stock">View Inventory</Link>
+            <Link to="/admin/stock">Открыть склад</Link>
           </header>
           <div className="admin-mini-list">
             {lowStock.slice(0, 8).map((variant) => (
@@ -118,31 +115,31 @@ export default function AdminDashboardPage() {
                 <strong>{variant.product?.name}</strong>
                 <span>{variant.sku}</span>
                 <span className={`stock-status ${variant.stock === 0 ? 'out' : 'low'}`}>
-                  {variant.stock === 0 ? 'Out of Stock' : `${variant.stock} left`}
+                  {variant.stock === 0 ? 'Нет в наличии' : `Остаток: ${variant.stock}`}
                 </span>
               </article>
             ))}
-            {lowStock.length === 0 && <p>No low stock alerts.</p>}
+            {lowStock.length === 0 && <p>Нет предупреждений по остаткам.</p>}
           </div>
         </article>
 
         <article className="admin-panel">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Top Products</p>
-              <h2>Sales signal</h2>
+              <p className="section-label">Популярные товары</p>
+              <h2>Сигнал продаж</h2>
             </div>
-            <Link to="/admin/analytics">Analytics</Link>
+            <Link to="/admin/analytics">Аналитика</Link>
           </header>
           <div className="admin-mini-list">
             {topProducts.slice(0, 8).map((product) => (
               <article className="admin-mini-card" key={product.productId}>
                 <strong>{product.name}</strong>
-                <span>{product.soldQuantity} sold</span>
+                <span>Продано: {product.soldQuantity}</span>
                 <span>{money(product.revenue)}</span>
               </article>
             ))}
-            {topProducts.length === 0 && <p>No sales data yet.</p>}
+            {topProducts.length === 0 && <p>Данных о продажах пока нет.</p>}
           </div>
         </article>
       </section>
@@ -151,15 +148,15 @@ export default function AdminDashboardPage() {
         <article className="admin-panel admin-products-mini">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Product Management</p>
-              <h2>Catalogue control</h2>
+              <p className="section-label">Управление товарами</p>
+              <h2>Контроль каталога</h2>
             </div>
-            <Link to="/admin/products/create">Add Product</Link>
+            <Link to="/admin/products/create">Добавить товар</Link>
           </header>
           <div className="admin-table-wrap compact">
             <table className="admin-table admin-table--compact">
               <thead>
-                <tr><th>Product</th><th>SKU</th><th>Price</th><th>Stock</th><th>Status</th></tr>
+                <tr><th>Товар</th><th>SKU</th><th>Цена</th><th>Остаток</th><th>Статус</th></tr>
               </thead>
               <tbody>
                 {products.slice(0, 5).map((product) => (
@@ -168,10 +165,10 @@ export default function AdminDashboardPage() {
                     <td>{product.variants?.[0]?.sku || '-'}</td>
                     <td>{money(product.finalPrice || product.price)}</td>
                     <td>{(product.variants || []).reduce((sum, variant) => sum + Number(variant.stock || 0), 0)}</td>
-                    <td><span className={`admin-status ${product.status.toLowerCase()}`}>{product.status}</span></td>
+                    <td><span className={`admin-status ${product.status.toLowerCase()}`}>{formatProductStatus(product.status)}</span></td>
                   </tr>
                 ))}
-                {products.length === 0 && <tr><td colSpan="5">No products yet.</td></tr>}
+                {products.length === 0 && <tr><td colSpan="5">Товаров пока нет.</td></tr>}
               </tbody>
             </table>
           </div>
@@ -180,37 +177,37 @@ export default function AdminDashboardPage() {
         <article className="admin-panel admin-forge-mini">
           <header className="admin-panel__head">
             <div>
-              <p className="section-label">Stock Movements</p>
-              <h2>Last warehouse events</h2>
+              <p className="section-label">Движение склада</p>
+              <h2>Последние события склада</h2>
             </div>
-            <Link to="/admin/analytics">Open Analytics</Link>
+            <Link to="/admin/analytics">Открыть аналитику</Link>
           </header>
           <div className="admin-mini-list">
             {stockMovements.slice(0, 5).map((movement) => (
               <article className="admin-mini-card" key={movement.id}>
                 <strong>{movement.product?.name}</strong>
-                <span className={`stock-movement ${movement.type.toLowerCase()}`}>{movement.type}</span>
+                <span className={`stock-movement ${movement.type.toLowerCase()}`}>{formatStockMovement(movement.type)}</span>
                 <span>{movementSign(movement.quantity)}</span>
               </article>
             ))}
-            {stockMovements.length === 0 && <p>No stock movements yet.</p>}
+            {stockMovements.length === 0 && <p>Движений склада пока нет.</p>}
           </div>
         </article>
 
         <article className="admin-live-preview">
-          <p className="section-label">Live Product Preview</p>
+          <p className="section-label">Предпросмотр товара</p>
           <div className="admin-preview-card">
             <div className="admin-preview-image">
               <img
                 src={mediaUrl(previewProduct?.images?.[0]?.url, '/images/placeholders/product-placeholder.png')}
-                alt={previewProduct?.name || 'Preview'}
+                alt={previewProduct?.name || 'Предпросмотр'}
               />
             </div>
             <div className="admin-preview-body">
-              <h3>{previewProduct?.name || 'No products yet'}</h3>
-              <span>{previewProduct?.category?.name || 'Awaiting catalogue data'}</span>
+              <h3>{previewProduct?.name || 'Товаров пока нет'}</h3>
+              <span>{previewProduct?.category?.name || 'Ожидаем данные каталога'}</span>
               <strong>{previewProduct ? money(previewProduct.finalPrice || previewProduct.price) : money(0)}</strong>
-              {previewProduct && <Link className="ghost-button" to={`/product/${previewProduct.slug}`}>View Product Page</Link>}
+              {previewProduct && <Link className="ghost-button" to={`/product/${previewProduct.slug}`}>Страница товара</Link>}
             </div>
           </div>
         </article>

@@ -98,56 +98,56 @@ export default function ProfileSettingsPage() {
       <ProfileMenu />
       <section className="profile-content settings-content">
         <div className="section-heading">
-          <p className="eyebrow">Settings</p>
-          <h1>Profile Settings</h1>
+          <p className="eyebrow">Настройки</p>
+          <h1>Настройки профиля</h1>
         </div>
 
         {error && <p className="state-text danger">{error}</p>}
         {success && <p className="state-text success">{success}</p>}
 
         <section className="settings-panel">
-          <h2>Avatar Upload</h2>
+          <h2>Аватар</h2>
           <div className="avatar-upload">
             <div className="profile-avatar large">
               {avatarUrl(profile?.user?.avatar) ? (
-                <img src={avatarUrl(profile.user.avatar)} alt={profile?.user?.username || 'Avatar'} />
+                <img src={avatarUrl(profile.user.avatar)} alt={profile?.user?.username || 'Аватар'} />
               ) : (
                 <span>{profile?.user?.username?.[0]?.toUpperCase() || 'V'}</span>
               )}
             </div>
             <label className="file-input-label">
-              Choose image
+              Загрузить аватар
               <input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleAvatarChange} />
             </label>
           </div>
         </section>
 
         <form className="settings-panel" onSubmit={handleProfileSubmit}>
-          <h2>Personal Data</h2>
+          <h2>Личные данные</h2>
           <div className="settings-grid">
             <label>
-              Username
+              Имя пользователя
               <input
                 value={profileForm.username}
                 onChange={(event) => setProfileForm({ ...profileForm, username: event.target.value })}
               />
             </label>
             <label>
-              First name
+              Имя
               <input
                 value={profileForm.firstName}
                 onChange={(event) => setProfileForm({ ...profileForm, firstName: event.target.value })}
               />
             </label>
             <label>
-              Last name
+              Фамилия
               <input
                 value={profileForm.lastName}
                 onChange={(event) => setProfileForm({ ...profileForm, lastName: event.target.value })}
               />
             </label>
             <label>
-              Birth date
+              Дата рождения
               <input
                 type="date"
                 value={profileForm.birthDate}
@@ -156,20 +156,20 @@ export default function ProfileSettingsPage() {
             </label>
           </div>
           <label>
-            Bio
+            О себе
             <textarea
               value={profileForm.bio}
               onChange={(event) => setProfileForm({ ...profileForm, bio: event.target.value })}
               rows="4"
             />
           </label>
-          <button className="gold-button" type="submit" disabled={isLoading}>Save profile</button>
+          <button className="gold-button" type="submit" disabled={isLoading}>Сохранить профиль</button>
         </form>
 
         <form className="settings-panel" onSubmit={handlePhoneSubmit}>
-          <h2>Phone</h2>
+          <h2>Телефон</h2>
           <label>
-            Phone
+            Телефон
             <input
               type="tel"
               placeholder="+7 (999) 999-99-99"
@@ -178,14 +178,14 @@ export default function ProfileSettingsPage() {
               onChange={(event) => setPhone(maskRuPhone(event.target.value))}
             />
           </label>
-          <button className="gold-button" type="submit" disabled={isLoading}>Save phone</button>
+          <button className="gold-button" type="submit" disabled={isLoading}>Сохранить телефон</button>
         </form>
 
         <form className="settings-panel" onSubmit={handleEmailSubmit}>
-          <h2>Change Email</h2>
+          <h2>Изменить почту</h2>
           <div className="settings-grid">
             <label>
-              New email
+              Новый email
               <input
                 type="email"
                 value={emailForm.newEmail}
@@ -193,7 +193,7 @@ export default function ProfileSettingsPage() {
               />
             </label>
             <label>
-              Current password
+              Текущий пароль
               <input
                 type="password"
                 value={emailForm.password}
@@ -201,14 +201,14 @@ export default function ProfileSettingsPage() {
               />
             </label>
           </div>
-          <button className="gold-button" type="submit" disabled={isLoading}>Change email</button>
+          <button className="gold-button" type="submit" disabled={isLoading}>Изменить почту</button>
         </form>
 
         <form className="settings-panel" onSubmit={handlePasswordSubmit}>
-          <h2>Password</h2>
+          <h2>Изменить пароль</h2>
           <div className="settings-grid">
             <label>
-              Current password
+              Текущий пароль
               <input
                 type="password"
                 value={passwordForm.currentPassword}
@@ -216,7 +216,7 @@ export default function ProfileSettingsPage() {
               />
             </label>
             <label>
-              New password
+              Новый пароль
               <input
                 type="password"
                 value={passwordForm.newPassword}
@@ -224,7 +224,7 @@ export default function ProfileSettingsPage() {
               />
             </label>
           </div>
-          <button className="gold-button" type="submit" disabled={isLoading}>Change password</button>
+          <button className="gold-button" type="submit" disabled={isLoading}>Изменить пароль</button>
         </form>
       </section>
     </main>

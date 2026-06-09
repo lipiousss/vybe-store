@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Admin user request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос пользователя';
 }
 
 export const useAdminUserStore = create((set, get) => ({
@@ -41,7 +41,7 @@ export const useAdminUserStore = create((set, get) => ({
     try {
       await adminApi.updateUserRole(id, role);
       await get().fetchUsers();
-      set({ success: 'User role updated.' });
+      set({ success: 'Роль пользователя обновлена.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;
@@ -53,7 +53,7 @@ export const useAdminUserStore = create((set, get) => ({
     try {
       await adminApi.updateUserBlock(id, isBlocked);
       await get().fetchUsers();
-      set({ success: isBlocked ? 'User blocked.' : 'User unblocked.' });
+      set({ success: isBlocked ? 'Пользователь заблокирован.' : 'Пользователь разблокирован.' });
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
       throw error;

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useAdminUserStore } from '../../store/adminUserStore.js';
 import { useAuthStore } from '../../store/authStore.js';
+import { formatRole } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 export default function AdminUsersPage() {
@@ -23,7 +24,7 @@ export default function AdminUsersPage() {
 
   async function handleRole(user, role) {
     if (user.id === currentUser?.id && user.role === 'ADMIN' && role !== 'ADMIN') {
-      window.alert('You cannot remove the ADMIN role from yourself.');
+      window.alert('Нельзя снять роль администратора с самого себя.');
       return;
     }
 
@@ -32,7 +33,7 @@ export default function AdminUsersPage() {
 
   async function handleBlock(user) {
     if (user.id === currentUser?.id) {
-      window.alert('You cannot block yourself.');
+      window.alert('Нельзя заблокировать самого себя.');
       return;
     }
 
@@ -43,23 +44,23 @@ export default function AdminUsersPage() {
     <div className="admin-users-page">
       <section className="admin-page-head">
         <div>
-          <p className="section-label">Customers</p>
-          <h1>CUSTOMERS</h1>
-          <p>Manage roles, blocked status and basic account activity.</p>
+          <p className="section-label">Пользователи</p>
+          <h1>ПОЛЬЗОВАТЕЛИ</h1>
+          <p>Управление ролями, блокировками и базовой активностью аккаунтов.</p>
         </div>
       </section>
 
       <section className="admin-filters">
-        <input value={filters.search} onChange={(event) => updateFilter('search', event.target.value)} placeholder="Search email or username" />
+        <input value={filters.search} onChange={(event) => updateFilter('search', event.target.value)} placeholder="Поиск по email или username" />
         <select value={filters.role} onChange={(event) => updateFilter('role', event.target.value)}>
-          <option value="">All roles</option>
-          <option value="USER">USER</option>
-          <option value="ADMIN">ADMIN</option>
+          <option value="">Все роли</option>
+          <option value="USER">Пользователь</option>
+          <option value="ADMIN">Администратор</option>
         </select>
         <select value={filters.isBlocked} onChange={(event) => updateFilter('isBlocked', event.target.value)}>
-          <option value="">All statuses</option>
-          <option value="false">Active</option>
-          <option value="true">Blocked</option>
+          <option value="">Все статусы</option>
+          <option value="false">Активные</option>
+          <option value="true">Заблокированные</option>
         </select>
       </section>
 
@@ -69,16 +70,16 @@ export default function AdminUsersPage() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th>Avatar</th>
-              <th>User</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Phone</th>
-              <th>Orders</th>
-              <th>Favorites</th>
-              <th>Status</th>
-              <th>Created</th>
-              <th>Actions</th>
+              <th>Аватар</th>
+              <th>Пользователь</th>
+              <th>Почта</th>
+              <th>Роль</th>
+              <th>Телефон</th>
+              <th>Заказы</th>
+              <th>Избранное</th>
+              <th>Статус</th>
+              <th>Создан</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody>
@@ -89,23 +90,23 @@ export default function AdminUsersPage() {
                     {user.avatar ? <img src={mediaUrl(user.avatar)} alt={user.username} /> : user.username[0]?.toUpperCase()}
                   </div>
                 </td>
-                <td><strong>{user.username}</strong><span>{user.profile?.firstName || 'No profile name'}</span></td>
+                <td><strong>{user.username}</strong><span>{user.profile?.firstName || 'Имя не указано'}</span></td>
                 <td>{user.email}</td>
-                <td><span className={`admin-role-badge ${user.role.toLowerCase()}`}>{user.role}</span></td>
+                <td><span className={`admin-role-badge ${user.role.toLowerCase()}`}>{formatRole(user.role)}</span></td>
                 <td>{user.phone || '-'}</td>
                 <td>{user.counts?.orders || 0}</td>
                 <td>{user.counts?.favorites || 0}</td>
                 <td>
                   <span className={`admin-blocked-badge ${user.isBlocked ? 'blocked' : 'active'}`}>
-                    {user.isBlocked ? 'blocked' : 'active'}
+                    {user.isBlocked ? 'Заблокирован' : 'Активен'}
                   </span>
                 </td>
                 <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                 <td>
                   <div className="admin-row-actions">
                     <select value={user.role} onChange={(event) => handleRole(user, event.target.value)} disabled={isLoading}>
-                      <option value="USER">USER</option>
-                      <option value="ADMIN">ADMIN</option>
+                      <option value="USER">Пользователь</option>
+                      <option value="ADMIN">Администратор</option>
                     </select>
                     <button
                       className={`admin-icon-action${user.isBlocked ? '' : ' danger'}`}
@@ -113,13 +114,13 @@ export default function AdminUsersPage() {
                       onClick={() => handleBlock(user)}
                       disabled={isLoading || user.id === currentUser?.id}
                     >
-                      {user.isBlocked ? 'Unblock' : 'Block'}
+                      {user.isBlocked ? 'Разблокировать' : 'Заблокировать'}
                     </button>
                   </div>
                 </td>
               </tr>
             ))}
-            {!isLoading && users.length === 0 && <tr><td colSpan="10">No users found.</td></tr>}
+            {!isLoading && users.length === 0 && <tr><td colSpan="10">Пользователи не найдены.</td></tr>}
           </tbody>
         </table>
       </div>

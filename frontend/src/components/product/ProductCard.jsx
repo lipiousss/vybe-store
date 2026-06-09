@@ -4,17 +4,20 @@ import { motion } from 'framer-motion';
 import { useAuthStore } from '../../store/authStore.js';
 import { useCartStore } from '../../store/cartStore.js';
 import { useFavoriteStore } from '../../store/favoriteStore.js';
+import { money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
+import './ProductCard.css';
 
-function money(value) {
-  if (value === null || value === undefined) {
-    return '';
-  }
+const badgePriority = {
+  outOfStock: 1,
+  discount: 2,
+  limited: 3,
+  new: 4,
+  featured: 5,
+  archive: 6,
+};
 
-  return `$${Number(value).toFixed(2)}`;
-}
-
-export default function ProductCard({ product }) {
+export default function ProductCard({ product, variant = 'default' }) {
   const navigate = useNavigate();
   const isAuth = useAuthStore((state) => state.isAuth);
   const addToCart = useCartStore((state) => state.addToCart);
@@ -22,15 +25,38 @@ export default function ProductCard({ product }) {
   const isFavorite = useFavoriteStore((state) => state.isFavorite(product.id));
   const [message, setMessage] = React.useState(null);
   const [lightPosition, setLightPosition] = React.useState({ x: '50%', y: '50%' });
-  const image = mediaUrl(product.images?.[0]?.url);
-  const categoryName = product.category?.name || product.categoryName || 'VYBE artifact';
-  const hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(product.finalPrice);
-  const hasStock = !product.variants?.length || product.variants.some((variant) => variant.stock > 0);
+
+  const rawImage = product.images?.[0]?.url;
+  const image = rawImage ? mediaUrl(rawImage) : null;
+  const categoryName = product.category?.name || product.categoryName || '';
+  const collectionName = product.collection?.name || '';
+  const eyebrow = [categoryName, collectionName].filter(Boolean).join(' / ') || 'VYBE';
+  const finalPrice = product.finalPrice || product.price;
+  const hasDiscount = product.oldPrice && Number(product.oldPrice) > Number(finalPrice);
+  const discountPercent = hasDiscount
+    ? Math.round(((Number(product.oldPrice) - Number(finalPrice)) / Number(product.oldPrice)) * 100)
+    : 0;
+  const variants = product.variants || [];
+  const stockTotal = variants.reduce((sum, item) => sum + Number(item.stock || 0), 0);
+  const hasVariantStock = variants.length ? variants.some((item) => Number(item.stock || 0) > 0) : true;
+  const isArchived = product.status === 'ARCHIVED';
+  const isOutOfStock = product.status === 'OUT_OF_STOCK' || !hasVariantStock;
+  const hasStock = !isOutOfStock && !isArchived;
+
+  const badges = [
+    isOutOfStock && { key: 'outOfStock', label: 'Нет в наличии', className: 'product-card__badge--empty' },
+    hasDiscount && { key: 'discount', label: `Скидка ${discountPercent}%`, className: 'product-card__badge--discount' },
+    product.isLimited && { key: 'limited', label: 'Лимитировано', className: 'product-card__badge--limited' },
+    product.isNew && { key: 'new', label: 'Новинка', className: 'product-card__badge--new' },
+    product.isFeatured && { key: 'featured', label: 'Рекомендуем', className: 'product-card__badge--featured' },
+    isArchived && { key: 'archive', label: 'Архив', className: 'product-card__badge--archive' },
+  ]
+    .filter(Boolean)
+    .sort((first, second) => badgePriority[first.key] - badgePriority[second.key])
+    .slice(0, 3);
 
   React.useEffect(() => {
-    if (!message) {
-      return undefined;
-    }
+    if (!message) return undefined;
 
     const timer = window.setTimeout(() => setMessage(null), 2200);
     return () => window.clearTimeout(timer);
@@ -49,10 +75,7 @@ export default function ProductCard({ product }) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!requireAuth()) {
-      return;
-    }
-
+    if (!requireAuth()) return;
     await toggleFavorite(product.id);
   }
 
@@ -60,12 +83,10 @@ export default function ProductCard({ product }) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (!requireAuth()) {
-      return;
-    }
+    if (!requireAuth()) return;
 
     if (!hasStock) {
-      setMessage('Out of stock');
+      setMessage('Нет в наличии');
       return;
     }
 
@@ -82,51 +103,76 @@ export default function ProductCard({ product }) {
 
   return (
     <motion.article
-      className="product-card artifact-card"
-      style={{ '--light-x': lightPosition.x, '--light-y': lightPosition.y }}
+      className={`product-card vybe-product-card product-card--${variant}`}
+      style={{ '--card-light-x': lightPosition.x, '--card-light-y': lightPosition.y }}
       onMouseMove={handleMouseMove}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.18 }}
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
     >
-      <Link className="product-card-link" to={`/product/${product.slug}`}>
-        <div className="product-image-wrap">
-          <img src={image} alt={product.images?.[0]?.alt || product.name} />
-          <div className="product-card-overlay">
-            <span className="view-item">VIEW ITEM</span>
+      <div className="product-card__media">
+        <Link className="product-card__media-link" to={`/product/${product.slug}`} aria-label={`Открыть товар ${product.name}`}>
+          {image ? (
+            <img className="product-card__image" src={image} alt={product.images?.[0]?.alt || product.name} />
+          ) : (
+            <span className="product-card__image-placeholder">Нет изображения</span>
+          )}
+        </Link>
+
+        {badges.length > 0 && (
+          <div className="product-card__badges" aria-label="Метки товара">
+            {badges.map((badge) => (
+              <span className={`product-card__badge ${badge.className}`} key={badge.key}>
+                {badge.label}
+              </span>
+            ))}
           </div>
-        </div>
+        )}
 
-        <div className="product-card-body">
-          <div className="badge-row">
-            {product.isNew && <span className="badge blue">NEW</span>}
-            {product.isLimited && <span className="badge blood">LIMITED</span>}
-            {product.isFeatured && <span className="badge gold">FEATURED</span>}
-          </div>
-
-          <h3>{product.name}</h3>
-          <p className="product-category">{categoryName}</p>
-
-          <div className="price-row">
-            {hasDiscount && <span className="old-price">{money(product.oldPrice)}</span>}
-            <span className="final-price">{money(product.finalPrice || product.price)}</span>
-          </div>
-        </div>
-      </Link>
-
-      <div className="product-card-actions">
         <button
-          className={`icon-action${isFavorite ? ' is-active' : ''}`}
+          className={`product-card__favorite${isFavorite ? ' is-active' : ''}`}
           type="button"
           onClick={handleFavorite}
-          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          aria-label={isFavorite ? 'Убрать из избранного' : 'Добавить в избранное'}
         >
-          {'\u2665'}
-        </button>
-        <button className="icon-action" type="button" onClick={handleAddToCart} disabled={!hasStock} aria-label="Add to cart">
-          +
+          <span aria-hidden="true">♥</span>
         </button>
       </div>
-      {message && <p className="product-card-message">{message}</p>}
+
+      <div className="product-card__body">
+        <div className="product-card__eyebrow">{eyebrow}</div>
+
+        <h3 className="product-card__title">
+          <Link to={`/product/${product.slug}`}>{product.name}</Link>
+        </h3>
+
+        <div className="product-card__meta">
+          {product.material && <span>{product.material}</span>}
+          {product.color && <span>{product.color}</span>}
+        </div>
+
+        <div className="product-card__purchase">
+          <div className="product-card__price-row">
+            <span className="product-card__price">{money(finalPrice)}</span>
+            {hasDiscount && <span className="product-card__old-price">{money(product.oldPrice)}</span>}
+          </div>
+
+          <div className={`product-card__stock${hasStock ? '' : ' is-empty'}`}>
+            {hasStock ? 'В наличии' : 'Нет в наличии'}
+            {hasStock && variants.length ? <span>{stockTotal} шт.</span> : null}
+          </div>
+        </div>
+
+        <div className="product-card__actions">
+          <Link className="product-card__details" to={`/product/${product.slug}`}>
+            Подробнее
+          </Link>
+          <button className="product-card__cart" type="button" onClick={handleAddToCart} disabled={!hasStock}>
+            {hasStock ? 'В корзину' : 'Нет в наличии'}
+          </button>
+        </div>
+      </div>
+
+      {message && <p className="product-card__message">{message}</p>}
     </motion.article>
   );
 }

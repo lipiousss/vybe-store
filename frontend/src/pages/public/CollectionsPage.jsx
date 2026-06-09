@@ -18,18 +18,18 @@ export default function CollectionsPage() {
   return (
     <main className="page-shell collections-page">
       <section className="page-hero cinematic collections-hero">
-        <p className="section-label">Collections</p>
-        <h1>Archive Drops</h1>
-        <p>Curated VYBE drops grouped by material language, mood and dark visual ritual.</p>
+        <p className="section-label">Коллекции</p>
+        <h1>Архивные дропы</h1>
+        <p>Подборки VYBE, собранные по материалам, настроению и тёмному визуальному ритуалу.</p>
       </section>
 
-      {isLoading && <Loader text="Loading collections..." />}
-      {error && <ErrorState title="Collections are unavailable" message={error} />}
+      {isLoading && <Loader text="Загружаем коллекции..." />}
+      {error && <ErrorState title="Коллекции недоступны" message={error} />}
       {!isLoading && !error && activeCollections.length === 0 && (
         <EmptyState
-          label="Collections"
-          title="No collections found."
-          message="Create collections from the admin panel to show archive drops here."
+          label="Коллекции"
+          title="Коллекции не найдены."
+          message="Создайте коллекции в админ-панели, чтобы показывать архивные дропы здесь."
         />
       )}
 
@@ -47,9 +47,9 @@ export default function CollectionsPage() {
                 <div className="collection-showcase__body">
                   <p className="section-label">{collection.slug}</p>
                   <h2>{collection.name}</h2>
-                  <p>{collection.description || 'A curated archive of designer relics.'}</p>
+                  <p>{collection.description || 'Подборка дизайнерских реликвий из архива VYBE.'}</p>
                   <Link className="ghost-button" to={`/catalog?collection=${collection.slug}`}>
-                    View Products
+                    Смотреть товары
                   </Link>
                 </div>
                 {products.length > 0 && (

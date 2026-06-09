@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { favoriteApi } from '../api/favoriteApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Favorite request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос избранного';
 }
 
 function favoriteIdsFrom(favorites) {

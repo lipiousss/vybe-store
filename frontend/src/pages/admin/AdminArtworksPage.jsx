@@ -3,12 +3,12 @@ import { useAdminArtworkStore } from '../../store/adminArtworkStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const categories = [
-  'Night Collection',
-  'Armor Concepts',
-  'Product Visuals',
-  'Posters',
-  'Characters',
-  'Environment',
+  ['Night Collection', 'Ночная коллекция'],
+  ['Armor Concepts', 'Концепты брони'],
+  ['Product Visuals', 'Визуалы товаров'],
+  ['Posters', 'Постеры'],
+  ['Characters', 'Персонажи'],
+  ['Environment', 'Окружение'],
 ];
 
 const emptyForm = {
@@ -21,6 +21,10 @@ const emptyForm = {
   order: 0,
   isActive: true,
 };
+
+function categoryLabel(value) {
+  return categories.find(([category]) => category === value)?.[1] || value;
+}
 
 export default function AdminArtworksPage() {
   const {
@@ -89,7 +93,7 @@ export default function AdminArtworksPage() {
   }
 
   async function handleDelete(artwork) {
-    if (!window.confirm(`Удалить artwork "${artwork.title}"?`)) return;
+    if (!window.confirm(`Удалить артворк "${artwork.title}"?`)) return;
     await deleteArtwork(artwork.id);
     if (form.id === artwork.id) {
       setForm(emptyForm);
@@ -100,11 +104,11 @@ export default function AdminArtworksPage() {
     <div className="admin-artworks-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Artworks</p>
-          <h1>Visual Archive</h1>
+          <p className="eyebrow">Артворки</p>
+          <h1>ВИЗУАЛЬНЫЙ АРХИВ</h1>
           <p>Добавление, скрытие и редактирование визуального архива VYBE.</p>
         </div>
-        <button className="gold-button" type="button" onClick={() => setForm(emptyForm)}>Add Artwork</button>
+        <button className="gold-button" type="button" onClick={() => setForm(emptyForm)}>Добавить артворк</button>
       </section>
 
       {(error || success) && <p className={`state-text ${error ? 'danger' : 'success'}`}>{error || success}</p>}
@@ -112,49 +116,49 @@ export default function AdminArtworksPage() {
       <section className="artwork-admin-layout">
         <form className="artwork-admin-form" onSubmit={handleSubmit}>
           <div>
-            <p className="eyebrow">{form.id ? 'Edit Artwork' : 'New Artwork'}</p>
-            <h2>{form.id ? form.title : 'Add Artwork'}</h2>
+            <p className="eyebrow">{form.id ? 'Редактирование' : 'Новый артворк'}</p>
+            <h2>{form.id ? form.title : 'Добавить артворк'}</h2>
           </div>
           <label>
-            Title
+            Название
             <input value={form.title} onChange={(event) => updateField('title', event.target.value)} required />
           </label>
           <label>
-            Description
+            Описание
             <textarea value={form.description} onChange={(event) => updateField('description', event.target.value)} />
           </label>
           <div className="admin-form-grid">
             <label>
-              Category
+              Категория
               <select value={form.category} onChange={(event) => updateField('category', event.target.value)}>
-                {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+                {categories.map(([value, label]) => <option key={value} value={value}>{label}</option>)}
               </select>
             </label>
             <label>
-              Order
+              Порядок
               <input type="number" value={form.order} onChange={(event) => updateField('order', event.target.value)} />
             </label>
           </div>
           <label>
-            Tags
-            <input value={form.tags} onChange={(event) => updateField('tags', event.target.value)} placeholder="dark, armor, archive" />
+            Теги
+            <input value={form.tags} onChange={(event) => updateField('tags', event.target.value)} placeholder="тьма, броня, архив" />
           </label>
           <label className="check-row">
             <input type="checkbox" checked={form.isActive} onChange={(event) => updateField('isActive', event.target.checked)} />
-            Active
+            Активен
           </label>
           <label className="admin-upload-zone">
-            Upload artwork image
+            Загрузить изображение артворка
             <input accept="image/jpeg,image/png,image/webp" type="file" onChange={handleUpload} />
           </label>
           {form.image && (
             <div className="admin-upload-preview contain">
-              <img src={mediaUrl(form.image, '/images/placeholders/artwork-placeholder.png')} alt={form.title || 'Artwork preview'} />
+              <img src={mediaUrl(form.image, '/images/placeholders/artwork-placeholder.png')} alt={form.title || 'Предпросмотр артворка'} />
             </div>
           )}
           <div className="admin-form-actions">
             <button className="gold-button" type="submit" disabled={isLoading}>
-              {form.id ? 'Save Artwork' : 'Create Artwork'}
+              {form.id ? 'Сохранить артворк' : 'Создать артворк'}
             </button>
           </div>
         </form>
@@ -167,15 +171,15 @@ export default function AdminArtworksPage() {
               </div>
               <div>
                 <span className={`admin-blocked-badge ${artwork.isActive ? 'active' : 'blocked'}`}>
-                  {artwork.isActive ? 'active' : 'inactive'}
+                  {artwork.isActive ? 'Активен' : 'Скрыт'}
                 </span>
                 <h3>{artwork.title}</h3>
-                <p>{artwork.category}</p>
+                <p>{categoryLabel(artwork.category)}</p>
                 <p>{(artwork.tags || []).join(', ')}</p>
               </div>
               <div className="admin-row-actions">
-                <button className="ghost-button small" type="button" onClick={() => editArtwork(artwork)}>Edit</button>
-                <button className="ghost-button small danger" type="button" onClick={() => handleDelete(artwork)}>Delete</button>
+                <button className="ghost-button small" type="button" onClick={() => editArtwork(artwork)}>Изменить</button>
+                <button className="ghost-button small danger" type="button" onClick={() => handleDelete(artwork)}>Удалить</button>
               </div>
             </article>
           ))}

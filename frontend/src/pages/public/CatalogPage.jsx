@@ -75,26 +75,26 @@ export default function CatalogPage() {
   return (
     <main className="page-shell catalog-page">
       <section className="catalog-hero fantasy-card">
-        <p className="section-label">Catalog</p>
-        <h1>Catalog of Relics</h1>
-        <p>Wearable relics and functional artifacts shaped for the night side of style.</p>
+        <p className="section-label">Каталог</p>
+        <h1>Каталог реликвий</h1>
+        <p>Дизайнерские товары, собранные в эстетике ночного мира VYBE.</p>
       </section>
 
       <section className="catalog-layout">
         <aside className="filter-panel">
           <label>
-            Search
+            Поиск
             <input
               value={filters.search}
               onChange={(event) => updateFilter('search', event.target.value)}
-              placeholder="Nocturne, relic, eclipse..."
+              placeholder="Nocturne, реликвия, eclipse..."
             />
           </label>
 
           <label>
-            Category
+            Категория
             <select value={filters.category} onChange={(event) => updateFilter('category', event.target.value)}>
-              <option value="">All categories</option>
+              <option value="">Все категории</option>
               {childCategories.map((category) => (
                 <option key={category.id} value={category.slug}>{category.name}</option>
               ))}
@@ -102,9 +102,9 @@ export default function CatalogPage() {
           </label>
 
           <label>
-            Collection
+            Коллекция
             <select value={filters.collection} onChange={(event) => updateFilter('collection', event.target.value)}>
-              <option value="">All collections</option>
+              <option value="">Все коллекции</option>
               {collections.map((collection) => (
                 <option key={collection.id} value={collection.slug}>{collection.name}</option>
               ))}
@@ -113,7 +113,7 @@ export default function CatalogPage() {
 
           <div className="price-filter">
             <label>
-              Min
+              Цена от
               <input
                 type="number"
                 min="0"
@@ -122,7 +122,7 @@ export default function CatalogPage() {
               />
             </label>
             <label>
-              Max
+              Цена до
               <input
                 type="number"
                 min="0"
@@ -133,31 +133,35 @@ export default function CatalogPage() {
           </div>
 
           <div className="check-stack">
-            {['isNew', 'isLimited', 'isFeatured'].map((name) => (
+            {[
+              ['isNew', 'Новинки'],
+              ['isLimited', 'Лимитированные'],
+              ['isFeatured', 'Рекомендуемые'],
+            ].map(([name, label]) => (
               <label key={name} className="check-row">
                 <input
                   type="checkbox"
                   checked={filters[name]}
                   onChange={(event) => updateFilter(name, event.target.checked)}
                 />
-                {name.replace('is', '').toUpperCase()}
+                {label}
               </label>
             ))}
           </div>
 
           <button className="ghost-button" type="button" onClick={() => setFilters(initialFilters)}>
-            Reset
+            Сбросить фильтры
           </button>
         </aside>
 
         <div className="catalog-results">
-          {isLoading && <Loader text="Loading catalog..." />}
-          {error && <ErrorState title="Catalog is unavailable" message={error} />}
+          {isLoading && <Loader text="Загружаем каталог..." />}
+          {error && <ErrorState title="Каталог недоступен" message={error} />}
           {!isLoading && products.length === 0 && (
             <EmptyState
-              label="Catalog"
-              title="No artifacts found."
-              message="Try another name, collection, category, or price range."
+              label="Каталог"
+              title="Товары не найдены"
+              message="Попробуйте изменить фильтры, категорию, коллекцию или диапазон цены."
             />
           )}
           {!isLoading && !error && products.length > 0 && (

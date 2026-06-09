@@ -3,10 +3,10 @@ import { useSiteAssetStore } from '../../store/siteAssetStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const bannerAssets = [
-  ['enter_screen_image', 'Enter Screen Image', 'Ritual gate image shown before the storefront opens.', '/images/placeholders/product-placeholder.png'],
-  ['home_hero_image', 'Home Hero Image', 'Main cinematic storefront banner.', '/images/placeholders/product-placeholder.png'],
-  ['about_main_image', 'About Main Image', 'Storytelling image for the brand page.', '/images/placeholders/product-placeholder.png'],
-  ['collectibles_hero_image', 'Collectibles Hero Image', 'Archive hero image for collectible relics.', '/images/placeholders/collectible-placeholder.png'],
+  ['enter_screen_image', 'Изображение входного экрана', 'Ритуальный экран перед открытием витрины.', '/images/placeholders/product-placeholder.png'],
+  ['home_hero_image', 'Главное изображение витрины', 'Кинематографичный баннер главной страницы.', '/images/placeholders/product-placeholder.png'],
+  ['about_main_image', 'Изображение страницы о бренде', 'Сюжетный визуал для страницы о проекте.', '/images/placeholders/product-placeholder.png'],
+  ['collectibles_hero_image', 'Изображение коллекционных предметов', 'Hero-изображение для архивных реликвий.', '/images/placeholders/collectible-placeholder.png'],
 ];
 
 export default function AdminBannersPage() {
@@ -57,9 +57,9 @@ export default function AdminBannersPage() {
     <div className="admin-banners-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Banners</p>
-          <h1>BANNER VAULT</h1>
-          <p>Manage public hero and ritual images through the existing SiteAsset API.</p>
+          <p className="eyebrow">Баннеры</p>
+          <h1>ХРАНИЛИЩЕ БАННЕРОВ</h1>
+          <p>Управляйте публичными hero-изображениями через существующий SiteAsset API.</p>
         </div>
       </section>
 
@@ -75,10 +75,10 @@ export default function AdminBannersPage() {
               </div>
               <div className="site-asset-card__body">
                 <p className="eyebrow">{key}</p>
-                <label>Title<input value={draft.title || title} onChange={(event) => updateDraft(key, 'title', event.target.value)} /></label>
-                <label>Description<textarea value={draft.description || description} onChange={(event) => updateDraft(key, 'description', event.target.value)} /></label>
-                <label className="admin-upload-zone">Upload new image<input accept="image/jpeg,image/png,image/webp" type="file" onChange={(event) => handleUpload(key, event)} /></label>
-                <button className="gold-button" type="button" disabled={isLoading} onClick={() => saveBanner(key, title, description, fallback)}>Save Banner</button>
+                <label>Заголовок<input value={draft.title || title} onChange={(event) => updateDraft(key, 'title', event.target.value)} /></label>
+                <label>Описание<textarea value={draft.description || description} onChange={(event) => updateDraft(key, 'description', event.target.value)} /></label>
+                <label className="admin-upload-zone">Загрузить новое изображение<input accept="image/jpeg,image/png,image/webp" type="file" onChange={(event) => handleUpload(key, event)} /></label>
+                <button className="gold-button" type="button" disabled={isLoading} onClick={() => saveBanner(key, title, description, fallback)}>Сохранить баннер</button>
               </div>
             </article>
           );

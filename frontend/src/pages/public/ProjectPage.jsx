@@ -15,20 +15,20 @@ const stackItems = [
 
 const projectNotes = [
   {
-    title: 'Concept',
-    text: 'VYBE Store is a diploma project about a dark fantasy online shop for designer apparel, archive objects, art fragments, and limited collectibles.',
+    title: 'Концепция',
+    text: 'VYBE Store — дипломный проект интернет-магазина дизайнерской продукции в стилистике dark fantasy: одежда, архивные объекты, визуальные фрагменты и лимитированные коллекционные предметы.',
   },
   {
-    title: 'Visual Direction',
-    text: 'The interface mixes boutique commerce with old-web archive pages: dark surfaces, worn gold borders, cold blue glow, compact panels, and artifact-like product cards.',
+    title: 'Визуальное направление',
+    text: 'Интерфейс соединяет премиальную витрину и архив старого веба: тёмные поверхности, потускневшее золото, холодное синее свечение, компактные панели и карточки товаров как артефакты.',
   },
   {
-    title: 'Current Stage',
-    text: 'The project already has Docker infrastructure, PostgreSQL, Prisma schema and seed data, backend API for catalog entities, and a frontend foundation with public pages.',
+    title: 'Текущий этап',
+    text: 'В проекте уже есть Docker-инфраструктура, PostgreSQL, Prisma schema, seed-данные, backend API и frontend с публичными страницами, профилем, корзиной и админкой.',
   },
   {
-    title: 'Next Work',
-    text: 'Upcoming stages include cart, orders, admin panel, inventory tools, file uploads, and richer artwork/content management.',
+    title: 'Следующие шаги',
+    text: 'Дальнейшая работа может включать продакшен-хранилище файлов, расширенную аналитику, интеграции оплаты и полноценное управление контентом страниц.',
   },
 ];
 
@@ -37,36 +37,36 @@ export default function ProjectPage() {
     <main className="project-page">
       <header className="project-topbar">
         <Link to="/" className="project-title-link">VYBE://PROJECT</Link>
-        <nav aria-label="Project navigation">
-          <a href="#overview">Overview</a>
-          <a href="#stack">Stack</a>
-          <a href="#roadmap">Roadmap</a>
+        <nav aria-label="Навигация проекта">
+          <a href="#overview">Обзор</a>
+          <a href="#stack">Стек</a>
+          <a href="#roadmap">Архитектура</a>
         </nav>
       </header>
 
       <div className="project-layout">
         <aside className="project-sidebar">
           <section className="project-widget">
-            <h2>[Menu]</h2>
-            <Link to="/">Home</Link>
-            <Link to="/catalog">Catalog</Link>
-            <Link to="/collectibles">Collectibles</Link>
-            <Link to="/artworks">Artworks</Link>
-            <Link to="/about">About</Link>
+            <h2>[Меню]</h2>
+            <Link to="/">Главная</Link>
+            <Link to="/catalog">Каталог</Link>
+            <Link to="/collectibles">Коллекционные</Link>
+            <Link to="/artworks">Артворки</Link>
+            <Link to="/about">О нас</Link>
           </section>
 
           <section className="project-widget">
-            <h2>[Status]</h2>
-            <p>Mode: diploma build</p>
-            <p>Theme: dark fantasy commerce</p>
-            <p>Runtime: Docker Compose</p>
+            <h2>[Статус]</h2>
+            <p>Режим: дипломная сборка</p>
+            <p>Тема: dark fantasy commerce</p>
+            <p>Запуск: Docker Compose</p>
           </section>
 
           <section className="project-widget">
-            <h2>[Milestones]</h2>
+            <h2>[Этапы]</h2>
             <ol>
-              <li>Infrastructure</li>
-              <li>Database seed</li>
+              <li>Инфраструктура</li>
+              <li>База данных и seed</li>
               <li>Backend API</li>
               <li>Frontend foundation</li>
               <li>Commerce flow</li>
@@ -78,10 +78,10 @@ export default function ProjectPage() {
           <div className="project-content-frame">
             <section className="project-hero-panel" id="overview">
               <p className="project-terminal-line">visitor@vybe-store:~$ open project_manifest.txt</p>
-              <h1>About The Project</h1>
+              <h1>О проекте</h1>
               <p>
-                This page is a project archive for VYBE Store: the idea, stack, structure,
-                visual language, and planned implementation path in one place.
+                Эта страница — архив проекта VYBE Store: идея, стек, структура,
+                визуальный язык и логика реализации в одном месте.
               </p>
             </section>
 
@@ -97,7 +97,7 @@ export default function ProjectPage() {
             <section className="project-panel" id="stack">
               <div className="project-section-heading">
                 <span>01</span>
-                <h2>Stack</h2>
+                <h2>Стек</h2>
               </div>
               <div className="project-stack-grid">
                 {stackItems.map((item) => (
@@ -110,12 +110,12 @@ export default function ProjectPage() {
               <div>
                 <div className="project-section-heading">
                   <span>02</span>
-                  <h2>Architecture</h2>
+                  <h2>Архитектура</h2>
                 </div>
                 <p>
-                  The frontend consumes public backend endpoints, Zustand stores hold UI and
-                  entity state, Express routes expose API modules, and Prisma maps the store
-                  domain to PostgreSQL.
+                  Frontend обращается к публичным backend endpoints, Zustand хранит состояние UI
+                  и сущностей, Express отдаёт API-модули, а Prisma связывает домен магазина
+                  с PostgreSQL.
                 </p>
               </div>
               <div className="project-terminal">

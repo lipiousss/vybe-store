@@ -15,14 +15,14 @@ export default function ArtworkCard({ artwork, index, className = '' }) {
       transition={{ duration: 0.2 }}
       onClick={() => openArtworkModal(artwork)}
     >
-      <button type="button" className="artwork-card__button" aria-label={`View ${artwork.title}`}>
-        <span className="artwork-card__number">ARTWORK {artworkNumber}</span>
+      <button type="button" className="artwork-card__button" aria-label={`Смотреть артворк ${artwork.title}`}>
+        <span className="artwork-card__number">АРТВОРК {artworkNumber}</span>
         <span className="artwork-card__image">
           <img src={mediaUrl(artwork.image, '/images/placeholders/artwork-placeholder.png')} alt={artwork.title} />
-          <span className="artwork-card__overlay">View Artwork</span>
+          <span className="artwork-card__overlay">Смотреть артворк</span>
         </span>
         <span className="artwork-card__body">
-          <span className="artwork-card__category">{artwork.category || 'Archive'}</span>
+          <span className="artwork-card__category">{artwork.category || 'Архив'}</span>
           <strong>{artwork.title}</strong>
           {artwork.description && <span>{artwork.description}</span>}
           {tags.length > 0 && (

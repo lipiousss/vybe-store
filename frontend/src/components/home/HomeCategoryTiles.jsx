@@ -3,39 +3,39 @@ import { Link } from 'react-router-dom';
 
 const tileConfig = [
   {
-    title: 'APPAREL',
-    text: 'Layered shadows tailored for the realm.',
-    match: ['apparel', 'clothing', 'одежда'],
+    title: 'Одежда',
+    text: 'Многослойные силуэты для ночного города.',
+    match: ['одежда', 'apparel', 'clothing'],
     to: '/catalog',
-    image: '/images/placeholders/product-placeholder.png',
+    image: '/images/site/setup/setup-scene-1.png',
   },
   {
-    title: 'ACCESSORIES',
-    text: 'Details that speak in steel and signal.',
-    match: ['accessories', 'аксессуары'],
+    title: 'Аксессуары',
+    text: 'Металл, символы и детали для законченного образа.',
+    match: ['аксессуары', 'accessories'],
     to: '/catalog',
-    image: '/images/placeholders/product-placeholder.png',
+    image: '/images/site/home/home-feature-banner-1.png',
   },
   {
-    title: 'DECOR',
-    text: 'Objects for a mythic dark sanctuary.',
-    match: ['decor', 'декор'],
+    title: 'Декор',
+    text: 'Предметы для тёмного личного пространства.',
+    match: ['декор', 'decor'],
     to: '/catalog',
-    image: '/images/placeholders/product-placeholder.png',
+    image: '/images/site/setup/setup-scene-3.png',
   },
   {
-    title: 'PERIPHERALS',
-    text: 'Build your dark command desk.',
-    match: ['peripherals', 'периферия'],
+    title: 'Периферия',
+    text: 'Рабочее место как часть визуального ритуала.',
+    match: ['периферия', 'peripherals'],
     to: '/catalog',
-    image: '/images/placeholders/product-placeholder.png',
+    image: '/images/site/setup/setup-scene-2.png',
   },
   {
-    title: 'COLLECTIBLES',
-    text: 'Rare fragments from the archive.',
-    match: ['collectibles', 'коллекционные'],
+    title: 'Коллекционные предметы',
+    text: 'Редкие фрагменты из архива бренда.',
+    match: ['коллекционные', 'collectibles'],
     to: '/collectibles',
-    image: '/images/placeholders/collectible-placeholder.png',
+    image: '/images/site/home/home-feature-banner-2.png',
   },
 ];
 
@@ -48,7 +48,7 @@ function findCategory(categories, match) {
 
 export default function HomeCategoryTiles({ categories = [] }) {
   return (
-    <section className="home-category-tiles" aria-label="Featured categories">
+    <section className="home-category-tiles" aria-label="Разделы каталога">
       {tileConfig.map((tile, index) => {
         const category = findCategory(categories, tile.match);
         const to = category?.slug && tile.to === '/catalog'
@@ -58,15 +58,15 @@ export default function HomeCategoryTiles({ categories = [] }) {
         return (
           <article className="home-category-tile" key={tile.title}>
             <div className="home-category-tile__image">
-              <img src={category?.image || tile.image} alt="" />
+              <img src={tile.image} alt="" />
             </div>
             <div className="home-category-tile__content">
               <span>{String(index + 1).padStart(2, '0')}</span>
               <h3>{tile.title}</h3>
               <p>{category?.description || tile.text}</p>
             </div>
-            <Link to={to} aria-label={`Open ${tile.title}`}>
-              {'\u2192'}
+            <Link to={to} aria-label={`Открыть раздел ${tile.title}`}>
+              →
             </Link>
           </article>
         );

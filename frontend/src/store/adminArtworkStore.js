@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Admin artwork request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос артворка';
 }
 
 export const useAdminArtworkStore = create((set, get) => ({
@@ -28,7 +28,7 @@ export const useAdminArtworkStore = create((set, get) => ({
     set({ isLoading: true, error: null, success: null });
     try {
       const data = await adminApi.createArtwork(payload);
-      set({ currentArtwork: data.artwork, isLoading: false, success: 'Artwork created.' });
+      set({ currentArtwork: data.artwork, isLoading: false, success: 'Артворк создан.' });
       await get().fetchAdminArtworks();
       return data.artwork;
     } catch (error) {
@@ -41,7 +41,7 @@ export const useAdminArtworkStore = create((set, get) => ({
     set({ isLoading: true, error: null, success: null });
     try {
       const data = await adminApi.updateArtwork(id, payload);
-      set({ currentArtwork: data.artwork, isLoading: false, success: 'Artwork updated.' });
+      set({ currentArtwork: data.artwork, isLoading: false, success: 'Артворк обновлён.' });
       await get().fetchAdminArtworks();
       return data.artwork;
     } catch (error) {
@@ -57,7 +57,7 @@ export const useAdminArtworkStore = create((set, get) => ({
       set((state) => ({
         artworks: state.artworks.filter((artwork) => artwork.id !== id),
         isLoading: false,
-        success: 'Artwork deleted.',
+        success: 'Артворк удалён.',
       }));
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });
@@ -69,7 +69,7 @@ export const useAdminArtworkStore = create((set, get) => ({
     set({ isLoading: true, error: null, success: null });
     try {
       const data = await adminApi.uploadArtworkImage(file);
-      set({ isLoading: false, success: 'Image uploaded.' });
+      set({ isLoading: false, success: 'Изображение загружено.' });
       return data.url;
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });

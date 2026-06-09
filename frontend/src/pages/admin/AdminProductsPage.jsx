@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAdminProductStore } from '../../store/adminProductStore.js';
 import { useCategoryStore } from '../../store/categoryStore.js';
+import { formatProductStatus, money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 function imageUrl(product) {
@@ -20,10 +21,6 @@ function flattenCategories(categories = []) {
 
 function stockTotal(product) {
   return (product.variants || []).reduce((total, variant) => total + Number(variant.stock || 0), 0);
-}
-
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
 }
 
 export default function AdminProductsPage() {
@@ -53,7 +50,7 @@ export default function AdminProductsPage() {
   }, [fetchProducts, filters]);
 
   async function handleDelete(product) {
-    if (!window.confirm(`Delete product "${product.name}"?`)) return;
+    if (!window.confirm(`Удалить товар "${product.name}"?`)) return;
     await deleteProduct(product.id);
   }
 
@@ -66,36 +63,36 @@ export default function AdminProductsPage() {
     <div className="admin-products-page">
       <section className="admin-page-head">
         <div>
-          <p className="section-label">Products</p>
-          <h1>PRODUCTS</h1>
-          <p>Manage your entire catalogue.</p>
+          <p className="section-label">Товары</p>
+          <h1>ТОВАРЫ</h1>
+          <p>Управление каталогом, статусами, остатками и витриной.</p>
         </div>
-        <Link className="gold-button" to="/admin/products/create">Add Product</Link>
+        <Link className="gold-button" to="/admin/products/create">Добавить товар</Link>
       </section>
 
       <section className="admin-filters admin-filters--products">
         <select value={filters.category} onChange={(event) => updateFilter('category', event.target.value)}>
-          <option value="">All Categories</option>
+          <option value="">Все категории</option>
           {flatCategories.map((category) => (
             <option key={category.id} value={category.slug}>{category.name}</option>
           ))}
         </select>
         <select value={filters.status} onChange={(event) => updateFilter('status', event.target.value)}>
-          <option value="">All Status</option>
-          <option value="ACTIVE">ACTIVE</option>
-          <option value="DRAFT">DRAFT</option>
-          <option value="ARCHIVED">ARCHIVED</option>
-          <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+          <option value="">Все статусы</option>
+          <option value="ACTIVE">Активен</option>
+          <option value="DRAFT">Черновик</option>
+          <option value="ARCHIVED">Архив</option>
+          <option value="OUT_OF_STOCK">Нет в наличии</option>
         </select>
         <select value={filters.isCollectible} onChange={(event) => updateFilter('isCollectible', event.target.value)}>
-          <option value="">All Stock</option>
-          <option value="false">Regular</option>
-          <option value="true">Collectible</option>
+          <option value="">Все типы</option>
+          <option value="false">Обычные товары</option>
+          <option value="true">Коллекционные</option>
         </select>
         <input
           value={filters.search}
           onChange={(event) => updateFilter('search', event.target.value)}
-          placeholder="Search products..."
+          placeholder="Поиск товаров..."
         />
       </section>
 
@@ -105,15 +102,15 @@ export default function AdminProductsPage() {
         <table className="admin-table admin-table--products">
           <thead>
             <tr>
-              <th>Image</th>
-              <th>Product</th>
-              <th>Category</th>
-              <th>Collection</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Status</th>
-              <th>Badges</th>
-              <th>Actions</th>
+              <th>Фото</th>
+              <th>Товар</th>
+              <th>Категория</th>
+              <th>Коллекция</th>
+              <th>Цена</th>
+              <th>Остаток</th>
+              <th>Статус</th>
+              <th>Метки</th>
+              <th>Действия</th>
             </tr>
           </thead>
           <tbody>
@@ -131,27 +128,27 @@ export default function AdminProductsPage() {
                   {product.oldPrice && <span>{money(product.oldPrice)}</span>}
                 </td>
                 <td>{stockTotal(product)}</td>
-                <td><span className={`admin-status ${product.status.toLowerCase()}`}>{product.status}</span></td>
+                <td><span className={`admin-status ${product.status.toLowerCase()}`}>{formatProductStatus(product.status)}</span></td>
                 <td>
                   <div className="admin-badges">
-                    {product.isNew && <span>NEW</span>}
-                    {product.isLimited && <span>LIMITED</span>}
-                    {product.isFeatured && <span>FEATURED</span>}
-                    {product.isCollectible && <span>COLLECTIBLE</span>}
+                    {product.isNew && <span>Новинка</span>}
+                    {product.isLimited && <span>Лимит</span>}
+                    {product.isFeatured && <span>Рекомендуем</span>}
+                    {product.isCollectible && <span>Коллекционный</span>}
                   </div>
                 </td>
                 <td>
                   <div className="admin-row-actions">
-                    <Link className="admin-icon-action" to={`/admin/products/${product.id}/edit`}>Edit</Link>
+                    <Link className="admin-icon-action" to={`/admin/products/${product.id}/edit`}>Изменить</Link>
                     <button className="admin-icon-action danger" type="button" onClick={() => handleDelete(product)}>
-                      Delete
+                      Удалить
                     </button>
                   </div>
                 </td>
               </tr>
             ))}
             {!isLoading && products.length === 0 && (
-              <tr><td colSpan="9">No products found.</td></tr>
+              <tr><td colSpan="9">Товары не найдены.</td></tr>
             )}
           </tbody>
         </table>

@@ -1,9 +1,9 @@
 import React from 'react';
 
 export default function EmptyState({
-  label = 'Empty',
-  title = 'Nothing found',
-  message = 'Try changing filters or return later.',
+  label = 'Пусто',
+  title = 'Ничего не найдено',
+  message = 'Попробуйте изменить фильтры или вернуться позже.',
   action,
 }) {
   return (

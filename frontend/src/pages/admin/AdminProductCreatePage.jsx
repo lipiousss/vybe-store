@@ -15,11 +15,11 @@ export default function AdminProductCreatePage() {
   return (
     <div className="admin-product-editor">
       <section className="admin-page-head">
-        <p className="section-label">Create Product</p>
-        <h1>NEW ARTIFACT</h1>
-        <p>Add a product card, images, variants and starting stock.</p>
+        <p className="section-label">Создание товара</p>
+        <h1>НОВЫЙ АРТЕФАКТ</h1>
+        <p>Добавьте карточку товара, изображения, варианты и стартовые остатки.</p>
       </section>
-      <ProductAdminForm onSubmit={handleSubmit} submitLabel="Create product" />
+      <ProductAdminForm onSubmit={handleSubmit} submitLabel="Создать товар" />
     </div>
   );
 }

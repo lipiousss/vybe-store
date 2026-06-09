@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { cartApi } from '../api/cartApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Cart request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос корзины';
 }
 
 function applyCartState(set, cart) {

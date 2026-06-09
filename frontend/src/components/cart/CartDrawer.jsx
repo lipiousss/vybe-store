@@ -3,10 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import CartItem from './CartItem.jsx';
 import { useCartStore } from '../../store/cartStore.js';
-
-function money(value) {
-  return `$${Number(value || 0).toFixed(2)}`;
-}
+import { money } from '../../utils/formatters.js';
 
 export default function CartDrawer() {
   const navigate = useNavigate();
@@ -34,7 +31,7 @@ export default function CartDrawer() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <button className="cart-drawer__overlay" type="button" aria-label="Close cart" onClick={closeCart} />
+          <button className="cart-drawer__overlay" type="button" aria-label="Закрыть корзину" onClick={closeCart} />
           <motion.aside
             className="cart-drawer__panel"
             initial={{ x: '100%' }}
@@ -44,18 +41,18 @@ export default function CartDrawer() {
           >
             <header className="cart-drawer__header">
               <div>
-                <p className="eyebrow">Cart</p>
-                <h2>Your relics</h2>
+                <p className="eyebrow">Корзина</p>
+                <h2>Ваши реликвии</h2>
               </div>
-              <button type="button" onClick={closeCart} aria-label="Close cart">x</button>
+              <button type="button" onClick={closeCart} aria-label="Закрыть корзину">x</button>
             </header>
 
             {error && <p className="state-text danger">{error}</p>}
 
             {items.length === 0 ? (
               <div className="cart-empty">
-                <h3>The cart is empty.</h3>
-                <p>Add an item from the catalog to begin the ritual.</p>
+                <h3>Корзина пуста</h3>
+                <p>Добавьте товар из каталога, чтобы начать оформление.</p>
               </div>
             ) : (
               <motion.div
@@ -85,18 +82,18 @@ export default function CartDrawer() {
 
             <footer className="cart-drawer__footer">
               <div>
-                <span>Total items</span>
+                <span>Количество</span>
                 <strong>{totalQuantity}</strong>
               </div>
               <div>
-                <span>Total</span>
+                <span>Итого</span>
                 <strong>{money(totalPrice)}</strong>
               </div>
               <button className="gold-button" type="button" onClick={handleCheckout} disabled={items.length === 0}>
-                Checkout
+                Оформить заказ
               </button>
               <button className="ghost-button danger" type="button" onClick={clearCart} disabled={items.length === 0}>
-                Clear cart
+                Очистить корзину
               </button>
             </footer>
           </motion.aside>

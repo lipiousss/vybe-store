@@ -5,11 +5,12 @@ import { useCartStore } from '../../store/cartStore.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const navItems = [
-  ['SHOP', '/catalog'],
-  ['COLLECTIONS', '/collections'],
-  ['COLLECTIBLES', '/collectibles'],
-  ['ARTWORKS', '/artworks'],
-  ['ABOUT', '/about'],
+  ['Главная', '/'],
+  ['Каталог', '/catalog'],
+  ['Коллекции', '/collections'],
+  ['Коллекционные предметы', '/collectibles'],
+  ['Артворки', '/artworks'],
+  ['О нас', '/about'],
 ];
 
 export default function Header() {
@@ -60,9 +61,7 @@ export default function Header() {
 
   React.useEffect(() => {
     function handleDocumentPointerDown(event) {
-      if (!isMenuOpen) {
-        return;
-      }
+      if (!isMenuOpen) return;
 
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setIsMenuOpen(false);
@@ -87,10 +86,10 @@ export default function Header() {
 
   return (
     <div className="site-header-stack">
-      <div className="site-topbar" aria-label="Store announcement">
-        <span>+</span>
-        <p>Free worldwide shipping on demo orders over $150</p>
-        <span>+</span>
+      <div className="site-topbar" aria-label="Объявление магазина">
+        <span />
+        <p>Бесплатная доставка при заказе от 15 000 ₽</p>
+        <span />
       </div>
 
       <header className="site-header ornamental-header">
@@ -105,10 +104,10 @@ export default function Header() {
           aria-expanded={isMobileOpen}
           onClick={() => setIsMobileOpen((value) => !value)}
         >
-          MENU
+          Меню
         </button>
 
-        <nav className={`main-nav${isMobileOpen ? ' is-open' : ''}`} aria-label="Main navigation">
+        <nav className={`main-nav${isMobileOpen ? ' is-open' : ''}`} aria-label="Основная навигация">
           {navItems.map(([label, to]) => (
             <NavLink
               key={label}
@@ -122,8 +121,17 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
-          <button className="header-icon-button header-search-button" type="button" aria-label="Open catalog search" onClick={() => goTo('/catalog')}>
-            Search
+          <button className="header-icon-button header-search-button" type="button" aria-label="Открыть поиск по каталогу" onClick={() => goTo('/catalog')}>
+            Поиск
+          </button>
+
+          <button className="header-icon-button header-favorite-button" type="button" aria-label="Открыть избранное" onClick={() => goTo(isAuth ? '/profile/favorites' : '/login')}>
+            Избранное
+          </button>
+
+          <button className="cart-button" type="button" onClick={handleCartClick}>
+            <span>Корзина</span>
+            <strong>{totalQuantity}</strong>
           </button>
 
           <div className="user-menu" ref={userMenuRef}>
@@ -133,10 +141,10 @@ export default function Header() {
                 className="user-menu-trigger"
                 onClick={() => setIsMenuOpen((value) => !value)}
                 aria-expanded={isMenuOpen}
-                aria-label="Open profile menu"
+                aria-label="Открыть меню профиля"
               >
                 <span className="avatar-orb">
-                  {avatar ? <img src={avatar} alt={user?.username || 'Avatar'} /> : user?.username?.[0]?.toUpperCase() || 'V'}
+                  {avatar ? <img src={avatar} alt={user?.username || 'Аватар'} /> : user?.username?.[0]?.toUpperCase() || 'V'}
                 </span>
               </button>
             ) : (
@@ -145,94 +153,54 @@ export default function Header() {
                 type="button"
                 onClick={() => setIsMenuOpen((value) => !value)}
                 aria-expanded={isMenuOpen}
-                aria-label="Open guest menu"
+                aria-label="Открыть меню гостя"
               >
-                Profile
+                Войти
               </button>
             )}
 
             {isMenuOpen && (
               <nav
                 className="user-dropdown"
-                aria-label="Profile menu"
+                aria-label="Меню профиля"
                 onPointerDown={(event) => event.stopPropagation()}
               >
                 {isAuth ? (
                   <>
-                    <Link
-                      to="/profile"
-                      onMouseDown={(event) => handleDropdownNavigate(event, '/profile')}
-                      onPointerDown={(event) => handleDropdownNavigate(event, '/profile')}
-                      onClick={(event) => handleDropdownNavigate(event, '/profile')}
-                    >
-                      Profile
+                    <Link to="/profile" onMouseDown={(event) => handleDropdownNavigate(event, '/profile')} onPointerDown={(event) => handleDropdownNavigate(event, '/profile')} onClick={(event) => handleDropdownNavigate(event, '/profile')}>
+                      Профиль
                     </Link>
-                    <Link
-                      to="/profile/settings"
-                      onMouseDown={(event) => handleDropdownNavigate(event, '/profile/settings')}
-                      onPointerDown={(event) => handleDropdownNavigate(event, '/profile/settings')}
-                      onClick={(event) => handleDropdownNavigate(event, '/profile/settings')}
-                    >
-                      Settings
+                    <Link to="/profile/settings" onMouseDown={(event) => handleDropdownNavigate(event, '/profile/settings')} onPointerDown={(event) => handleDropdownNavigate(event, '/profile/settings')} onClick={(event) => handleDropdownNavigate(event, '/profile/settings')}>
+                      Настройки
                     </Link>
                     {!isAdmin && (
-                      <Link
-                        to="/profile/favorites"
-                        onMouseDown={(event) => handleDropdownNavigate(event, '/profile/favorites')}
-                        onPointerDown={(event) => handleDropdownNavigate(event, '/profile/favorites')}
-                        onClick={(event) => handleDropdownNavigate(event, '/profile/favorites')}
-                      >
-                        Favorites
+                      <Link to="/profile/favorites" onMouseDown={(event) => handleDropdownNavigate(event, '/profile/favorites')} onPointerDown={(event) => handleDropdownNavigate(event, '/profile/favorites')} onClick={(event) => handleDropdownNavigate(event, '/profile/favorites')}>
+                        Избранное
                       </Link>
                     )}
                     {isAdmin && (
-                      <Link
-                        to="/admin"
-                        onMouseDown={(event) => handleDropdownNavigate(event, '/admin')}
-                        onPointerDown={(event) => handleDropdownNavigate(event, '/admin')}
-                        onClick={(event) => handleDropdownNavigate(event, '/admin')}
-                      >
-                        Admin Panel
+                      <Link to="/admin" onMouseDown={(event) => handleDropdownNavigate(event, '/admin')} onPointerDown={(event) => handleDropdownNavigate(event, '/admin')} onClick={(event) => handleDropdownNavigate(event, '/admin')}>
+                        Админ-панель
                       </Link>
                     )}
-                    <Link
-                      to="/profile/orders"
-                      onMouseDown={(event) => handleDropdownNavigate(event, '/profile/orders')}
-                      onPointerDown={(event) => handleDropdownNavigate(event, '/profile/orders')}
-                      onClick={(event) => handleDropdownNavigate(event, '/profile/orders')}
-                    >
-                      Orders
+                    <Link to="/profile/orders" onMouseDown={(event) => handleDropdownNavigate(event, '/profile/orders')} onPointerDown={(event) => handleDropdownNavigate(event, '/profile/orders')} onClick={(event) => handleDropdownNavigate(event, '/profile/orders')}>
+                      Заказы
                     </Link>
-                    <button type="button" onClick={handleLogout}>Logout</button>
+                    <button type="button" onClick={handleLogout}>Выйти</button>
                   </>
                 ) : (
                   <>
-                    <Link
-                      to="/login"
-                      onMouseDown={(event) => handleDropdownNavigate(event, '/login')}
-                      onPointerDown={(event) => handleDropdownNavigate(event, '/login')}
-                      onClick={(event) => handleDropdownNavigate(event, '/login')}
-                    >
-                      Login
+                    <Link to="/login" onMouseDown={(event) => handleDropdownNavigate(event, '/login')} onPointerDown={(event) => handleDropdownNavigate(event, '/login')} onClick={(event) => handleDropdownNavigate(event, '/login')}>
+                      Войти
                     </Link>
-                    <Link
-                      to="/register"
-                      onMouseDown={(event) => handleDropdownNavigate(event, '/register')}
-                      onPointerDown={(event) => handleDropdownNavigate(event, '/register')}
-                      onClick={(event) => handleDropdownNavigate(event, '/register')}
-                    >
-                      Register
+                    <Link to="/register" onMouseDown={(event) => handleDropdownNavigate(event, '/register')} onPointerDown={(event) => handleDropdownNavigate(event, '/register')} onClick={(event) => handleDropdownNavigate(event, '/register')}>
+                      Регистрация
                     </Link>
                   </>
                 )}
               </nav>
             )}
           </div>
-
-          <button className="cart-button" type="button" onClick={handleCartClick}>
-            <span>Cart</span>
-            <strong>{totalQuantity}</strong>
-          </button>
         </div>
       </header>
     </div>

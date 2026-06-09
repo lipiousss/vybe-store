@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { adminApi } from '../api/adminApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Site asset request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос изображения сайта';
 }
 
 export const useSiteAssetStore = create((set, get) => ({
@@ -33,7 +33,7 @@ export const useSiteAssetStore = create((set, get) => ({
           ...state.assets.filter((asset) => asset.key !== key),
         ].sort((a, b) => a.key.localeCompare(b.key)),
         isLoading: false,
-        success: 'Site asset saved.',
+        success: 'Изображение сайта сохранено.',
       }));
       return data.asset;
     } catch (error) {
@@ -46,7 +46,7 @@ export const useSiteAssetStore = create((set, get) => ({
     set({ isLoading: true, error: null, success: null });
     try {
       const data = await adminApi.uploadSiteAssetImage(file);
-      set({ isLoading: false, success: 'Image uploaded.' });
+      set({ isLoading: false, success: 'Изображение загружено.' });
       return data.url;
     } catch (error) {
       set({ error: getErrorMessage(error), isLoading: false });

@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useCategoryStore } from '../../store/categoryStore.js';
 import { useCollectionStore } from '../../store/collectionStore.js';
 import { useAdminProductStore } from '../../store/adminProductStore.js';
+import { formatProductStatus, money } from '../../utils/formatters.js';
 import { mediaUrl } from '../../utils/mediaUrl.js';
 
 const defaultForm = {
@@ -22,9 +23,16 @@ const defaultForm = {
   isLimited: false,
   isFeatured: false,
   isCollectible: false,
-  characteristics: '{\n  "origin": "VYBE archive"\n}',
+  characteristics: '{\n  "origin": "Архив VYBE"\n}',
   images: [],
   variants: [],
+};
+
+const flagLabels = {
+  isNew: 'Новинка',
+  isLimited: 'Лимитированный',
+  isFeatured: 'Рекомендуемый',
+  isCollectible: 'Коллекционный',
 };
 
 function normalizeImageUrl(url) {
@@ -87,7 +95,7 @@ function calculateFinalPrice(form) {
   return price;
 }
 
-export default function ProductAdminForm({ initialProduct = null, onSubmit, submitLabel = 'Save product' }) {
+export default function ProductAdminForm({ initialProduct = null, onSubmit, submitLabel = 'Сохранить товар' }) {
   const { categories, fetchCategories } = useCategoryStore();
   const { collections, fetchCollections } = useCollectionStore();
   const { uploadImage, isLoading, error, success, clearMessages } = useAdminProductStore();
@@ -138,7 +146,7 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
       ...current,
       images: [
         ...current.images,
-        { url, alt: current.name || 'VYBE product image', order: current.images.length },
+        { url, alt: current.name || 'Изображение товара VYBE', order: current.images.length },
       ],
     }));
     event.target.value = '';
@@ -150,7 +158,7 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
       ...current,
       variants: [
         ...current.variants,
-        { size: 'One Size', color: current.color || 'Black', sku: `VYBE-${suffix}`, stock: 0 },
+        { size: 'One Size', color: current.color || 'Чёрный', sku: `VYBE-${suffix}`, stock: 0 },
       ],
     }));
   }
@@ -180,18 +188,18 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
     try {
       characteristics = JSON.parse(form.characteristics || '{}');
     } catch {
-      throw new Error('Characteristics must be valid JSON.');
+      throw new Error('Характеристики должны быть валидным JSON.');
     }
 
-    if (!form.name.trim()) throw new Error('Name is required.');
-    if (!form.description.trim()) throw new Error('Description is required.');
-    if (!Number.isFinite(price) || price <= 0) throw new Error('Price must be greater than 0.');
-    if (!form.categoryId) throw new Error('Category is required.');
+    if (!form.name.trim()) throw new Error('Название обязательно.');
+    if (!form.description.trim()) throw new Error('Описание обязательно.');
+    if (!Number.isFinite(price) || price <= 0) throw new Error('Цена должна быть больше 0.');
+    if (!form.categoryId) throw new Error('Категория обязательна.');
     if (form.discountType === 'PERCENT' && (discountValue < 0 || discountValue > 100)) {
-      throw new Error('Percent discount must be from 0 to 100.');
+      throw new Error('Скидка в процентах должна быть от 0 до 100.');
     }
     if (form.discountType === 'FIXED' && discountValue > price) {
-      throw new Error('Fixed discount cannot be greater than price.');
+      throw new Error('Фиксированная скидка не может быть больше цены.');
     }
 
     return {
@@ -211,7 +219,7 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
       variants: form.variants.map((variant) => ({
         id: variant.id,
         size: variant.size || 'One Size',
-        color: variant.color || form.color || 'Default',
+        color: variant.color || form.color || 'По умолчанию',
         sku: variant.sku,
         stock: Math.max(Number(variant.stock) || 0, 0),
       })),
@@ -233,65 +241,65 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
     <form className="admin-form-shell" onSubmit={handleSubmit}>
       <section className="admin-form-main">
         <header className="admin-form-hero">
-          <p className="section-label">FORGE THE CATALOGUE</p>
-          <h1>Create a new artifact for your realm</h1>
+          <p className="section-label">КУЗНИЦА КАТАЛОГА</p>
+          <h1>Создайте новый артефакт для витрины</h1>
         </header>
 
-        <nav className="admin-form-tabs" aria-label="Product form sections">
-          <a href="#product-details">Product Details</a>
-          <a href="#pricing-inventory">Pricing & Inventory</a>
-          <a href="#media-settings">Media & Settings</a>
+        <nav className="admin-form-tabs" aria-label="Разделы формы товара">
+          <a href="#product-details">Данные товара</a>
+          <a href="#pricing-inventory">Цена и остатки</a>
+          <a href="#media-settings">Медиа и настройки</a>
         </nav>
 
         <section className="admin-form-section" id="product-details">
           <div className="admin-panel__head">
             <div>
-              <p className="section-label">Product Details</p>
-              <h2>Core artifact data</h2>
+              <p className="section-label">Данные товара</p>
+              <h2>Основная информация</h2>
             </div>
           </div>
 
           <div className="admin-form-grid">
             <label>
-              Product Name
+              Название товара
               <input value={form.name} onChange={(event) => updateField('name', event.target.value)} />
             </label>
             <label>
-              Category
+              Категория
               <select value={form.categoryId} onChange={(event) => updateField('categoryId', event.target.value)}>
-                <option value="">Select category</option>
+                <option value="">Выберите категорию</option>
                 {flatCategories.map((category) => (
                   <option key={category.id} value={category.id}>{category.name}</option>
                 ))}
               </select>
             </label>
             <label>
-              Collection
+              Коллекция
               <select value={form.collectionId || ''} onChange={(event) => updateField('collectionId', event.target.value)}>
-                <option value="">No collection</option>
+                <option value="">Без коллекции</option>
                 {collections.map((collection) => (
                   <option key={collection.id} value={collection.id}>{collection.name}</option>
                 ))}
               </select>
             </label>
             <label>
-              Brand
+              Бренд
               <input value={form.brand} onChange={(event) => updateField('brand', event.target.value)} />
             </label>
             <label>
-              Designer
+              Дизайнер
               <input value={form.designer} onChange={(event) => updateField('designer', event.target.value)} />
             </label>
             <label>
-              Material
+              Материал
               <input value={form.material} onChange={(event) => updateField('material', event.target.value)} />
             </label>
             <label>
-              Color
+              Цвет
               <input value={form.color} onChange={(event) => updateField('color', event.target.value)} />
             </label>
             <label className="admin-wide">
-              Description
+              Описание
               <textarea rows="5" value={form.description} onChange={(event) => updateField('description', event.target.value)} />
             </label>
           </div>
@@ -300,31 +308,31 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
         <section className="admin-form-section" id="pricing-inventory">
           <div className="admin-panel__head">
             <div>
-              <p className="section-label">Pricing & Inventory</p>
-              <h2>Price, discount and variants</h2>
+              <p className="section-label">Цена и остатки</p>
+              <h2>Цена, скидка и варианты</h2>
             </div>
-            <button className="ghost-button small" type="button" onClick={addVariant}>Add variant</button>
+            <button className="ghost-button small" type="button" onClick={addVariant}>Добавить вариант</button>
           </div>
 
           <div className="admin-form-grid">
             <label>
-              Price
+              Цена
               <input min="0" type="number" value={form.price} onChange={(event) => updateField('price', event.target.value)} />
             </label>
             <label>
-              Old Price
+              Старая цена
               <input min="0" type="number" value={form.oldPrice} onChange={(event) => updateField('oldPrice', event.target.value)} />
             </label>
             <label>
-              Discount Type
+              Тип скидки
               <select value={form.discountType} onChange={(event) => updateField('discountType', event.target.value)}>
-                <option value="NONE">NONE</option>
-                <option value="PERCENT">PERCENT</option>
-                <option value="FIXED">FIXED</option>
+                <option value="NONE">Без скидки</option>
+                <option value="PERCENT">Процент</option>
+                <option value="FIXED">Фиксированная</option>
               </select>
             </label>
             <label>
-              Discount Value
+              Значение скидки
               <input min="0" type="number" value={form.discountValue} onChange={(event) => updateField('discountValue', event.target.value)} />
             </label>
           </div>
@@ -332,11 +340,11 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
           <div className="admin-variant-list">
             {form.variants.map((variant, index) => (
               <article key={variant.id || index}>
-                <input value={variant.size} onChange={(event) => updateVariant(index, 'size', event.target.value)} placeholder="Size" />
-                <input value={variant.color} onChange={(event) => updateVariant(index, 'color', event.target.value)} placeholder="Color" />
+                <input value={variant.size} onChange={(event) => updateVariant(index, 'size', event.target.value)} placeholder="Размер" />
+                <input value={variant.color} onChange={(event) => updateVariant(index, 'color', event.target.value)} placeholder="Цвет" />
                 <input value={variant.sku} onChange={(event) => updateVariant(index, 'sku', event.target.value)} placeholder="SKU" />
-                <input min="0" type="number" value={variant.stock} onChange={(event) => updateVariant(index, 'stock', event.target.value)} placeholder="Stock" />
-                <button className="admin-icon-action danger" type="button" onClick={() => removeVariant(index)}>Remove</button>
+                <input min="0" type="number" value={variant.stock} onChange={(event) => updateVariant(index, 'stock', event.target.value)} placeholder="Остаток" />
+                <button className="admin-icon-action danger" type="button" onClick={() => removeVariant(index)}>Удалить</button>
               </article>
             ))}
           </div>
@@ -345,14 +353,14 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
         <section className="admin-form-section" id="media-settings">
           <div className="admin-panel__head">
             <div>
-              <p className="section-label">Media & Settings</p>
-              <h2>Images, flags and status</h2>
+              <p className="section-label">Медиа и настройки</p>
+              <h2>Изображения, метки и статус</h2>
             </div>
           </div>
 
           <label className="admin-upload-zone">
-            <span>Drag & drop images here</span>
-            <strong>Choose Files</strong>
+            <span>Перетащите изображения сюда</span>
+            <strong>Выбрать файл</strong>
             <input accept="image/jpeg,image/png,image/webp" type="file" onChange={handleUpload} />
           </label>
 
@@ -360,34 +368,34 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
             {form.images.map((image, index) => (
               <article key={`${image.url}-${index}`}>
                 <img src={normalizeImageUrl(image.url)} alt={image.alt || form.name} />
-                <input value={image.alt} onChange={(event) => updateImage(index, 'alt', event.target.value)} placeholder="Alt" />
-                <input min="0" type="number" value={image.order} onChange={(event) => updateImage(index, 'order', event.target.value)} placeholder="Order" />
-                <button className="admin-icon-action danger" type="button" onClick={() => removeImage(index)}>Remove</button>
+                <input value={image.alt} onChange={(event) => updateImage(index, 'alt', event.target.value)} placeholder="Alt-текст" />
+                <input min="0" type="number" value={image.order} onChange={(event) => updateImage(index, 'order', event.target.value)} placeholder="Порядок" />
+                <button className="admin-icon-action danger" type="button" onClick={() => removeImage(index)}>Удалить</button>
               </article>
             ))}
           </div>
 
           <div className="admin-form-grid">
             <label>
-              Status
+              Статус
               <select value={form.status} onChange={(event) => updateField('status', event.target.value)}>
-                <option value="ACTIVE">ACTIVE</option>
-                <option value="DRAFT">DRAFT</option>
-                <option value="ARCHIVED">ARCHIVED</option>
-                <option value="OUT_OF_STOCK">OUT_OF_STOCK</option>
+                <option value="ACTIVE">Активен</option>
+                <option value="DRAFT">Черновик</option>
+                <option value="ARCHIVED">Архив</option>
+                <option value="OUT_OF_STOCK">Нет в наличии</option>
               </select>
             </label>
             <label className="admin-wide">
-              Characteristics JSON
+              Характеристики JSON
               <textarea className="admin-json" value={form.characteristics} onChange={(event) => updateField('characteristics', event.target.value)} />
             </label>
           </div>
 
           <div className="admin-checks">
-            {['isNew', 'isLimited', 'isFeatured', 'isCollectible'].map((field) => (
+            {Object.entries(flagLabels).map(([field, label]) => (
               <label className="check-row" key={field}>
                 <input type="checkbox" checked={form[field]} onChange={(event) => updateField(field, event.target.checked)} />
-                {field}
+                {label}
               </label>
             ))}
           </div>
@@ -401,31 +409,32 @@ export default function ProductAdminForm({ initialProduct = null, onSubmit, subm
 
         <div className="admin-form-actions">
           <button className="gold-button" type="submit" disabled={isLoading}>
-            {isLoading ? 'Saving...' : submitLabel}
+            {isLoading ? 'Сохраняем...' : submitLabel}
           </button>
         </div>
       </section>
 
       <aside className="admin-live-preview admin-product-preview">
-        <p className="section-label">LIVE PREVIEW</p>
-        <span>This is how your product will appear on the store.</span>
+        <p className="section-label">ПРЕДПРОСМОТР</p>
+        <span>Так товар будет выглядеть на витрине.</span>
         <div className="admin-preview-card">
           <div className="admin-preview-image">
-            <img src={normalizeImageUrl(previewImage)} alt={form.name || 'Product preview'} />
+            <img src={normalizeImageUrl(previewImage)} alt={form.name || 'Предпросмотр товара'} />
           </div>
           <div className="admin-preview-body">
             <div className="badge-row">
-              {form.isNew && <span className="badge blue">NEW</span>}
-              {form.isLimited && <span className="badge gold">LIMITED</span>}
-              {form.isFeatured && <span className="badge">FEATURED</span>}
+              {form.isNew && <span className="badge blue">Новинка</span>}
+              {form.isLimited && <span className="badge gold">Лимит</span>}
+              {form.isFeatured && <span className="badge">Рекомендуем</span>}
             </div>
-            <span className="product-category">{selectedCategory?.name || 'No category'}</span>
-            <h3>{form.name || 'Unnamed VYBE item'}</h3>
-            <p>{form.description || 'Description preview will appear here.'}</p>
+            <span className="product-category">{selectedCategory?.name || 'Без категории'}</span>
+            <h3>{form.name || 'Новый товар VYBE'}</h3>
+            <p>{form.description || 'Здесь появится описание товара.'}</p>
             <div className="price-row">
-              {form.oldPrice && <span className="old-price">{Number(form.oldPrice).toLocaleString('ru-RU')} ₽</span>}
-              <span className="final-price">{finalPrice.toLocaleString('ru-RU')} ₽</span>
+              {form.oldPrice && <span className="old-price">{money(form.oldPrice)}</span>}
+              <span className="final-price">{money(finalPrice)}</span>
             </div>
+            <span className="admin-status active">{formatProductStatus(form.status)}</span>
           </div>
         </div>
       </aside>

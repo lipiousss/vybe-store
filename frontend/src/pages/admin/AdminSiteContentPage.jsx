@@ -5,26 +5,26 @@ import { mediaUrl } from '../../utils/mediaUrl.js';
 const requiredAssets = [
   {
     key: 'enter_screen_image',
-    title: 'Enter Screen Image',
-    description: 'Background image for the ritual enter screen.',
+    title: 'Изображение входного экрана',
+    description: 'Фоновое изображение ритуального входного экрана.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'home_hero_image',
-    title: 'Home Hero Image',
-    description: 'Main image for the storefront hero.',
+    title: 'Главное изображение главной страницы',
+    description: 'Основное изображение hero-блока витрины.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'about_main_image',
-    title: 'About Main Image',
-    description: 'Story image for the about page.',
+    title: 'Изображение страницы о бренде',
+    description: 'Сюжетное изображение для страницы о бренде.',
     fallback: '/images/placeholders/product-placeholder.png',
   },
   {
     key: 'collectibles_hero_image',
-    title: 'Collectibles Hero Image',
-    description: 'Hero image for collectible relics.',
+    title: 'Изображение коллекционных предметов',
+    description: 'Hero-изображение для коллекционных реликвий.',
     fallback: '/images/placeholders/collectible-placeholder.png',
   },
 ];
@@ -76,9 +76,9 @@ export default function AdminSiteContentPage() {
     <div className="admin-site-content-page">
       <section className="admin-page-head">
         <div>
-          <p className="eyebrow">Site Content</p>
-          <h1>SITE CONTENT</h1>
-          <p>Manage EnterScreen, hero and key public-page images through SiteAsset records.</p>
+          <p className="eyebrow">Контент сайта</p>
+          <h1>КОНТЕНТ САЙТА</h1>
+          <p>Управляйте EnterScreen, hero-блоками и ключевыми изображениями публичных страниц.</p>
         </div>
       </section>
 
@@ -97,19 +97,19 @@ export default function AdminSiteContentPage() {
               <div className="site-asset-card__body">
                 <p className="eyebrow">{config.key}</p>
                 <label>
-                  Title
+                  Заголовок
                   <input value={draft.title || ''} onChange={(event) => updateDraft(config.key, 'title', event.target.value)} />
                 </label>
                 <label>
-                  Description
+                  Описание
                   <textarea value={draft.description || ''} onChange={(event) => updateDraft(config.key, 'description', event.target.value)} />
                 </label>
                 <label className="admin-upload-zone">
-                  Upload new image
+                  Загрузить новое изображение
                   <input accept="image/jpeg,image/png,image/webp" type="file" onChange={(event) => handleUpload(config.key, event)} />
                 </label>
                 <button className="gold-button" type="button" disabled={isLoading} onClick={() => handleSave(config)}>
-                  Save
+                  Сохранить
                 </button>
               </div>
             </article>

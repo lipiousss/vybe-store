@@ -36,6 +36,11 @@
   --line-blue: rgba(97, 168, 255, 0.28);
   --shadow-blue: 0 0 28px rgba(97, 168, 255, 0.18);
   --shadow-gold: 0 0 24px rgba(224, 199, 123, 0.16);
+  --product-card-height: 430px;
+  --product-card-image-height: 238px;
+  --product-card-border: rgba(148, 163, 184, 0.16);
+  --product-card-border-hover: rgba(56, 189, 248, 0.46);
+  --product-card-bg: linear-gradient(180deg, rgba(12, 19, 30, 0.96), rgba(5, 9, 16, 0.98));
   --container: 1180px;
   --wide-container: 1440px;
   --radius: 8px;

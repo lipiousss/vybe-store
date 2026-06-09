@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { artworkApi } from '../api/artworkApi.js';
 
 function getErrorMessage(error) {
-  return error.response?.data?.message || error.message || 'Request failed';
+  return error.response?.data?.message || error.message || 'Не удалось выполнить запрос артворков';
 }
 
 export const useArtworkStore = create((set) => ({
@@ -12,7 +12,7 @@ export const useArtworkStore = create((set) => ({
   isModalOpen: false,
   isLoading: false,
   error: null,
-  activeCategory: 'All',
+  activeCategory: '',
 
   async fetchArtworks(params = {}) {
     set({ isLoading: true, error: null });

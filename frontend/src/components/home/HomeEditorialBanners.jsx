@@ -1,25 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function HomeEditorialBanners({ collections = [] }) {
-  const eclipse = collections.find((collection) => collection.name?.toLowerCase().includes('eclipse'));
-  const collectionTitle = eclipse?.name || 'Eclipse Collection';
+const banners = [
+  {
+    label: 'За кулисами',
+    title: 'За кулисами дизайна',
+    text: 'Материалы, силуэты и детали, собранные в единую атмосферу.',
+    image: '/images/site/home/home-feature-banner-1.png',
+    to: '/about',
+    action: 'Подробнее',
+  },
+  {
+    label: 'Лимитированный дроп',
+    title: 'Лимитированный дроп',
+    text: 'Редкие предметы и коллекции, доступные ограниченное время.',
+    image: '/images/site/home/home-feature-banner-2.png',
+    to: '/collections',
+    action: 'Смотреть коллекцию',
+  },
+];
 
+export default function HomeEditorialBanners() {
   return (
-    <section className="home-editorial" aria-label="Editorial banners">
-      <article className="home-editorial__banner">
-        <p className="section-label">EDITORIAL</p>
-        <h2>Shadows in Motion</h2>
-        <p>A visual tale of fabric, form, and forgotten kingdoms.</p>
-        <Link to="/about">EXPLORE THE STORY {'\u2192'}</Link>
-      </article>
-
-      <article className="home-editorial__banner">
-        <p className="section-label">NEW DROP</p>
-        <h2>{collectionTitle}</h2>
-        <p>New designs born from the void. Limited pieces. Eternal impact.</p>
-        <Link to="/collectibles">DISCOVER NOW {'\u2192'}</Link>
-      </article>
+    <section className="home-editorial" aria-label="Баннеры VYBE">
+      {banners.map((banner) => (
+        <article
+          className="home-editorial__banner"
+          key={banner.title}
+          style={{ '--banner-image': `url("${banner.image}")` }}
+        >
+          <p className="section-label">{banner.label}</p>
+          <h2>{banner.title}</h2>
+          <p>{banner.text}</p>
+          <Link to={banner.to}>{banner.action} →</Link>
+        </article>
+      ))}
     </section>
   );
 }
