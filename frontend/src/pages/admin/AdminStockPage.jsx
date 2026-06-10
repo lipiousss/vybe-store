@@ -22,7 +22,7 @@ function stockLabel(stock) {
 }
 
 export default function AdminStockPage() {
-  const { stockItems, fetchStock, updateStock, exportStock, isLoading, error, success, clearMessages } = useAdminStockStore();
+  const { stockItems, fetchStock, updateStock, exportStock, isLoading, isExporting, error, success, clearMessages } = useAdminStockStore();
   const [drafts, setDrafts] = useState({});
   const rows = useMemo(() => flattenStock(stockItems), [stockItems]);
   const totalStock = rows.reduce((sum, row) => sum + Number(row.variant.stock || 0), 0);
@@ -56,6 +56,14 @@ export default function AdminStockPage() {
     await fetchStock();
   }
 
+  async function handleExport() {
+    try {
+      await exportStock();
+    } catch {
+      // Ошибка уже сохраняется в adminStockStore и выводится ниже.
+    }
+  }
+
   return (
     <div className="admin-stock-page">
       <section className="admin-page-head">
@@ -64,7 +72,9 @@ export default function AdminStockPage() {
           <h1>ОСТАТКИ</h1>
           <p>Контроль остатков вариантов, ручные корректировки и экспорт в Excel.</p>
         </div>
-        <button className="gold-button" type="button" onClick={exportStock} disabled={isLoading}>Экспорт Excel</button>
+        <button className="gold-button admin-stock-export-button" type="button" onClick={handleExport} disabled={isExporting}>
+          {isExporting ? 'Экспорт...' : 'Экспорт Excel'}
+        </button>
       </section>
 
       <section className="admin-dashboard-grid admin-dashboard-grid--stats">

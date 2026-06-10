@@ -8,6 +8,7 @@ function getErrorMessage(error) {
 export const useAdminStockStore = create((set) => ({
   stockItems: [],
   isLoading: false,
+  isExporting: false,
   error: null,
   success: null,
 
@@ -35,20 +36,31 @@ export const useAdminStockStore = create((set) => ({
   },
 
   async exportStock() {
-    set({ isLoading: true, error: null, success: null });
+    set({ isExporting: true, error: null, success: null });
     try {
       const blob = await adminApi.exportStock();
-      const url = URL.createObjectURL(blob);
+      const excelBlob = blob instanceof Blob
+        ? blob
+        : new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(excelBlob);
       const link = document.createElement('a');
+      const date = new Date().toISOString().slice(0, 10);
+
       link.href = url;
-      link.download = 'vybe-stock.xlsx';
+      link.download = `vybe-stock-${date}.xlsx`;
+      link.rel = 'noopener';
+      link.style.display = 'none';
       document.body.appendChild(link);
       link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-      set({ isLoading: false, success: 'Экспорт остатков скачан.' });
+
+      window.setTimeout(() => {
+        link.remove();
+        URL.revokeObjectURL(url);
+      }, 500);
+
+      set({ isExporting: false, success: 'Экспорт остатков скачан.' });
     } catch (error) {
-      set({ error: getErrorMessage(error), isLoading: false });
+      set({ error: getErrorMessage(error), isExporting: false });
       throw error;
     }
   },

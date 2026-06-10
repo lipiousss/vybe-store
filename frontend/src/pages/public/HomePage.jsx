@@ -51,7 +51,7 @@ export default function HomePage() {
             message="Отметьте товары как рекомендуемые в админ-панели, чтобы заполнить эту секцию."
           />
         ) : (
-          <div className="product-grid home-featured__grid">
+          <div className="home-featured__grid vybe-product-grid vybe-product-grid--compact">
             {featured.map((product) => (
               <ProductCard key={product.id} product={product} variant="compact" />
             ))}

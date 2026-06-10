@@ -63,8 +63,8 @@ export default function CatalogPage() {
         urlParams[key] = String(value);
       }
     }
-    setSearchParams(urlParams, { replace: true });
 
+    setSearchParams(urlParams, { replace: true });
     fetchProducts(params);
   }, [filters, fetchProducts, setSearchParams]);
 
@@ -73,21 +73,28 @@ export default function CatalogPage() {
   }
 
   return (
-    <main className="page-shell catalog-page">
-      <section className="catalog-hero fantasy-card">
-        <p className="section-label">Каталог</p>
-        <h1>Каталог реликвий</h1>
-        <p>Дизайнерские товары, собранные в эстетике ночного мира VYBE.</p>
+    <main className="page-shell catalog-page catalog-reference-page">
+      <section className="catalog-hero reference-hero">
+        <p className="section-label">КАТАЛОГ</p>
+        <h1>Найди предмет своего стиля</h1>
+        <p>Одежда, аксессуары, декор, периферия и коллекционные предметы в единой визуальной системе.</p>
       </section>
 
       <section className="catalog-layout">
-        <aside className="filter-panel">
+        <aside className="filter-panel catalog-filter-panel">
+          <div className="catalog-filter-panel__head">
+            <span>Фильтры</span>
+            <button className="ghost-button small" type="button" onClick={() => setFilters(initialFilters)}>
+              Сбросить
+            </button>
+          </div>
+
           <label>
             Поиск
             <input
               value={filters.search}
               onChange={(event) => updateFilter('search', event.target.value)}
-              placeholder="Nocturne, реликвия, eclipse..."
+              placeholder="Название, коллекция, материал..."
             />
           </label>
 
@@ -148,24 +155,25 @@ export default function CatalogPage() {
               </label>
             ))}
           </div>
-
-          <button className="ghost-button" type="button" onClick={() => setFilters(initialFilters)}>
-            Сбросить фильтры
-          </button>
         </aside>
 
         <div className="catalog-results">
+          <div className="catalog-results__bar">
+            <span>{products.length} предметов</span>
+            <small>Витрина VYBE</small>
+          </div>
+
           {isLoading && <Loader text="Загружаем каталог..." />}
           {error && <ErrorState title="Каталог недоступен" message={error} />}
           {!isLoading && products.length === 0 && (
             <EmptyState
               label="Каталог"
               title="Товары не найдены"
-              message="Попробуйте изменить фильтры, категорию, коллекцию или диапазон цены."
+              message="Попробуйте изменить поиск, категорию, коллекцию или диапазон цены."
             />
           )}
           {!isLoading && !error && products.length > 0 && (
-            <div className="product-grid">
+            <div className="vybe-product-grid vybe-product-grid--catalog">
               {products.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

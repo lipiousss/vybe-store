@@ -53,7 +53,7 @@ export default function CollectionsPage() {
                   </Link>
                 </div>
                 {products.length > 0 && (
-                  <div className="collection-showcase__products">
+                  <div className="collection-showcase__products vybe-product-grid vybe-product-grid--compact">
                     {products.map((product) => (
                       <ProductCard key={product.id} product={product} />
                     ))}

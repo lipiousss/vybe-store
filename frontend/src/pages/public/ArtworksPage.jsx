@@ -63,15 +63,12 @@ export default function ArtworksPage() {
   }, [activeFilter.value, fetchArtworks]);
 
   return (
-    <main className="artworks-page">
-      <section className="artworks-hero">
+    <main className="artworks-page artworks-reference-page">
+      <section className="artworks-hero reference-hero">
         <div>
-          <p className="eyebrow">Визуальный архив VYBE</p>
+          <p className="section-label">ARTWORKS</p>
           <h1>Визуальный архив</h1>
-          <p>
-            Коллекция визуальных фрагментов, концептов и dark fantasy-референсов
-            из вселенной VYBE.
-          </p>
+          <p>Изображения, сцены и визуальные материалы, раскрывающие атмосферу проекта.</p>
         </div>
       </section>
 
@@ -115,9 +112,9 @@ export default function ArtworksPage() {
 
         <header className="artwork-banner" aria-label="Баннер артворков">
           <div className="artwork-banner-log">
-            <span>archive.boot 24:05:26 - загрузка визуальных фрагментов | статус: активен</span>
-            <span>vybe.index 24:05:26 - золотая рамка проверена | холодное свечение стабильно</span>
-            <span>visual.node 24:05:26 - концепты, постеры, персонажи, окружение</span>
+            <span>archive.boot — загрузка визуальных фрагментов | статус: активен</span>
+            <span>vybe.index — золотая рамка проверена | холодное свечение стабильно</span>
+            <span>visual.node — концепты, постеры, персонажи, окружение</span>
           </div>
           <h2>АРТВОРКИ</h2>
         </header>

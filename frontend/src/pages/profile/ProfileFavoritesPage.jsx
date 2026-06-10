@@ -38,7 +38,7 @@ export default function ProfileFavoritesPage() {
         ) : null}
 
         {!isLoading && !error && products.length > 0 && (
-          <div className="product-grid favorites-grid">
+          <div className="favorites-grid vybe-product-grid vybe-product-grid--favorites">
             {products.map((product) => (
               <ProductCard product={product} key={product.id} />
             ))}

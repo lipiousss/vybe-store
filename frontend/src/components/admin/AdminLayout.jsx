@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore.js';
+import { useAdminStockStore } from '../../store/adminStockStore.js';
 
 const menuGroups = [
   {
@@ -36,10 +37,20 @@ const menuGroups = [
 export default function AdminLayout() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
+  const exportStock = useAdminStockStore((state) => state.exportStock);
+  const isExporting = useAdminStockStore((state) => state.isExporting);
 
   function handleLogout() {
     logout();
     navigate('/');
+  }
+
+  async function handleExportReport() {
+    try {
+      await exportStock();
+    } catch {
+      // Ошибка уже сохраняется в adminStockStore.
+    }
   }
 
   return (
@@ -92,7 +103,9 @@ export default function AdminLayout() {
               <option value="7">Последние 7 дней</option>
               <option value="all">Всё время</option>
             </select>
-            <button type="button">Экспорт отчёта</button>
+            <button className="admin-export-report-button" type="button" onClick={handleExportReport} disabled={isExporting}>
+              {isExporting ? 'Экспорт...' : 'Экспорт отчёта'}
+            </button>
             <div className="admin-topbar__user">
               <span className="avatar-orb">{user?.username?.[0]?.toUpperCase() || 'A'}</span>
               <div>

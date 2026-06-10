@@ -18,10 +18,10 @@ const filters = [
 ];
 
 const archiveFacts = [
-  ['Кураторский архив', 'Каждый объект отобран из архива VYBE.'],
+  ['Кураторский архив', 'Каждый объект отобран из визуального архива VYBE.'],
   ['Лимитированные релизы', 'Редкие дропы в малых тиражах.'],
-  ['Подлинные реликвии', 'Demo-происхождение для коллекционных предметов.'],
-  ['Безопасная доставка', 'Защищённый сценарий корзины и оформления.'],
+  ['Визуальная ценность', 'Предметы работают как часть dark fantasy-сцены.'],
+  ['Demo-доставка', 'Корзина и оформление заказа работают в демонстрационном режиме.'],
 ];
 
 export default function CollectiblesPage() {
@@ -51,12 +51,12 @@ export default function CollectiblesPage() {
   return (
     <main className="page-shell collectibles-page collectibles-reference-page">
       <section
-        className="page-hero cinematic collectibles-hero"
+        className="page-hero cinematic collectibles-hero reference-hero"
         style={{ '--collectibles-image': `url("${heroImage}")` }}
       >
-        <p className="section-label">Архив VYBE</p>
-        <h1>Коллекционные предметы</h1>
-        <p>Редкие объекты из архива VYBE.</p>
+        <p className="section-label">КОЛЛЕКЦИОННЫЕ ПРЕДМЕТЫ</p>
+        <h1>Архив редких вещей</h1>
+        <p>Лимитированные предметы, артбуки, стикер-паки и коллекционные фигурки.</p>
       </section>
 
       <section className="collectibles-toolbar" aria-label="Фильтры коллекционных предметов">
@@ -74,7 +74,7 @@ export default function CollectiblesPage() {
         </div>
 
         <label className="collectibles-sort">
-          <span>Сортировка:</span>
+          <span>Сортировка</span>
           <select value={sort} onChange={(event) => setSort(event.target.value)}>
             <option value="newest">Сначала новые</option>
             <option value="price-asc">Цена: по возрастанию</option>
@@ -88,13 +88,13 @@ export default function CollectiblesPage() {
       {!isLoading && !error && visibleProducts.length === 0 && (
         <EmptyState
           label="Коллекционные предметы"
-          title="Реликвии не найдены"
+          title="Редкие вещи не найдены"
           message="На этой полке архива пока пусто для выбранного фильтра."
         />
       )}
 
       {!isLoading && !error && visibleProducts.length > 0 && (
-        <div className="product-grid cinematic-grid collectibles-grid">
+        <div className="cinematic-grid collectibles-grid vybe-product-grid vybe-product-grid--collectibles">
           {visibleProducts.map((product, index) => (
             <div className="collectible-slot" key={product.id}>
               <span>АРХИВ {String(index + 1).padStart(3, '0')}</span>

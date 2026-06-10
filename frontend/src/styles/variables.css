@@ -12,6 +12,13 @@
   --vybe-ash: #cbd5e1;
   --vybe-muted: #7f8794;
   --vybe-blood: #991b1b;
+  --color-bg-deep: #02040a;
+  --color-panel: rgba(8, 15, 26, 0.84);
+  --color-panel-2: rgba(13, 23, 36, 0.9);
+  --color-text: #e5edf6;
+  --color-border: rgba(148, 163, 184, 0.16);
+  --color-danger: #991b1b;
+  --radius-card: 24px;
   --color-bg: #030407;
   --color-bg-soft: #070a10;
   --color-card: #0d1018;

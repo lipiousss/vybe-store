@@ -85,7 +85,7 @@ export default function ProfilePage() {
             <Link className="ghost-button" to="/profile/favorites">Смотреть всё</Link>
           </div>
 
-          <div className="product-grid saved-relic-grid">
+          <div className="saved-relic-grid vybe-product-grid vybe-product-grid--compact">
             {savedProducts.length > 0 ? (
               savedProducts.map((product) => <ProductCard product={product} key={product.id} variant="compact" />)
             ) : (
