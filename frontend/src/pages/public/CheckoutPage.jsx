@@ -10,12 +10,19 @@ import { maskRuPhone } from '../../utils/phoneMask.js';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+const addressPrefix = 'Россия, ';
+
+function maskRuAddress(value) {
+  const withoutCountry = value.replace(/\s+/g, ' ').replace(/^россия,?\s*/i, '').trimStart();
+  return `${addressPrefix}${withoutCountry}`.replace(/,\s*,/g, ', ');
+}
 
 function validateForm(form) {
   if (!form.customerName.trim()) return 'Укажите имя получателя.';
   if (!phonePattern.test(form.customerPhone.trim())) return 'Телефон должен быть в формате +7 (999) 999-99-99.';
   if (!emailPattern.test(form.customerEmail.trim())) return 'Некорректный email.';
   if (!form.deliveryCity.trim()) return 'Укажите город.';
+  if (form.deliveryAddress.trim() === addressPrefix.trim()) return 'Укажите адрес доставки в России.';
   if (!form.deliveryAddress.trim()) return 'Укажите адрес доставки.';
   return null;
 }
@@ -113,6 +120,7 @@ export default function CheckoutPage() {
           <label>
             Город
             <input
+              placeholder="Например: Москва"
               value={form.deliveryCity}
               onChange={(event) => setForm({ ...form, deliveryCity: event.target.value })}
             />
@@ -120,8 +128,14 @@ export default function CheckoutPage() {
           <label className="checkout-wide">
             Адрес доставки
             <input
+              placeholder="Россия, г. Москва, ул. Тверская, д. 1, кв. 1"
               value={form.deliveryAddress}
-              onChange={(event) => setForm({ ...form, deliveryAddress: event.target.value })}
+              onFocus={() => {
+                if (!form.deliveryAddress.trim()) {
+                  setForm({ ...form, deliveryAddress: addressPrefix });
+                }
+              }}
+              onChange={(event) => setForm({ ...form, deliveryAddress: maskRuAddress(event.target.value) })}
             />
           </label>
           <label className="checkout-wide">

@@ -1,7 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore.js';
-import { useAdminStockStore } from '../../store/adminStockStore.js';
 
 const menuGroups = [
   {
@@ -37,20 +36,10 @@ const menuGroups = [
 export default function AdminLayout() {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const exportStock = useAdminStockStore((state) => state.exportStock);
-  const isExporting = useAdminStockStore((state) => state.isExporting);
 
   function handleLogout() {
     logout();
     navigate('/');
-  }
-
-  async function handleExportReport() {
-    try {
-      await exportStock();
-    } catch {
-      // Ошибка уже сохраняется в adminStockStore.
-    }
   }
 
   return (
@@ -66,15 +55,9 @@ export default function AdminLayout() {
             <section className="admin-sidebar__section" key={group.title}>
               <p>{group.title}</p>
               {group.links.map((link) => (
-                link.placeholder ? (
-                  <span className="admin-sidebar__link admin-sidebar__link--placeholder" key={`${group.title}-${link.label}`}>
-                    <span>{link.label}</span>
-                  </span>
-                ) : (
-                  <NavLink className="admin-sidebar__link" end={Boolean(link.end)} key={`${group.title}-${link.label}`} to={link.to}>
-                    <span>{link.label}</span>
-                  </NavLink>
-                )
+                <NavLink className="admin-sidebar__link" end={Boolean(link.end)} key={`${group.title}-${link.label}`} to={link.to}>
+                  <span>{link.label}</span>
+                </NavLink>
               ))}
             </section>
           ))}
@@ -103,9 +86,6 @@ export default function AdminLayout() {
               <option value="7">Последние 7 дней</option>
               <option value="all">Всё время</option>
             </select>
-            <button className="admin-export-report-button" type="button" onClick={handleExportReport} disabled={isExporting}>
-              {isExporting ? 'Экспорт...' : 'Экспорт отчёта'}
-            </button>
             <div className="admin-topbar__user">
               <span className="avatar-orb">{user?.username?.[0]?.toUpperCase() || 'A'}</span>
               <div>

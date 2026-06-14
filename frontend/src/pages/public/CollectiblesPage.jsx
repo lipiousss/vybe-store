@@ -12,7 +12,6 @@ const filters = [
   ['Фигурки', 'figures'],
   ['Постеры', 'art-books'],
   ['Карты', 'cards'],
-  ['Патчи', 'patches'],
   ['Объекты', 'limited-boxes'],
   ['Лимитированные', 'limited'],
 ];

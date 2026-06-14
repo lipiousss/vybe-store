@@ -16,7 +16,7 @@ const navItems = [
 export default function Header() {
   const navigate = useNavigate();
   const { user, isAuth, logout } = useAuthStore();
-  const { closeCart, openCart, totalQuantity } = useCartStore();
+  const { closeCart, totalQuantity } = useCartStore();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
   const userMenuRef = React.useRef(null);
@@ -56,7 +56,8 @@ export default function Header() {
       return;
     }
 
-    openCart();
+    closeCart();
+    navigate('/cart');
   }
 
   React.useEffect(() => {

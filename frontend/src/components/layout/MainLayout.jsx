@@ -11,7 +11,7 @@ export default function MainLayout() {
   const isAdmin = location.pathname.startsWith('/admin');
 
   return (
-    <div className="site-frame">
+    <div className={`site-frame${isAdmin ? ' site-frame--admin' : ' site-frame--public'}`}>
       {!isAdmin && <Atmosphere />}
       {!isAdmin && <Header />}
       <PageTransition key={location.pathname}>

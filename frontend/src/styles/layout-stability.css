@@ -1,5 +1,76 @@
 /* Final stability layer for profile and admin pages. Loaded after legacy styles. */
 
+:root {
+  --site-header-fixed-height: 102px;
+}
+
+.site-frame--public {
+  padding-top: var(--site-header-fixed-height);
+}
+
+.site-frame--public .site-header-stack {
+  position: fixed !important;
+  inset: 0 0 auto;
+  z-index: 1000;
+  width: 100%;
+}
+
+.site-frame--public .site-header,
+.site-frame--public .site-topbar,
+.site-frame--public .header-actions,
+.site-frame--public .cart-button,
+.site-frame--public .user-menu,
+.site-frame--public .user-dropdown {
+  pointer-events: auto;
+}
+
+.site-frame--public .cart-button {
+  position: relative;
+  z-index: 1002;
+  cursor: pointer;
+}
+
+@media (min-width: 901px) {
+  .catalog-layout {
+    align-items: start;
+  }
+
+  .catalog-filter-panel {
+    position: sticky !important;
+    top: calc(var(--site-header-fixed-height) + 18px);
+    z-index: 20;
+    max-height: calc(100vh - var(--site-header-fixed-height) - 36px);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .collectibles-toolbar {
+    position: sticky !important;
+    top: calc(var(--site-header-fixed-height) + 14px);
+    z-index: 32;
+    max-height: calc(100vh - var(--site-header-fixed-height) - 28px);
+    overflow-x: auto;
+    overflow-y: visible;
+    backdrop-filter: blur(18px);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --site-header-fixed-height: 92px;
+  }
+
+  .site-frame--public {
+    padding-top: var(--site-header-fixed-height);
+  }
+
+  .catalog-filter-panel,
+  .collectibles-toolbar {
+    position: relative;
+    top: auto;
+  }
+}
+
 .auth-page {
   position: relative;
   isolation: isolate;
@@ -613,7 +684,7 @@
 
 .profile-layout {
   display: grid;
-  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr) minmax(220px, 300px);
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
   gap: 28px;
   align-items: start;
   margin-top: 28px;
@@ -621,7 +692,24 @@
 }
 
 .profile-layout .profile-content {
-  grid-column: auto;
+  grid-column: 2;
+  width: 100%;
+}
+
+.profile-layout .profile-actions {
+  grid-column: 2;
+  position: static;
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+
+.profile-archive-content .saved-relic-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  width: 100%;
+}
+
+.profile-archive-content .vybe-product-card--compact {
+  min-height: 460px;
 }
 
 .profile-hero {
