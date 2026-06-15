@@ -80,7 +80,7 @@ For the most stable diploma preview, deploy the whole project on one VPS with Do
 - Frontend: Nginx production build
 - Backend: Node.js/Express
 - Database: PostgreSQL Docker volume
-- Uploads: persistent Docker volume
+- Uploads: `backend/uploads` bind-mounted into the backend container
 - Public API path: `/api`
 - Public uploads path: `/uploads`
 
@@ -169,9 +169,9 @@ npm run prisma:seed
 
 If the hosting plan does not provide a shell, set `RUN_SEED_ON_START=true` only for a deliberate one-time seed. Keep it `false` for normal redeploys. Use `RUN_SEED_FORCE=true` and `SEED_FORCE=true` only when you intentionally want to recreate demo data and overwrite product data.
 
-### Uploads Warning
+### Uploads Storage
 
-Local uploaded files are stored in `backend/uploads`. On many free hosting plans, this folder may be reset after redeploy or restart. For a production version, use Cloudinary, S3, Netlify Blob or a persistent disk. For diploma preview, placeholder images and demo uploads are acceptable.
+Local uploaded files are stored in `backend/uploads`. The VPS production compose file bind-mounts this folder into the backend container, so uploaded files survive container rebuilds and are served through `/uploads`. For a larger production version, use Cloudinary, S3 or another object storage service.
 
 ## Project Structure
 

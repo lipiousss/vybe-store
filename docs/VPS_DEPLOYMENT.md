@@ -5,7 +5,7 @@ This guide deploys the full VYBE store on one VPS with Docker:
 - Frontend: Nginx serves the Vite production build.
 - Backend: Node.js + Express.
 - Database: PostgreSQL in a persistent Docker volume.
-- Uploads: stored in a persistent Docker volume.
+- Uploads: stored in `backend/uploads` on the VPS, mounted into the backend container.
 - Public API path: `/api`.
 - Public uploads path: `/uploads`.
 
@@ -21,12 +21,13 @@ The most reliable option for users in Russia is a VPS from a provider available 
 - `.env.production.example`
 - `frontend/Dockerfile.production`
 - `frontend/nginx.production.conf`
+- `backend/Dockerfile`
 
 Local development still uses the existing `docker-compose.yml`.
 
 ## 1. Prepare The VPS
 
-Install Docker and Git on Ubuntu:
+Install Docker and Git on Ubuntu, then configure Docker mirrors. Mirrors help when Docker Hub rate limits image downloads.
 
 ```bash
 sudo apt update
@@ -34,6 +35,19 @@ sudo apt install -y ca-certificates curl git
 curl -fsSL https://get.docker.com | sudo sh
 sudo usermod -aG docker $USER
 newgrp docker
+
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json >/dev/null <<'JSON'
+{
+  "registry-mirrors": [
+    "https://mirror.gcr.io",
+    "https://dockerhub.timeweb.cloud",
+    "https://hub-mirror.c.163.com"
+  ],
+  "dns": ["8.8.8.8", "1.1.1.1"]
+}
+JSON
+sudo systemctl restart docker
 ```
 
 Open ports:
@@ -53,8 +67,6 @@ git clone https://github.com/YOUR_GITHUB_USER/vybe-store.git
 cd vybe-store
 ```
 
-Or upload the current folder with `scp`/SFTP.
-
 ## 3. Create Production Env
 
 ```bash
@@ -70,14 +82,15 @@ POSTGRES_USER=vybe
 POSTGRES_PASSWORD=strong_database_password
 JWT_SECRET=long_random_jwt_secret
 CLIENT_URL=http://YOUR_SERVER_IP
+FRONTEND_URL=http://YOUR_SERVER_IP
 VITE_API_URL=/api
 HTTP_PORT=80
-RUN_SEED_ON_START=false
+RUN_SEED_ON_START=true
 RUN_SEED_FORCE=false
 SEED_FORCE=false
 ```
 
-If you later connect a domain with HTTPS, change `CLIENT_URL` to `https://your-domain.ru` and redeploy.
+`RUN_SEED_ON_START=true` is safe for the demo because the backend only runs seed when the database has zero products. If you later connect a domain with HTTPS, change `CLIENT_URL` and `FRONTEND_URL` to `https://your-domain.ru` and redeploy.
 
 ## 4. Start Production Containers
 
@@ -101,31 +114,23 @@ http://YOUR_SERVER_IP/health
 
 ## 5. Restore Local Database And Images
 
-If you need the exact local data and uploaded images, use the backup created in:
+Uploaded images are mounted from the repository folder:
 
 ```text
-backend/database-dumps/vybe-full-backup-20260615-031514/vybe-full-backup-20260615-031514-portable.zip
+backend/uploads
 ```
 
-Copy the zip to the VPS, unzip it, then restore the SQL dump:
+If you have a SQL dump, copy it to `backend/database-dumps` on the VPS and restore it:
 
 ```bash
-unzip vybe-full-backup-20260615-031514-portable.zip
-cd package
-docker compose --env-file ../.env.production -f ../docker-compose.production.yml up -d postgres
-docker exec -i vybe-postgres-prod psql -U vybe -d postgres < vybe_store_full_backup.sql
+docker compose --env-file .env.production -f docker-compose.production.yml up -d postgres
+docker exec -i vybe-postgres-prod psql -U vybe -d postgres < backend/database-dumps/vybe_store_full_backup.sql
 ```
 
-Copy uploads into the backend uploads volume:
+Restart backend and frontend after restoring:
 
 ```bash
-docker cp backend/uploads/. vybe-backend-prod:/app/uploads/
-```
-
-Restart backend after copying uploads:
-
-```bash
-docker compose --env-file ../.env.production -f ../docker-compose.production.yml restart backend frontend
+docker compose --env-file .env.production -f docker-compose.production.yml restart backend frontend
 ```
 
 ## 6. Update Workflow

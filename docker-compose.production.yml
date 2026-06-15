@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:16-alpine
+    image: mirror.gcr.io/library/postgres:16-alpine
     container_name: vybe-postgres-prod
     restart: unless-stopped
     environment:
@@ -27,11 +27,12 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.production}
       CLIENT_URL: ${CLIENT_URL:?Set CLIENT_URL in .env.production}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       RUN_SEED_ON_START: ${RUN_SEED_ON_START:-false}
       RUN_SEED_FORCE: ${RUN_SEED_FORCE:-false}
       SEED_FORCE: ${SEED_FORCE:-false}
     volumes:
-      - vybe_backend_uploads:/app/uploads
+      - ./backend/uploads:/app/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -68,5 +69,4 @@ services:
 
 volumes:
   vybe_postgres_data:
-  vybe_backend_uploads:
   vybe_pgadmin_data:
