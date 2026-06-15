@@ -1,5 +1,5 @@
 const localApiUrl = 'http://localhost:4000/api';
-const productionApiUrl = 'https://vybe-store-backend.onrender.com/api';
+const productionApiUrl = '/api';
 const apiUrl = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? productionApiUrl : localApiUrl);
 const backendUrl = apiUrl.replace(/\/api\/?$/, '');
 

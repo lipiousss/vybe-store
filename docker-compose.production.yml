@@ -27,9 +27,9 @@ services:
       HOST: 0.0.0.0
       DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.production}
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://194.87.187.168,https://194.87.187.168,http://localhost:5173,http://127.0.0.1:5173,https://lipioussss.netlify.app,https://vybe-store-frontend.onrender.com}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://194.87.187.168}
       CLIENT_URL: ${CLIENT_URL:?Set CLIENT_URL in .env.production}
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      FRONTEND_URL: ${FRONTEND_URL:-http://194.87.187.168}
       RUN_SEED_ON_START: ${RUN_SEED_ON_START:-false}
       RUN_SEED_FORCE: ${RUN_SEED_FORCE:-false}
       SEED_FORCE: ${SEED_FORCE:-false}
@@ -52,23 +52,5 @@ services:
     depends_on:
       - backend
 
-  pgadmin:
-    image: dpage/pgadmin4:8
-    container_name: vybe-pgadmin-prod
-    restart: unless-stopped
-    profiles:
-      - tools
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@vybe.com}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:?Set PGADMIN_DEFAULT_PASSWORD in .env.production}
-    ports:
-      - "${PGADMIN_PORT:-5050}:80"
-    volumes:
-      - vybe_pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      postgres:
-        condition: service_healthy
-
 volumes:
   vybe_postgres_data:
-  vybe_pgadmin_data:

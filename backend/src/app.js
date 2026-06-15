@@ -27,13 +27,10 @@ const host = process.env.HOST || '0.0.0.0';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsPath = path.resolve(__dirname, '../uploads');
-const defaultClientUrls = [
+const isProduction = process.env.NODE_ENV === 'production';
+const devClientUrls = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
-  'http://194.87.187.168',
-  'https://194.87.187.168',
-  'https://lipioussss.netlify.app',
-  'https://vybe-store-frontend.onrender.com',
 ];
 
 function normalizeOrigin(origin) {
@@ -44,7 +41,7 @@ const configuredClientUrls = [
   process.env.CORS_ORIGIN,
   process.env.CLIENT_URL,
   process.env.FRONTEND_URL,
-  ...defaultClientUrls,
+  ...(isProduction ? [] : devClientUrls),
 ]
   .filter(Boolean)
   .join(',');
