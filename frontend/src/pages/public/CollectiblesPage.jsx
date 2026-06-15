@@ -53,7 +53,7 @@ export default function CollectiblesPage() {
         className="page-hero cinematic collectibles-hero reference-hero"
         style={{ '--collectibles-image': `url("${heroImage}")` }}
       >
-        <p className="section-label">КОЛЛЕКЦИОННЫЕ ПРЕДМЕТЫ</p>
+        <p className="section-label">Коллекционные предметы</p>
         <h1>Архив редких вещей</h1>
         <p>Лимитированные предметы, артбуки, стикер-паки и коллекционные фигурки.</p>
       </section>
@@ -96,7 +96,7 @@ export default function CollectiblesPage() {
         <div className="cinematic-grid collectibles-grid vybe-product-grid vybe-product-grid--collectibles">
           {visibleProducts.map((product, index) => (
             <div className="collectible-slot" key={product.id}>
-              <span>АРХИВ {String(index + 1).padStart(3, '0')}</span>
+              <span>Архив {String(index + 1).padStart(3, '0')}</span>
               <ProductCard product={product} variant="collectible" />
             </div>
           ))}

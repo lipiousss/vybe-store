@@ -4,7 +4,7 @@ import { useAuthStore } from '../../store/authStore.js';
 
 const menuGroups = [
   {
-    title: 'ОСНОВНОЕ',
+    title: 'Основное',
     links: [
       { label: 'Панель', to: '/admin', end: true },
       { label: 'Заказы', to: '/admin/orders' },
@@ -15,7 +15,7 @@ const menuGroups = [
     ],
   },
   {
-    title: 'КАТАЛОГ',
+    title: 'Каталог',
     links: [
       { label: 'Категории', to: '/admin/categories' },
       { label: 'Склад', to: '/admin/stock' },
@@ -24,7 +24,7 @@ const menuGroups = [
     ],
   },
   {
-    title: 'УПРАВЛЕНИЕ',
+    title: 'Управление',
     links: [
       { label: 'Страницы', to: '/admin/pages' },
       { label: 'Баннеры', to: '/admin/banners' },
@@ -50,7 +50,7 @@ export default function AdminLayout() {
           <strong>VYBE</strong>
         </div>
 
-        <nav className="admin-sidebar__nav" aria-label="Admin navigation">
+        <nav className="admin-sidebar__nav" aria-label="Навигация администратора">
           {menuGroups.map((group) => (
             <section className="admin-sidebar__section" key={group.title}>
               <p>{group.title}</p>
@@ -64,8 +64,8 @@ export default function AdminLayout() {
         </nav>
 
         <div className="admin-promo-card">
-          <p>НОСИ ЛЕГЕНДУ.</p>
-          <strong>УПРАВЛЯЙ ТИШИНОЙ.</strong>
+          <p>Носи легенду.</p>
+          <strong>Управляй тишиной.</strong>
           <button type="button" onClick={() => navigate('/')}>На сайт</button>
           <button type="button" onClick={handleLogout}>Выйти</button>
         </div>
@@ -84,7 +84,7 @@ export default function AdminLayout() {
             <select defaultValue="30">
               <option value="30">Последние 30 дней</option>
               <option value="7">Последние 7 дней</option>
-              <option value="all">Всё время</option>
+              <option value="all">Все время</option>
             </select>
             <div className="admin-topbar__user">
               <span className="avatar-orb">{user?.username?.[0]?.toUpperCase() || 'A'}</span>
