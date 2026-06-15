@@ -18,10 +18,13 @@ The most reliable option for users in Russia is a VPS from a provider available 
 ## Files Used
 
 - `docker-compose.production.yml`
+- `docker-compose.caddy.yml` for optional HTTPS/domain mode
 - `.env.production.example`
+- `Caddyfile`
 - `frontend/Dockerfile.production`
 - `frontend/nginx.production.conf`
 - `backend/Dockerfile`
+- `docs/HTTPS_CADDY_DEPLOYMENT.md`
 
 Local development still uses the existing `docker-compose.yml`.
 
@@ -90,7 +93,7 @@ RUN_SEED_FORCE=false
 SEED_FORCE=false
 ```
 
-`RUN_SEED_ON_START=true` is safe for the demo because the backend only runs seed when the database has zero products. If you later connect a domain with HTTPS, change `CLIENT_URL` and `FRONTEND_URL` to `https://your-domain.ru` and redeploy.
+`RUN_SEED_ON_START=true` is safe for the demo because the backend only runs seed when the database has zero products. If you later connect a domain with HTTPS, use `docs/HTTPS_CADDY_DEPLOYMENT.md`.
 
 ## 4. Start Production Containers
 

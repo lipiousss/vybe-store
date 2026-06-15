@@ -1,0 +1,9 @@
+{
+  email {$SITE_EMAIL}
+}
+
+{$SITE_DOMAIN} {
+  encode gzip zstd
+
+  reverse_proxy frontend:80
+}

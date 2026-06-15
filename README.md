@@ -87,10 +87,13 @@ For the most stable diploma preview, deploy the whole project on one VPS with Do
 Production files:
 
 - `docker-compose.production.yml`
+- `docker-compose.caddy.yml` for optional HTTPS/domain mode
 - `.env.production.example`
+- `Caddyfile`
 - `frontend/Dockerfile.production`
 - `frontend/nginx.production.conf`
 - `docs/VPS_DEPLOYMENT.md`
+- `docs/HTTPS_CADDY_DEPLOYMENT.md`
 
 Quick VPS start:
 
@@ -106,6 +109,8 @@ Open:
 - Health: `http://YOUR_SERVER_IP/health`
 
 For a full step-by-step guide, use `docs/VPS_DEPLOYMENT.md`.
+
+For a domain with HTTPS, point the domain to the VPS and use `docs/HTTPS_CADDY_DEPLOYMENT.md`.
 
 ### Frontend On Netlify
 

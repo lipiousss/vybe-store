@@ -1,0 +1,21 @@
+services:
+  caddy:
+    image: mirror.gcr.io/library/caddy:2-alpine
+    container_name: vybe-caddy-prod
+    restart: unless-stopped
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?Set SITE_DOMAIN in .env.production}
+      SITE_EMAIL: ${SITE_EMAIL:-admin@vybe.com}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - vybe_caddy_data:/data
+      - vybe_caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  vybe_caddy_data:
+  vybe_caddy_config:
