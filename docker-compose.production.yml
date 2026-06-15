@@ -27,6 +27,7 @@ services:
       HOST: 0.0.0.0
       DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.production}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://194.87.187.168,https://194.87.187.168,http://localhost:5173,http://127.0.0.1:5173,https://lipioussss.netlify.app,https://vybe-store-frontend.onrender.com}
       CLIENT_URL: ${CLIENT_URL:?Set CLIENT_URL in .env.production}
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       RUN_SEED_ON_START: ${RUN_SEED_ON_START:-false}
