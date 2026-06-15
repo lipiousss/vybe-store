@@ -15,4 +15,4 @@ COPY src ./src
 
 EXPOSE 4000
 
-CMD ["npm", "run", "render:start"]
+CMD ["npm", "start"]

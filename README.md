@@ -73,110 +73,42 @@ docker compose logs frontend
 
 ## Deployment
 
-### Full VPS Deployment
+Production uses one clean VPS architecture:
 
-For the most stable diploma preview, deploy the whole project on one VPS with Docker:
-
-- Frontend: Nginx production build
-- Backend: Node.js/Express
-- Database: PostgreSQL Docker volume
-- Uploads: `backend/uploads` bind-mounted into the backend container
-- Public API path: `/api`
-- Public uploads path: `/uploads`
+- Public URL: `http://109.196.100.48`
+- Public entrypoint: frontend Nginx container on port `80`
+- `/` serves the Vite production build
+- `/api/` proxies to the internal backend service on port `4000`
+- `/uploads/` proxies to backend uploaded files
+- Backend is not exposed directly
+- PostgreSQL is internal only and stores data in a persistent Docker volume
 
 Production files:
 
 - `docker-compose.production.yml`
-- `docker-compose.caddy.yml` for optional HTTPS/domain mode
 - `.env.production.example`
-- `Caddyfile`
 - `frontend/Dockerfile.production`
 - `frontend/nginx.production.conf`
+- `backend/Dockerfile`
 - `docs/VPS_DEPLOYMENT.md`
-- `docs/HTTPS_CADDY_DEPLOYMENT.md`
 
 Quick VPS start:
 
 ```bash
 cp .env.production.example .env.production
-# edit .env.production: passwords, JWT_SECRET, CLIENT_URL
+# edit .env.production: POSTGRES_PASSWORD and JWT_SECRET
 docker compose --env-file .env.production -f docker-compose.production.yml up -d --build
 ```
 
 Open:
 
-- Site: `http://YOUR_SERVER_IP`
-- Health: `http://YOUR_SERVER_IP/health`
+- Site: `http://109.196.100.48`
+- Health: `http://109.196.100.48/health`
+- API: `http://109.196.100.48/api/products`
 
-For a full step-by-step guide, use `docs/VPS_DEPLOYMENT.md`.
+For the full server guide, use `docs/VPS_DEPLOYMENT.md`.
 
-For a domain with HTTPS, point the domain to the VPS and use `docs/HTTPS_CADDY_DEPLOYMENT.md`.
-
-### Frontend On Netlify
-
-Use these Netlify settings:
-
-- Base directory: `frontend`
-- Build command: `npm run build`
-- Publish directory: `dist`
-
-Frontend environment variables:
-
-```env
-VITE_API_URL=https://YOUR_BACKEND_DOMAIN/api
-```
-
-The file `frontend/public/_redirects` is included so direct React Router URLs such as `/catalog`, `/profile` and `/admin` work on Netlify.
-
-### Backend On Render Or Railway
-
-Use these hosting settings:
-
-- Root directory: `backend`
-- Build command: `npm install && npx prisma generate`
-- Start command: `npm start`
-
-Backend environment variables:
-
-```env
-DATABASE_URL=production PostgreSQL URL
-JWT_SECRET=strong secret
-CLIENT_URL=https://YOUR_NETLIFY_DOMAIN
-PORT=4000
-RUN_SEED_ON_START=false
-RUN_SEED_FORCE=false
-SEED_FORCE=false
-```
-
-`CLIENT_URL` can contain one or more origins separated by commas:
-
-```env
-CLIENT_URL=http://localhost:5173,https://your-site.netlify.app
-```
-
-Some platforms provide `PORT` automatically. In that case, use the platform value.
-
-### Database
-
-Use PostgreSQL on Render, Railway or Supabase.
-
-Run migrations:
-
-```bash
-npx prisma migrate deploy
-```
-
-Run seed:
-
-```bash
-npm run prisma:seed
-```
-
-If the hosting plan does not provide a shell, set `RUN_SEED_ON_START=true` only for a deliberate one-time seed. Keep it `false` for normal redeploys. Use `RUN_SEED_FORCE=true` and `SEED_FORCE=true` only when you intentionally want to recreate demo data and overwrite product data.
-
-### Uploads Storage
-
-Local uploaded files are stored in `backend/uploads`. The VPS production compose file bind-mounts this folder into the backend container, so uploaded files survive container rebuilds and are served through `/uploads`. For a larger production version, use Cloudinary, S3 or another object storage service.
+Uploaded files are stored in `backend/uploads`. The production compose file bind-mounts this folder into the backend container, so uploaded files survive container rebuilds and are served through `/uploads`.
 
 ## Project Structure
 
