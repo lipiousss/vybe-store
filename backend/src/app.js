@@ -23,6 +23,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+const host = process.env.HOST || '0.0.0.0';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const uploadsPath = path.resolve(__dirname, '../uploads');
@@ -133,8 +134,8 @@ app.use('/api/users', userRoutes);
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
-const server = app.listen(port, () => {
-  console.log(`Backend listening on port ${port}`);
+const server = app.listen(port, host, () => {
+  console.log(`Backend listening on ${host}:${port}`);
 });
 
 const shutdown = async () => {

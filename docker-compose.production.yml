@@ -24,6 +24,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 4000
+      HOST: 0.0.0.0
       DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
       JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.production}
       CLIENT_URL: ${CLIENT_URL:?Set CLIENT_URL in .env.production}
