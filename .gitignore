@@ -12,8 +12,9 @@ Thumbs.db
 # Uploaded project media is intentionally tracked for the diploma demo.
 # Keep product images, avatars, artworks, and site assets in git.
 
-# Database dumps can be committed when exported into the project.
-!backend/database-dumps/
-!backend/database-dumps/**
+# Database dumps are local-only. Keep backups outside git because GitHub
+# rejects large dump archives and SQL backups may contain private data.
+backend/database-dumps/*
+!backend/database-dumps/.gitkeep
 
 .vscode

@@ -73,6 +73,40 @@ docker compose logs frontend
 
 ## Deployment
 
+### Full VPS Deployment
+
+For the most stable diploma preview, deploy the whole project on one VPS with Docker:
+
+- Frontend: Nginx production build
+- Backend: Node.js/Express
+- Database: PostgreSQL Docker volume
+- Uploads: persistent Docker volume
+- Public API path: `/api`
+- Public uploads path: `/uploads`
+
+Production files:
+
+- `docker-compose.production.yml`
+- `.env.production.example`
+- `frontend/Dockerfile.production`
+- `frontend/nginx.production.conf`
+- `docs/VPS_DEPLOYMENT.md`
+
+Quick VPS start:
+
+```bash
+cp .env.production.example .env.production
+# edit .env.production: passwords, JWT_SECRET, CLIENT_URL
+docker compose --env-file .env.production -f docker-compose.production.yml up -d --build
+```
+
+Open:
+
+- Site: `http://YOUR_SERVER_IP`
+- Health: `http://YOUR_SERVER_IP/health`
+
+For a full step-by-step guide, use `docs/VPS_DEPLOYMENT.md`.
+
 ### Frontend On Netlify
 
 Use these Netlify settings:

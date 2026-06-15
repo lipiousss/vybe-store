@@ -19,3 +19,7 @@ docker compose up --build
 docker compose exec backend npx prisma migrate dev
 docker compose run --rm backend npx prisma migrate dev
 docker compose exec backend npx prisma db seed
+
+поднять бэкап:
+docker compose up -d postgres
+docker exec -i vybe-postgres psql -U vybe -d postgres < vybe_store_full_backup.sql
