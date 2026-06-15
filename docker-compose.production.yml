@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-vybe_store}
       POSTGRES_USER: ${POSTGRES_USER:-vybe}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vybe123}
     volumes:
       - vybe_postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -25,10 +25,10 @@ services:
       NODE_ENV: production
       PORT: 4000
       HOST: 0.0.0.0
-      DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.production}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
-      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in .env.production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vybe}:${POSTGRES_PASSWORD:-vybe123}@postgres:5432/${POSTGRES_DB:-vybe_store}?schema=public
+      JWT_SECRET: ${JWT_SECRET:-change_this_to_a_long_random_jwt_secret}
       CORS_ORIGIN: ${CORS_ORIGIN:-http://109.196.100.48}
-      CLIENT_URL: ${CLIENT_URL:?Set CLIENT_URL in .env.production}
+      CLIENT_URL: ${CLIENT_URL:-http://109.196.100.48}
       FRONTEND_URL: ${FRONTEND_URL:-http://109.196.100.48}
       RUN_SEED_ON_START: ${RUN_SEED_ON_START:-false}
       RUN_SEED_FORCE: ${RUN_SEED_FORCE:-false}
